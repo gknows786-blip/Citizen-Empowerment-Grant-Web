@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: citizen-grant-api
+    env: node
+    region: oregon
+    plan: starter
+    
+    # Build configuration
+    buildCommand: npm install
+    startCommand: node --loader tsx src/backend.ts
+    
+    # Environment variables (set in Render dashboard)
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "5000"
+      - key: MONGODB_URI
+        fromDatabase:
+          name: citizen-grant-db
+          property: connectionString
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+      - key: EMAIL_FROM
+        value: support@usfederalgrant.gov
+      - key: APP_URL
+        value: https://citizen-empowerment-grant.vercel.app
+      - key: FRONTEND_URL
+        value: https://citizen-empowerment-grant.vercel.app
+
+    # Health check
+    healthCheckPath: /api/health
+    
+    # Auto-deploy
+    autoDeploy: true
+
+databases:
+  - name: citizen-grant-db
+    engine: mongodb
+    version: "latest"

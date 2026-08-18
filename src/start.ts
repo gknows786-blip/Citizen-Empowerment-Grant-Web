@@ -1,6 +1,9 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
-
+import 'dotenv/config';
 import { renderErrorPage } from "./lib/error-page";
+
+// Initialize API server
+import app from './api/index.js';
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
