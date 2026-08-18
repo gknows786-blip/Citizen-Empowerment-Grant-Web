@@ -7,7 +7,7 @@ services:
     
     # Build configuration
     buildCommand: npm install --no-audit --no-fund --maxsockets=4
-    startCommand: node --loader tsx src/backend.ts
+    startCommand: node --import tsx src/backend.ts
     
     # Environment variables (set in Render dashboard)
     envVars:
