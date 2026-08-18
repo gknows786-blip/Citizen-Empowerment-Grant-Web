@@ -58,7 +58,7 @@
     "input-otp": "^1.4.2",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.575.0",
-    "mongoose": "^9.9.3",
+    "mongoose": "^8.9.5",
     "nodemailer": "^9.0.5",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",

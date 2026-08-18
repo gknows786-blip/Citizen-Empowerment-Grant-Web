@@ -34,9 +34,9 @@ services:
       - key: EMAIL_FROM
         value: support@usfederalgrant.gov
       - key: APP_URL
-        value: https://citizen-empowerment-grant.vercel.app
+        value: https://citizen-empowerment-grant-web.onrender.com
       - key: FRONTEND_URL
-        value: https://citizen-empowerment-grant.vercel.app
+        value: https://citizen-empowerment-grant-web.onrender.com
 
     # Health check
     healthCheckPath: /api/health
