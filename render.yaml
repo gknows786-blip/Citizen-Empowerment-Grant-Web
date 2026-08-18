@@ -6,7 +6,7 @@ services:
     plan: starter
     
     # Build configuration
-    buildCommand: npm install
+    buildCommand: npm install --no-audit --no-fund --maxsockets=4
     startCommand: node --loader tsx src/backend.ts
     
     # Environment variables (set in Render dashboard)
