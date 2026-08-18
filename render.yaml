@@ -16,9 +16,7 @@ services:
       - key: PORT
         value: "5000"
       - key: MONGODB_URI
-        fromDatabase:
-          name: citizen-grant-db
-          property: connectionString
+        sync: false
       - key: JWT_SECRET
         sync: false
       - key: JWT_EXPIRE
@@ -43,8 +41,3 @@ services:
     
     # Auto-deploy
     autoDeploy: true
-
-databases:
-  - name: citizen-grant-db
-    engine: mongodb
-    version: "latest"
