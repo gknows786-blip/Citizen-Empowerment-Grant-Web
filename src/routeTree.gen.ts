@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApplyRouteImport } from './routes/apply'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as EligibilityRouteImport } from './routes/eligibility'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as PaymentConfirmationRouteImport } from './routes/payment-confirmation'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApplyRoute = ApplyRouteImport.update({
   id: '/apply',
   path: '/apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EligibilityRoute = EligibilityRouteImport.update({
@@ -34,39 +41,71 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PaymentConfirmationRoute = PaymentConfirmationRouteImport.update({
+  id: '/payment-confirmation',
+  path: '/payment-confirmation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/apply': typeof ApplyRoute
+  '/dashboard': typeof DashboardRoute
   '/eligibility': typeof EligibilityRoute
   '/faq': typeof FaqRoute
+  '/payment-confirmation': typeof PaymentConfirmationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/apply': typeof ApplyRoute
+  '/dashboard': typeof DashboardRoute
   '/eligibility': typeof EligibilityRoute
   '/faq': typeof FaqRoute
+  '/payment-confirmation': typeof PaymentConfirmationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/apply': typeof ApplyRoute
+  '/dashboard': typeof DashboardRoute
   '/eligibility': typeof EligibilityRoute
   '/faq': typeof FaqRoute
+  '/payment-confirmation': typeof PaymentConfirmationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/apply' | '/eligibility' | '/faq'
+  fullPaths:
+    | '/'
+    | '/apply'
+    | '/dashboard'
+    | '/eligibility'
+    | '/faq'
+    | '/payment-confirmation'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/apply' | '/eligibility' | '/faq'
-  id: '__root__' | '/' | '/apply' | '/eligibility' | '/faq'
+  to:
+    | '/'
+    | '/apply'
+    | '/dashboard'
+    | '/eligibility'
+    | '/faq'
+    | '/payment-confirmation'
+  id:
+    | '__root__'
+    | '/'
+    | '/apply'
+    | '/dashboard'
+    | '/eligibility'
+    | '/faq'
+    | '/payment-confirmation'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApplyRoute: typeof ApplyRoute
+  DashboardRoute: typeof DashboardRoute
   EligibilityRoute: typeof EligibilityRoute
   FaqRoute: typeof FaqRoute
+  PaymentConfirmationRoute: typeof PaymentConfirmationRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -85,6 +124,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/eligibility': {
       id: '/eligibility'
       path: '/eligibility'
@@ -99,14 +145,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/payment-confirmation': {
+      id: '/payment-confirmation'
+      path: '/payment-confirmation'
+      fullPath: '/payment-confirmation'
+      preLoaderRoute: typeof PaymentConfirmationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApplyRoute: ApplyRoute,
+  DashboardRoute: DashboardRoute,
   EligibilityRoute: EligibilityRoute,
   FaqRoute: FaqRoute,
+  PaymentConfirmationRoute: PaymentConfirmationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

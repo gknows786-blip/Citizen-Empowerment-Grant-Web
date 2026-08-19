@@ -1,17 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+
 import { SiteLayout } from "@/components/SiteLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
 
 export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
-      { title: "FAQ — U.S. Federal Citizen Grant Program" },
+      {
+        title: "FAQ — Grant Portal Demo",
+      },
       {
         name: "description",
-        content: "Frequently asked questions about the U.S. Federal Citizen Grant Program. Get answers to common questions.",
+        content:
+          "Frequently asked questions about the independent grant portal demonstration.",
       },
     ],
   }),
@@ -27,192 +31,178 @@ interface FAQItem {
 const faqItems: FAQItem[] = [
   {
     category: "General",
-    question: "What is the U.S. Federal Citizen Grant Program?",
+    question:
+      "What is this grant portal?",
     answer:
-      "The U.S. Federal Citizen Grant Program is an official federal initiative to distribute granted funds to eligible citizens. It is authorized by Congress and administered through this secure online portal.",
+      "This is an independent software demonstration showing how a grant application portal could work. It is not an official government website.",
   },
   {
     category: "General",
-    question: "Is this program legitimate?",
+    question:
+      "Is this an official government website?",
     answer:
-      "Yes, this is an official U.S. federal program. Our portal is registered with the Federal Grant Administration Bureau and all transactions are secure and government-verified.",
+      "No. This project is an independent demonstration and is not affiliated with or operated by the U.S. government.",
+  },
+  {
+    category: "General",
+    question:
+      "Does submitting an application guarantee funding?",
+    answer:
+      "No. Submitting an application does not guarantee funding or approval.",
   },
   {
     category: "Eligibility",
-    question: "Who is eligible for this grant?",
+    question:
+      "Who can apply?",
     answer:
-      "Any person 18 years or older with a valid government ID, from any country in the Americas, can apply. You must have a valid email address and bank account for fund transfer.",
+      "The demonstration accepts applications from adults who meet the requirements displayed on the eligibility page.",
   },
   {
     category: "Eligibility",
-    question: "Can I apply if I have bad credit?",
+    question:
+      "Where can I see the requirements?",
     answer:
-      "Yes! Credit history does not affect grant eligibility. Grants are gifts, not loans. Your credit rating is not reviewed as part of the application process.",
-  },
-  {
-    category: "Eligibility",
-    question: "Are students eligible?",
-    answer:
-      "Yes, students aged 18 and older are eligible to apply. You can use the grant for education, personal expenses, or any other purpose.",
+      "Visit the Eligibility page to review the application's requirements and scoring criteria.",
   },
   {
     category: "Application",
-    question: "How long does the application process take?",
+    question:
+      "How long does the application take?",
     answer:
-      "The online application takes approximately 15 minutes to complete. Once submitted, verification takes 24-48 hours before your grant is approved and processed for delivery.",
+      "The demonstration application is designed to be completed in a few minutes, depending on how much information you provide.",
   },
   {
     category: "Application",
-    question: "What information do I need to provide?",
+    question:
+      "Can I edit my application?",
     answer:
-      "You will need to provide: full name, email address, phone number, date of birth, address, occupation, marital status, and a government-issued ID number. All information is encrypted and protected.",
+      "That depends on how the backend is configured. In this demonstration, application editing can be implemented as part of the application's account dashboard.",
   },
   {
     category: "Application",
-    question: "Can I edit my application after submission?",
+    question:
+      "What information should I provide?",
     answer:
-      "Contact our support team within 24 hours of submission to request changes. After verification begins, changes cannot be made.",
-  },
-  {
-    category: "Grants",
-    question: "How much can I receive?",
-    answer:
-      "You can receive between $10,000 and $200,000 depending on the package you select. All amounts have been approved by Congress.",
-  },
-  {
-    category: "Grants",
-    question: "Do I have to pay taxes on the grant?",
-    answer:
-      "Grant amounts are typically not subject to federal income tax as they are considered gift transfers. However, consult with a tax professional for your specific situation.",
-  },
-  {
-    category: "Grants",
-    question: "Is there a limit to how many times I can apply?",
-    answer:
-      "Each person can receive one grant per year. Previous grant recipients must wait 12 months before applying again.",
+      "Only provide information that the application actually needs. Do not submit passwords, payment credentials, or unnecessary government identification numbers.",
   },
   {
     category: "Fees",
-    question: "Are there any fees to apply?",
+    question:
+      "Is there an application fee?",
     answer:
-      "Application is completely free. However, once you select a grant package, there is a mandatory processing fee that covers tax clearance, legal processing, and insured delivery.",
+      "No application fee is required by this demonstration project.",
   },
   {
     category: "Fees",
-    question: "Why do I have to pay a processing fee?",
+    question:
+      "Will someone ask me to pay money to receive funding?",
     answer:
-      "The processing fee covers: federal tax clearance verification, legal document preparation, application processing, and insured home delivery via UPS/FedEx. These are required government fees.",
+      "This demonstration does not require payment to submit an application. Be cautious of anyone requesting money, passwords, or sensitive information in exchange for a promised grant.",
   },
   {
-    category: "Fees",
-    question: "Can the processing fee be deducted from my grant?",
+    category: "Security",
+    question:
+      "Is my information safe?",
     answer:
-      "No, the processing fee is separate and must be paid upfront. Your full grant amount is paid in addition to the fee you submit.",
+      "Only submit information through systems you trust. The security of a real deployment depends on the backend, database, authentication, encryption, hosting configuration, and other security controls.",
   },
   {
-    category: "Payment",
-    question: "How do I make the payment?",
+    category: "Security",
+    question:
+      "Should I share my password with support?",
     answer:
-      "After applying and selecting your grant package, we provide you with bank transfer details. You transfer the processing fee to our secure bank account, and your grant is processed immediately.",
-  },
-  {
-    category: "Payment",
-    question: "What payment methods do you accept?",
-    answer:
-      "We accept wire transfers and bank transfers to our verified federal account. All transactions are secure and monitored by federal authorities.",
-  },
-  {
-    category: "Payment",
-    question: "Is my payment information secure?",
-    answer:
-      "Yes, all payment information is encrypted with military-grade security. Our payment portal is PCI DSS compliant and monitored 24/7.",
-  },
-  {
-    category: "Delivery",
-    question: "How will I receive my grant money?",
-    answer:
-      "Your grant is delivered via insured UPS or FedEx shipment to your home address. A representative will require a signature and ID verification upon delivery.",
-  },
-  {
-    category: "Delivery",
-    question: "How long does delivery take?",
-    answer:
-      "Most grants are delivered within 24-48 hours of payment confirmation. Tracking information is provided via email so you can monitor your package.",
-  },
-  {
-    category: "Delivery",
-    question: "What if I am not home for delivery?",
-    answer:
-      "The carrier will leave a notice. You can arrange a redelivery time that works for you. Delivery attempts are made up to 3 times before returning the grant.",
+      "No. Never share your password, authentication codes, or other account secrets with anyone claiming to provide support.",
   },
   {
     category: "Support",
-    question: "What if I have problems with my application?",
+    question:
+      "How can I get help with the demonstration?",
     answer:
-      "Contact our support team at support@usfederalgrant.gov or call (202) 555-0199. We are available Monday-Friday, 9 AM - 5 PM EST.",
-  },
-  {
-    category: "Support",
-    question: "Can I speak to a live representative?",
-    answer:
-      "Yes, our customer support team is available by phone at (202) 555-0199 during business hours. You can also email us and expect a response within 24 hours.",
-  },
-  {
-    category: "Support",
-    question: "How can I check the status of my application?",
-    answer:
-      "Use your reference number in the status check section of our portal. You will see real-time updates on your application, verification, and delivery status.",
+      "Use the support method provided by the owner or developer of the project. Do not rely on unofficial phone numbers or email addresses claiming to represent a government agency.",
   },
   {
     category: "Legal",
-    question: "Is this a loan?",
+    question:
+      "Is this a government program?",
     answer:
-      "No, this is a grant, not a loan. You do not have to repay any of the funds. It is free money from the federal government.",
+      "No. This is an independent demonstration project.",
   },
   {
     category: "Legal",
-    question: "What happens if I share my reference number?",
+    question:
+      "Can this project guarantee that I will receive a grant?",
     answer:
-      "Your reference number is confidential. Sharing it with others is a violation of the terms and conditions and may result in cancellation of your grant.",
-  },
-  {
-    category: "Legal",
-    question: "Can I be scammed using this program?",
-    answer:
-      "No, this is an official government program. Never pay anyone else claiming to "help" you get the grant - this is a common scam. Always apply only through this official portal.",
+      "No. The software can demonstrate an application workflow, but it cannot guarantee funding from any government or other organization.",
   },
 ];
 
 function FAQ() {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [expandedId, setExpandedId] =
+    useState<number | null>(null);
 
-  const categories = ["All", ...Array.from(new Set(faqItems.map((item) => item.category)))];
-  const filteredFAQs = selectedCategory === "All" ? faqItems : faqItems.filter((item) => item.category === selectedCategory);
+  const [selectedCategory, setSelectedCategory] =
+    useState("All");
+
+  const categories = [
+    "All",
+    ...Array.from(
+      new Set(
+        faqItems.map((item) => item.category),
+      ),
+    ),
+  ];
+
+  const filteredFAQs =
+    selectedCategory === "All"
+      ? faqItems
+      : faqItems.filter(
+          (item) =>
+            item.category === selectedCategory,
+        );
 
   return (
     <SiteLayout>
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100">
         <div className="px-4 py-12">
-          <div className="max-w-4xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-12">
-              <h1 className="text-4xl font-bold text-blue-900 font-serif mb-4">Frequently Asked Questions</h1>
-              <p className="text-gray-700 text-lg">
-                Find answers to common questions about the U.S. Federal Citizen Grant Program
+          <div className="mx-auto max-w-4xl">
+            <div className="mb-12 text-center">
+              <h1 className="mb-4 font-serif text-4xl font-bold text-blue-900">
+                Frequently Asked Questions
+              </h1>
+
+              <p className="text-lg text-gray-700">
+                Answers about this independent grant portal
+                demonstration.
               </p>
             </div>
 
-            {/* Category Filter */}
-            <div className="flex flex-wrap gap-3 justify-center mb-8">
+            <Card className="mb-8 border-2 border-yellow-300 bg-yellow-50 p-6">
+              <h2 className="mb-2 text-xl font-bold text-yellow-900">
+                Important
+              </h2>
+
+              <p className="text-yellow-800">
+                This project is an independent demonstration.
+                It is not an official U.S. government website
+                and does not guarantee funding.
+              </p>
+            </Card>
+
+            <div className="mb-8 flex flex-wrap justify-center gap-3">
               {categories.map((category) => (
                 <Button
                   key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  variant={selectedCategory === category ? "default" : "outline"}
+                  onClick={() =>
+                    setSelectedCategory(category)
+                  }
+                  variant={
+                    selectedCategory === category
+                      ? "default"
+                      : "outline"
+                  }
                   className={
                     selectedCategory === category
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
                       : "border-gray-300 text-gray-700 hover:bg-gray-50"
                   }
                 >
@@ -221,74 +211,107 @@ function FAQ() {
               ))}
             </div>
 
-            {/* FAQ Accordion */}
-            <Card className="shadow-lg">
-              {filteredFAQs.map((item, idx) => (
-                <div key={idx} className={idx !== filteredFAQs.length - 1 ? "border-b" : ""}>
-                  <button
-                    onClick={() => setExpandedId(expandedId === idx ? null : idx)}
-                    className="w-full px-6 py-4 text-left hover:bg-blue-50 transition flex justify-between items-center group"
-                  >
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="text-2xl text-blue-600 group-hover:scale-110 transition">❓</div>
-                      <span className="text-lg font-semibold text-blue-900">{item.question}</span>
-                    </div>
-                    <ChevronDown
-                      size={24}
-                      className={`text-blue-600 transition-transform ${expandedId === idx ? "rotate-180" : ""}`}
-                    />
-                  </button>
+            <Card className="overflow-hidden shadow-lg">
+              {filteredFAQs.map((item, index) => {
+                const isExpanded =
+                  expandedId === index;
 
-                  {expandedId === idx && (
-                    <div className="px-6 pb-4 bg-blue-50 border-t">
-                      <div className="text-gray-700 leading-relaxed">{item.answer}</div>
-                      {item.category === "General" && (
-                        <div className="mt-4 pt-4 border-t border-blue-200">
-                          <Link to="/eligibility">
-                            <Button variant="outline" size="sm">
-                              Learn More About Eligibility
-                            </Button>
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
+                return (
+                  <div
+                    key={`${item.category}-${item.question}`}
+                    className={
+                      index !==
+                      filteredFAQs.length - 1
+                        ? "border-b"
+                        : ""
+                    }
+                  >
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpandedId(
+                          isExpanded
+                            ? null
+                            : index,
+                        )
+                      }
+                      className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition hover:bg-blue-50"
+                    >
+                      <div className="flex flex-1 items-center gap-4">
+                        <span className="text-2xl">
+                          ❓
+                        </span>
+
+                        <span className="text-lg font-semibold text-blue-900">
+                          {item.question}
+                        </span>
+                      </div>
+
+                      <ChevronDown
+                        size={24}
+                        className={`flex-shrink-0 text-blue-600 transition-transform ${
+                          isExpanded
+                            ? "rotate-180"
+                            : ""
+                        }`}
+                      />
+                    </button>
+
+                    {isExpanded && (
+                      <div className="border-t bg-blue-50 px-6 pb-5 pt-4">
+                        <p className="leading-relaxed text-gray-700">
+                          {item.answer}
+                        </p>
+
+                        {item.category ===
+                          "Eligibility" && (
+                          <div className="mt-4">
+                            <Link to="/eligibility">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                              >
+                                View Eligibility
+                              </Button>
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </Card>
 
-            {/* Contact Section */}
-            <Card className="mt-12 p-8 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-              <h2 className="text-2xl font-bold mb-4">Still Have Questions?</h2>
-              <p className="mb-6">Our support team is here to help. Contact us through any of these channels:</p>
+            <Card className="mt-12 bg-gradient-to-r from-blue-600 to-blue-700 p-8 text-white">
+              <h2 className="mb-4 text-2xl font-bold">
+                Need More Information?
+              </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <p className="font-semibold mb-2">📞 Phone</p>
-                  <p className="text-blue-100">(202) 555-0199</p>
-                  <p className="text-sm text-blue-200">Mon-Fri, 9 AM - 5 PM EST</p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-2">📧 Email</p>
-                  <p className="text-blue-100">support@usfederalgrant.gov</p>
-                  <p className="text-sm text-blue-200">Response within 24 hours</p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-2">📍 Office</p>
-                  <p className="text-blue-100">100 Independence Ave</p>
-                  <p className="text-sm text-blue-200">Washington, DC 20500</p>
-                </div>
+              <p className="mb-6 text-blue-100">
+                Review the eligibility requirements or start
+                an application to explore the demonstration.
+              </p>
+
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <Link to="/eligibility">
+                  <Button className="bg-white text-blue-700 hover:bg-blue-50">
+                    View Eligibility
+                  </Button>
+                </Link>
+
+                <Link to="/apply">
+                  <Button className="bg-green-600 text-white hover:bg-green-700">
+                    Start Application
+                  </Button>
+                </Link>
               </div>
             </Card>
 
-            {/* CTA */}
-            <div className="text-center mt-12">
-              <h3 className="text-2xl font-bold text-blue-900 mb-4">Ready to Start?</h3>
-              <Link to="/apply">
-                <Button className="bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-4 text-lg">
-                  BEGIN YOUR APPLICATION
-                </Button>
-              </Link>
+            <div className="mt-12 text-center">
+              <p className="text-sm text-gray-500">
+                Independent grant portal demonstration
+              </p>
             </div>
           </div>
         </div>
