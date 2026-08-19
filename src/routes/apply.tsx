@@ -7,19 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
-import {
-  signupServerFn,
-  signinServerFn,
-} from "@/lib/serverFunctions";
+import { signupServerFn, signinServerFn } from "@/lib/serverFunctions";
 
 export const Route = createFileRoute("/apply")({
   head: () => ({
@@ -29,8 +21,7 @@ export const Route = createFileRoute("/apply")({
       },
       {
         name: "description",
-        content:
-          "Independent grant application demonstration portal.",
+        content: "Independent grant application demonstration portal.",
       },
     ],
   }),
@@ -44,71 +35,44 @@ const signupSchema = z
     email: z.string().email("Enter a valid email address"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
-    phone: z
-      .string()
-      .regex(
-        /^\+?[\d\s()-]{10,}$/,
-        "Enter a valid phone number",
-      ),
-    dateOfBirth: z.string().refine(
-      (date) => {
-        if (!date) return false;
+    phone: z.string().regex(/^\+?[\d\s()-]{10,}$/, "Enter a valid phone number"),
+    dateOfBirth: z.string().refine((date) => {
+      if (!date) return false;
 
-        const birthDate = new Date(date);
+      const birthDate = new Date(date);
 
-        if (Number.isNaN(birthDate.getTime())) {
-          return false;
-        }
+      if (Number.isNaN(birthDate.getTime())) {
+        return false;
+      }
 
-        const today = new Date();
+      const today = new Date();
 
-        let age =
-          today.getFullYear() - birthDate.getFullYear();
+      let age = today.getFullYear() - birthDate.getFullYear();
 
-        const monthDifference =
-          today.getMonth() - birthDate.getMonth();
+      const monthDifference = today.getMonth() - birthDate.getMonth();
 
-        if (
-          monthDifference < 0 ||
-          (monthDifference === 0 &&
-            today.getDate() < birthDate.getDate())
-        ) {
-          age--;
-        }
+      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
 
-        return age >= 18;
-      },
-      "Applicant must be 18 years or older",
-    ),
+      return age >= 18;
+    }, "Applicant must be 18 years or older"),
     gender: z.enum(["Male", "Female", "Other"]),
     occupation: z.string().min(2, "Occupation is required"),
     address: z.string().min(5, "Address is required"),
     city: z.string().min(2, "City is required"),
     state: z.string().min(2, "State is required"),
-    zipCode: z
-      .string()
-      .regex(
-        /^[\dA-Za-z\s-]{3,10}$/,
-        "Enter a valid postal code",
-      ),
+    zipCode: z.string().regex(/^[\dA-Za-z\s-]{3,10}$/, "Enter a valid postal code"),
     country: z.string().min(2, "Country is required"),
-    maritalStatus: z.enum([
-      "Single",
-      "Married",
-      "Divorced",
-      "Widowed",
-    ]),
+    maritalStatus: z.enum(["Single", "Married", "Divorced", "Widowed"]),
     confidentiality: z.literal(true, {
       message: "You must accept the demonstration terms",
     }),
   })
-  .refine(
-    (data) => data.password === data.confirmPassword,
-    {
-      path: ["confirmPassword"],
-      message: "Passwords do not match",
-    },
-  );
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
 
 const signinSchema = z.object({
   email: z.string().email("Enter a valid email address"),
@@ -121,25 +85,19 @@ type SigninData = z.infer<typeof signinSchema>;
 function Apply() {
   const navigate = useNavigate();
 
-  const [signupData, setSignupData] =
-    useState<Partial<SignupData>>({});
+  const [signupData, setSignupData] = useState<Partial<SignupData>>({});
 
-  const [signinData, setSigninData] =
-    useState<Partial<SigninData>>({});
+  const [signinData, setSigninData] = useState<Partial<SigninData>>({});
 
-  const [errors, setErrors] =
-    useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [success, setSuccess] = useState("");
 
   const [loading, setLoading] = useState(false);
 
-  const [refNumber, setRefNumber] =
-    useState<string | null>(null);
+  const [refNumber, setRefNumber] = useState<string | null>(null);
 
-  const handleSignupChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
+  const handleSignupChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
 
     setSignupData((previous) => ({
@@ -156,9 +114,7 @@ function Apply() {
     }
   };
 
-  const handleSigninChange = (
-    event: ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleSigninChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setSigninData((previous) => ({
@@ -175,9 +131,7 @@ function Apply() {
     }
   };
 
-  const handleSignupSubmit = async (
-    event: FormEvent<HTMLFormElement>,
-  ) => {
+  const handleSignupSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setErrors({});
@@ -185,8 +139,7 @@ function Apply() {
     setLoading(true);
 
     try {
-      const validation =
-        signupSchema.safeParse(signupData);
+      const validation = signupSchema.safeParse(signupData);
 
       if (!validation.success) {
         const nextErrors: Record<string, string> = {};
@@ -225,9 +178,7 @@ function Apply() {
 
         setRefNumber(result.user.refNumber);
 
-        setSuccess(
-          `Registration successful. Reference: ${result.user.refNumber}`,
-        );
+        setSuccess(`Registration successful. Reference: ${result.user.refNumber}`);
 
         setTimeout(() => {
           navigate({
@@ -236,24 +187,19 @@ function Apply() {
         }, 2000);
       } else {
         setErrors({
-          form:
-            result.error ||
-            "Registration could not be completed.",
+          form: result.error || "Registration could not be completed.",
         });
       }
     } catch {
       setErrors({
-        form:
-          "Unable to connect to the application server.",
+        form: "Unable to connect to the application server.",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSigninSubmit = async (
-    event: FormEvent<HTMLFormElement>,
-  ) => {
+  const handleSigninSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setErrors({});
@@ -261,8 +207,7 @@ function Apply() {
     setLoading(true);
 
     try {
-      const validation =
-        signinSchema.safeParse(signinData);
+      const validation = signinSchema.safeParse(signinData);
 
       if (!validation.success) {
         const nextErrors: Record<string, string> = {};
@@ -287,9 +232,7 @@ function Apply() {
       if (result.success) {
         localStorage.setItem("token", result.token);
 
-        setSuccess(
-          "Login successful. Redirecting to your dashboard...",
-        );
+        setSuccess("Login successful. Redirecting to your dashboard...");
 
         setTimeout(() => {
           navigate({
@@ -303,8 +246,7 @@ function Apply() {
       }
     } catch {
       setErrors({
-        form:
-          "Unable to connect to the application server.",
+        form: "Unable to connect to the application server.",
       });
     } finally {
       setLoading(false);
@@ -323,18 +265,15 @@ function Apply() {
                 Grant Application Portal
               </h1>
 
-              <p className="text-blue-100">
-                Independent demonstration project
-              </p>
+              <p className="text-blue-100">Independent demonstration project</p>
             </div>
 
             <Alert className="mb-6 border-yellow-300 bg-yellow-50">
               <AlertCircle className="h-4 w-4 text-yellow-600" />
 
               <AlertDescription className="text-yellow-800">
-                This website is an independent demonstration project.
-                It is not a U.S. government website, does not guarantee
-                funding, and does not charge application fees.
+                This website is an independent demonstration project. It is not a U.S. government
+                website, does not guarantee funding, and does not charge application fees.
               </AlertDescription>
             </Alert>
 
@@ -342,9 +281,7 @@ function Apply() {
               <Alert className="mb-6 border-green-300 bg-green-50">
                 <CheckCircle className="h-4 w-4 text-green-600" />
 
-                <AlertDescription className="text-green-800">
-                  {success}
-                </AlertDescription>
+                <AlertDescription className="text-green-800">{success}</AlertDescription>
               </Alert>
             )}
 
@@ -352,32 +289,20 @@ function Apply() {
               <Alert className="mb-6 border-red-300 bg-red-50">
                 <AlertCircle className="h-4 w-4 text-red-600" />
 
-                <AlertDescription className="text-red-800">
-                  {errors.form}
-                </AlertDescription>
+                <AlertDescription className="text-red-800">{errors.form}</AlertDescription>
               </Alert>
             )}
 
             <div className="rounded-lg bg-white p-8 shadow-xl">
-              <Tabs
-                defaultValue="signup"
-                className="w-full"
-              >
+              <Tabs defaultValue="signup" className="w-full">
                 <TabsList className="mb-8 grid w-full grid-cols-2">
-                  <TabsTrigger value="signup">
-                    Create Account
-                  </TabsTrigger>
+                  <TabsTrigger value="signup">Create Account</TabsTrigger>
 
-                  <TabsTrigger value="signin">
-                    Sign In
-                  </TabsTrigger>
+                  <TabsTrigger value="signin">Sign In</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="signup">
-                  <form
-                    onSubmit={handleSignupSubmit}
-                    className="space-y-5"
-                  >
+                  <form onSubmit={handleSignupSubmit} className="space-y-5">
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       <FormField
                         id="firstName"
@@ -431,10 +356,7 @@ function Apply() {
                       />
 
                       <div>
-                        <Label
-                          htmlFor="gender"
-                          className="font-semibold text-blue-900"
-                        >
+                        <Label htmlFor="gender" className="font-semibold text-blue-900">
                           Gender
                         </Label>
 
@@ -445,22 +367,14 @@ function Apply() {
                           onChange={handleSignupChange}
                           className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
                         >
-                          <option value="">
-                            Select Gender
-                          </option>
+                          <option value="">Select Gender</option>
 
                           <option value="Male">Male</option>
-                          <option value="Female">
-                            Female
-                          </option>
+                          <option value="Female">Female</option>
                           <option value="Other">Other</option>
                         </select>
 
-                        {errors.gender && (
-                          <ErrorText>
-                            {errors.gender}
-                          </ErrorText>
-                        )}
+                        {errors.gender && <ErrorText>{errors.gender}</ErrorText>}
                       </div>
                     </div>
 
@@ -513,10 +427,7 @@ function Apply() {
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       <div>
-                        <Label
-                          htmlFor="country"
-                          className="font-semibold text-blue-900"
-                        >
+                        <Label htmlFor="country" className="font-semibold text-blue-900">
                           Country
                         </Label>
 
@@ -527,76 +438,41 @@ function Apply() {
                           onChange={handleSignupChange}
                           className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
                         >
-                          <option value="">
-                            Select Country
-                          </option>
-                          <option value="USA">
-                            United States
-                          </option>
-                          <option value="Canada">
-                            Canada
-                          </option>
-                          <option value="Mexico">
-                            Mexico
-                          </option>
-                          <option value="Nigeria">
-                            Nigeria
-                          </option>
-                          <option value="Other">
-                            Other
-                          </option>
+                          <option value="">Select Country</option>
+                          <option value="USA">United States</option>
+                          <option value="Canada">Canada</option>
+                          <option value="Mexico">Mexico</option>
+                          <option value="Nigeria">Nigeria</option>
+                          <option value="Other">Other</option>
                         </select>
 
-                        {errors.country && (
-                          <ErrorText>
-                            {errors.country}
-                          </ErrorText>
-                        )}
+                        {errors.country && <ErrorText>{errors.country}</ErrorText>}
                       </div>
 
                       <div>
-                        <Label
-                          htmlFor="maritalStatus"
-                          className="font-semibold text-blue-900"
-                        >
+                        <Label htmlFor="maritalStatus" className="font-semibold text-blue-900">
                           Marital Status
                         </Label>
 
                         <select
                           id="maritalStatus"
                           name="maritalStatus"
-                          value={
-                            signupData.maritalStatus || ""
-                          }
+                          value={signupData.maritalStatus || ""}
                           onChange={handleSignupChange}
                           className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
                         >
-                          <option value="">
-                            Select Status
-                          </option>
+                          <option value="">Select Status</option>
 
-                          <option value="Single">
-                            Single
-                          </option>
+                          <option value="Single">Single</option>
 
-                          <option value="Married">
-                            Married
-                          </option>
+                          <option value="Married">Married</option>
 
-                          <option value="Divorced">
-                            Divorced
-                          </option>
+                          <option value="Divorced">Divorced</option>
 
-                          <option value="Widowed">
-                            Widowed
-                          </option>
+                          <option value="Widowed">Widowed</option>
                         </select>
 
-                        {errors.maritalStatus && (
-                          <ErrorText>
-                            {errors.maritalStatus}
-                          </ErrorText>
-                        )}
+                        {errors.maritalStatus && <ErrorText>{errors.maritalStatus}</ErrorText>}
                       </div>
                     </div>
 
@@ -616,9 +492,7 @@ function Apply() {
                         name="confirmPassword"
                         type="password"
                         label="Confirm Password"
-                        value={
-                          signupData.confirmPassword || ""
-                        }
+                        value={signupData.confirmPassword || ""}
                         error={errors.confirmPassword}
                         onChange={handleSignupChange}
                       />
@@ -628,14 +502,11 @@ function Apply() {
                       <div className="flex items-start gap-3">
                         <Checkbox
                           id="confidentiality"
-                          checked={
-                            signupData.confidentiality === true
-                          }
+                          checked={signupData.confidentiality === true}
                           onCheckedChange={(checked) => {
                             setSignupData((previous) => ({
                               ...previous,
-                              confidentiality:
-                                checked === true,
+                              confidentiality: checked === true,
                             }));
                           }}
                         />
@@ -644,17 +515,12 @@ function Apply() {
                           htmlFor="confidentiality"
                           className="cursor-pointer text-sm leading-relaxed text-blue-900"
                         >
-                          I understand that this is an independent
-                          demonstration project and that submitting
-                          this form does not guarantee funding.
+                          I understand that this is an independent demonstration project and that
+                          submitting this form does not guarantee funding.
                         </Label>
                       </div>
 
-                      {errors.confidentiality && (
-                        <ErrorText>
-                          {errors.confidentiality}
-                        </ErrorText>
-                      )}
+                      {errors.confidentiality && <ErrorText>{errors.confidentiality}</ErrorText>}
                     </div>
 
                     <Button
@@ -662,18 +528,13 @@ function Apply() {
                       disabled={loading}
                       className="w-full bg-green-600 py-3 text-lg font-bold text-white hover:bg-green-700"
                     >
-                      {loading
-                        ? "Creating Account..."
-                        : "Create Account"}
+                      {loading ? "Creating Account..." : "Create Account"}
                     </Button>
                   </form>
                 </TabsContent>
 
                 <TabsContent value="signin">
-                  <form
-                    onSubmit={handleSigninSubmit}
-                    className="space-y-6"
-                  >
+                  <form onSubmit={handleSigninSubmit} className="space-y-6">
                     <FormField
                       id="signin-email"
                       name="email"
@@ -699,9 +560,7 @@ function Apply() {
                       disabled={loading}
                       className="w-full bg-blue-600 py-3 text-lg font-bold text-white hover:bg-blue-700"
                     >
-                      {loading
-                        ? "Signing In..."
-                        : "Sign In"}
+                      {loading ? "Signing In..." : "Sign In"}
                     </Button>
                   </form>
                 </TabsContent>
@@ -710,13 +569,9 @@ function Apply() {
 
             {refNumber && (
               <div className="mt-8 rounded-lg border-2 border-green-300 bg-green-50 p-6 text-center">
-                <p className="font-semibold text-gray-700">
-                  Your application reference:
-                </p>
+                <p className="font-semibold text-gray-700">Your application reference:</p>
 
-                <p className="mt-2 font-mono text-3xl font-bold text-blue-900">
-                  {refNumber}
-                </p>
+                <p className="mt-2 font-mono text-3xl font-bold text-blue-900">{refNumber}</p>
               </div>
             )}
           </div>
@@ -741,16 +596,11 @@ function FormField({
   value: string;
   error?: string;
   type?: string;
-  onChange: (
-    event: ChangeEvent<HTMLInputElement>,
-  ) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div>
-      <Label
-        htmlFor={id}
-        className="font-semibold text-blue-900"
-      >
+      <Label htmlFor={id} className="font-semibold text-blue-900">
         {label}
       </Label>
 
@@ -760,9 +610,7 @@ function FormField({
         type={type}
         value={value}
         onChange={onChange}
-        className={`mt-2 ${
-          error ? "border-red-500" : ""
-        }`}
+        className={`mt-2 ${error ? "border-red-500" : ""}`}
       />
 
       {error && <ErrorText>{error}</ErrorText>}
@@ -770,14 +618,6 @@ function FormField({
   );
 }
 
-function ErrorText({
-  children,
-}: {
-  children: string;
-}) {
-  return (
-    <p className="mt-1 text-sm text-red-600">
-      {children}
-    </p>
-  );
+function ErrorText({ children }: { children: string }) {
+  return <p className="mt-1 text-sm text-red-600">{children}</p>;
 }

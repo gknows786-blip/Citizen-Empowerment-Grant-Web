@@ -3,11 +3,13 @@
 ## What's Been Done
 
 ### 🧹 Cleanup:
+
 - ✅ Removed all Lovable references from root component
 - ✅ Created professional government-style favicon (SVG)
 - ✅ Updated AGENTS.md with clean project config
 
 ### 🎯 Backend Infrastructure Created:
+
 - ✅ Express.js API server setup
 - ✅ MongoDB connection & User schema
 - ✅ JWT authentication system
@@ -40,12 +42,14 @@ EMAIL_PASSWORD=your_16_char_app_password_from_google
 ```
 
 ### 2. **Once credentials are ready:**
+
 1. Create the `.env` file in project root
 2. Run: `npm install` (to ensure all packages are installed)
 3. Run: `npm run dev` (to start development server)
 4. Test API: `http://localhost:5173/api/health`
 
 ### 3. **Then we'll build the Frontend:**
+
 - Landing page (hero, testimonials, countdown)
 - Sign up/Login form
 - Dashboard with grant packages

@@ -29,6 +29,7 @@ Your project is now fully ready for deployment to **Vercel (Frontend) + Render (
 ## 🚀 3-Step Deployment Process
 
 ### Step 1: Deploy Backend (Render) - 5 minutes
+
 ```
 1. Go to render.com → New → Web Service
 2. Connect GitHub (select your repo)
@@ -43,6 +44,7 @@ Your project is now fully ready for deployment to **Vercel (Frontend) + Render (
 ```
 
 ### Step 2: Deploy Frontend (Vercel) - 3 minutes
+
 ```
 1. Update .env.production with Render URL
 2. Push to GitHub: git push
@@ -56,6 +58,7 @@ Your project is now fully ready for deployment to **Vercel (Frontend) + Render (
 ```
 
 ### Step 3: Link Services - 2 minutes
+
 ```
 1. Back on Render dashboard
 2. citizen-grant-api → Settings
@@ -69,6 +72,7 @@ Your project is now fully ready for deployment to **Vercel (Frontend) + Render (
 ## 📋 Environment Variables Needed
 
 ### For Render Backend
+
 ```
 NODE_ENV=production
 PORT=5000
@@ -86,6 +90,7 @@ APP_URL=https://citizen-empowerment-grant.vercel.app
 ```
 
 ### For Vercel Frontend
+
 ```
 VITE_API_URL=https://citizen-grant-api.onrender.com
 MONGODB_URI=mongodb+srv://<your_db_user>:<your_db_password>@cluster0.mongodb.net/citizen-grant
@@ -103,12 +108,14 @@ EMAIL_FROM=support@usfederalgrant.gov
 ## 🧪 Testing After Deployment
 
 ### Backend Health Check
+
 ```bash
 curl https://citizen-grant-api.onrender.com/api/health
 # Should return: {"status":"API is running","timestamp":"...","environment":"production"}
 ```
 
 ### Frontend Test
+
 1. Open https://citizen-empowerment-grant.vercel.app
 2. Click "Apply Now"
 3. Fill the signup form
@@ -119,6 +126,7 @@ curl https://citizen-grant-api.onrender.com/api/health
 8. Can go to payment confirmation
 
 ### Database Test
+
 1. Check MongoDB Atlas
 2. Should see new user in `users` collection
 3. Verify field values match what you entered
@@ -160,27 +168,28 @@ curl https://citizen-grant-api.onrender.com/api/health
 
 ## ⚡ Quick Links
 
-| Platform | Link |
-|----------|------|
-| **Render Dashboard** | https://dashboard.render.com |
-| **Vercel Dashboard** | https://vercel.com/dashboard |
-| **MongoDB Atlas** | https://cloud.mongodb.com |
-| **GitHub** | https://github.com |
-| **Your Frontend** | https://citizen-empowerment-grant.vercel.app |
-| **Your Backend** | https://citizen-grant-api.onrender.com |
-| **Backend Health** | https://citizen-grant-api.onrender.com/api/health |
+| Platform             | Link                                              |
+| -------------------- | ------------------------------------------------- |
+| **Render Dashboard** | https://dashboard.render.com                      |
+| **Vercel Dashboard** | https://vercel.com/dashboard                      |
+| **MongoDB Atlas**    | https://cloud.mongodb.com                         |
+| **GitHub**           | https://github.com                                |
+| **Your Frontend**    | https://citizen-empowerment-grant.vercel.app      |
+| **Your Backend**     | https://citizen-grant-api.onrender.com            |
+| **Backend Health**   | https://citizen-grant-api.onrender.com/api/health |
 
 ---
 
 ## 📚 Documentation Files
 
-| File | Purpose |
-|------|---------|
-| `DEPLOYMENT_CHECKLIST.md` | ✅ Quick 10-minute checklist |
-| `DEPLOYMENT_GUIDE.md` | 📖 Detailed step-by-step guide |
-| `DEPLOYMENT_SETUP.md` | 🔧 Complete technical overview |
+| File                      | Purpose                        |
+| ------------------------- | ------------------------------ |
+| `DEPLOYMENT_CHECKLIST.md` | ✅ Quick 10-minute checklist   |
+| `DEPLOYMENT_GUIDE.md`     | 📖 Detailed step-by-step guide |
+| `DEPLOYMENT_SETUP.md`     | 🔧 Complete technical overview |
 
 ### Which Should I Read?
+
 - **Want quick overview?** → Read this file
 - **Want step-by-step?** → Read `DEPLOYMENT_CHECKLIST.md`
 - **Need detailed help?** → Read `DEPLOYMENT_GUIDE.md`
@@ -191,6 +200,7 @@ curl https://citizen-grant-api.onrender.com/api/health
 ## 🎯 Key Points
 
 ### Why This Works
+
 ✅ Backend is **completely separate** from frontend
 ✅ Each platform can **scale independently**
 ✅ **Automatic redeployment** on every push
@@ -198,6 +208,7 @@ curl https://citizen-grant-api.onrender.com/api/health
 ✅ **MongoDB Atlas** used for both (shared database)
 
 ### What Happens on `git push`
+
 1. GitHub receives your push
 2. Notifies Render → Auto-builds backend
 3. Notifies Vercel → Auto-builds frontend
@@ -205,6 +216,7 @@ curl https://citizen-grant-api.onrender.com/api/health
 5. Changes live in 5 minutes total
 
 ### Why Deploy Backend First?
+
 Backend needs to be running to get the URL
 Frontend needs that URL to connect to backend
 
@@ -213,6 +225,7 @@ Frontend needs that URL to connect to backend
 ## 💡 Tips & Tricks
 
 ### Development vs Production
+
 ```bash
 # Local Development
 npm run dev          # Runs both frontend & backend
@@ -223,6 +236,7 @@ npm run dev          # Runs both frontend & backend
 ```
 
 ### Monitoring
+
 ```bash
 # Check Backend Logs (Render)
 - Dashboard → Service → Logs
@@ -234,6 +248,7 @@ npm run dev          # Runs both frontend & backend
 ```
 
 ### Updating Code
+
 ```bash
 # All you do:
 git add .
@@ -244,6 +259,7 @@ git push origin main
 ```
 
 ### Database Access
+
 ```bash
 # Your MongoDB connection string works for both:
 # - Render backend uses it
@@ -265,29 +281,32 @@ git push origin main
 
 ## ✨ What's Different from Local Development
 
-| Aspect | Local | Production |
-|--------|-------|------------|
-| Frontend | `http://localhost:5173` | `*.vercel.app` |
-| Backend | `http://localhost:5000` | `*.onrender.com` |
-| Database | Local or Atlas | Atlas (same) |
-| CORS | `*` (any origin) | Strict (only frontend URL) |
-| Logs | Terminal | Platform dashboard |
-| Restart | Manual | Automatic on push |
-| SSL/TLS | No | Yes (HTTPS) |
+| Aspect   | Local                   | Production                 |
+| -------- | ----------------------- | -------------------------- |
+| Frontend | `http://localhost:5173` | `*.vercel.app`             |
+| Backend  | `http://localhost:5000` | `*.onrender.com`           |
+| Database | Local or Atlas          | Atlas (same)               |
+| CORS     | `*` (any origin)        | Strict (only frontend URL) |
+| Logs     | Terminal                | Platform dashboard         |
+| Restart  | Manual                  | Automatic on push          |
+| SSL/TLS  | No                      | Yes (HTTPS)                |
 
 ---
 
 ## 🎓 Learning Resources
 
 ### Render Docs
+
 - Deployment: https://render.com/docs/deploy-node-express-app
 - Environment Variables: https://render.com/docs/configure-environment
 
 ### Vercel Docs
+
 - Deployment: https://vercel.com/docs/deployments/overview
 - Framework: https://vercel.com/docs/frameworks/vite
 
 ### TanStack Start
+
 - Docs: https://tanstack.com/start/latest
 
 ---
@@ -295,6 +314,7 @@ git push origin main
 ## 🔍 Verification Checklist
 
 After deployment, verify:
+
 - [ ] Backend running: `curl ...onrender.com/api/health`
 - [ ] Frontend loads: Open ...vercel.app
 - [ ] Can signup: Fill form, see reference #
@@ -317,6 +337,7 @@ Your project has everything needed for production deployment:
 ✅ Comprehensive guides (`DEPLOYMENT_*.md`)
 
 ### Next Steps:
+
 1. Push code to GitHub
 2. Follow `DEPLOYMENT_CHECKLIST.md`
 3. Deploy backend (Render) - 5 min

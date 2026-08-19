@@ -30,9 +30,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               <span className="block font-serif text-lg font-bold leading-tight text-white">
                 U.S. Federal Citizen Grant Program
               </span>
-              <span className="block text-xs text-blue-100">
-                Official Government Portal
-              </span>
+              <span className="block text-xs text-blue-100">Official Government Portal</span>
             </span>
           </Link>
 
@@ -79,17 +77,34 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <div>
               <h3 className="font-serif text-lg font-bold text-yellow-400 mb-3">About Us</h3>
               <p className="text-blue-100 text-sm">
-                The U.S. Federal Citizen Grant Program is an official government initiative to distribute federal funds to eligible citizens and permanent residents.
+                The U.S. Federal Citizen Grant Program is an official government initiative to
+                distribute federal funds to eligible citizens and permanent residents.
               </p>
             </div>
 
             <div>
               <h3 className="font-serif text-lg font-bold text-yellow-400 mb-3">Quick Links</h3>
               <ul className="text-blue-100 text-sm space-y-2">
-                <li><Link to="/" className="hover:text-white">Home</Link></li>
-                <li><Link to="/eligibility" className="hover:text-white">Check Eligibility</Link></li>
-                <li><Link to="/apply" className="hover:text-white">Apply Now</Link></li>
-                <li><Link to="/faq" className="hover:text-white">FAQ</Link></li>
+                <li>
+                  <Link to="/" className="hover:text-white">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/eligibility" className="hover:text-white">
+                    Check Eligibility
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/apply" className="hover:text-white">
+                    Apply Now
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/faq" className="hover:text-white">
+                    FAQ
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -118,10 +133,12 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
           <div className="text-center text-blue-100 text-xs">
             <p className="mb-2">
-              © {new Date().getFullYear()} U.S. Federal Citizen Grant Program - Official Government Portal
+              © {new Date().getFullYear()} U.S. Federal Citizen Grant Program - Official Government
+              Portal
             </p>
             <p>
-              This is an official United States government website. | Privacy Policy | Terms & Conditions | Accessibility Statement
+              This is an official United States government website. | Privacy Policy | Terms &
+              Conditions | Accessibility Statement
             </p>
           </div>
         </div>

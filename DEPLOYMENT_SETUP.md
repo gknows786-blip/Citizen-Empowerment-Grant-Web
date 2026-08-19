@@ -1,6 +1,7 @@
 # 📦 Deployment Files & Configuration Summary
 
 ## Overview
+
 All files needed for Vercel + Render deployment are now included in the project.
 
 ---
@@ -8,7 +9,9 @@ All files needed for Vercel + Render deployment are now included in the project.
 ## New Deployment Files Created
 
 ### 1. **Backend Entry Point**
+
 📄 `src/backend.ts`
+
 - Standalone Express server for Render
 - Connects to MongoDB
 - Sets up CORS
@@ -19,7 +22,9 @@ All files needed for Vercel + Render deployment are now included in the project.
 ### 2. **Platform Configuration Files**
 
 #### For Vercel (Frontend)
+
 📄 `vercel.json`
+
 - Build configuration for Vercel
 - Specifies output directory: `.output/public`
 - Declares required environment variables
@@ -27,7 +32,9 @@ All files needed for Vercel + Render deployment are now included in the project.
 - Region: iad1 (US)
 
 #### For Render (Backend)
+
 📄 `render.yaml`
+
 - Infrastructure as Code for Render
 - Defines service: Node.js web service
 - Database configuration
@@ -38,7 +45,9 @@ All files needed for Vercel + Render deployment are now included in the project.
 ### 3. **Environment Variable Templates**
 
 #### `.env.render` (for Render backend)
+
 Contains all backend environment variables:
+
 - Node.js config (NODE_ENV, PORT)
 - Database (MONGODB_URI)
 - Authentication (JWT_SECRET, JWT_EXPIRE)
@@ -47,7 +56,9 @@ Contains all backend environment variables:
 - URLs (APP_URL, FRONTEND_URL, CORS_ORIGIN)
 
 #### `.env.vercel` (for Vercel frontend)
+
 Contains frontend-specific environment variables:
+
 - Database connection string (for server functions)
 - JWT secrets
 - Email service credentials
@@ -55,14 +66,18 @@ Contains frontend-specific environment variables:
 - OAuth credentials
 
 #### `.env.production`
+
 Frontend production environment:
+
 - VITE_API_URL pointing to Render backend
 - Used during Vercel build and runtime
 
 ### 4. **Updated Configuration Files**
 
 #### `package.json` (scripts added)
+
 New npm scripts for deployment:
+
 ```json
 {
   "start:backend": "node --loader tsx src/backend.ts",
@@ -71,7 +86,9 @@ New npm scripts for deployment:
 ```
 
 #### `.gitignore` (enhanced)
+
 Added to prevent committing sensitive data:
+
 ```
 .env
 .env.local
@@ -83,6 +100,7 @@ Added to prevent committing sensitive data:
 ### 5. **Documentation Files**
 
 #### `DEPLOYMENT_GUIDE.md` (comprehensive)
+
 - Step-by-step deployment instructions
 - Configuration details for each platform
 - Environment variable setup
@@ -91,6 +109,7 @@ Added to prevent committing sensitive data:
 - Monitoring & logs
 
 #### `DEPLOYMENT_CHECKLIST.md` (quick reference)
+
 - Deployment order (backend → frontend)
 - Quick links
 - Environment variable summary
@@ -171,6 +190,7 @@ citizen-empowerment-grant/
 ## Environment Variables Summary
 
 ### Variables Used in Both
+
 - `MONGODB_URI` - Database connection
 - `JWT_SECRET` - Token encryption
 - `JWT_EXPIRE` - Token expiration (7d)
@@ -182,12 +202,14 @@ citizen-empowerment-grant/
 - `APP_URL` - Application URL
 
 ### Backend (Render) Only
+
 - `NODE_ENV` - Environment (production)
 - `PORT` - Server port (5000)
 - `FRONTEND_URL` - Frontend origin for CORS
 - `CORS_ORIGIN` - CORS whitelist
 
 ### Frontend (Vercel) Only
+
 - `VITE_API_URL` - Backend API base URL
 
 ---
@@ -195,6 +217,7 @@ citizen-empowerment-grant/
 ## Deployment Flow
 
 ### First Time Setup
+
 1. Create GitHub repository
 2. Push code with all deployment files
 3. Create Render account & connect GitHub
@@ -206,6 +229,7 @@ citizen-empowerment-grant/
 9. Test both services
 
 ### Auto-Deploy After Setup
+
 ```
 git push origin main
          ↓
@@ -224,6 +248,7 @@ GitHub receives push
 ## Quick Setup Commands
 
 ### Local Development
+
 ```bash
 # Install dependencies
 npm install
@@ -239,6 +264,7 @@ npm run start:backend
 ```
 
 ### Deployment
+
 ```bash
 # Commit and push (triggers auto-deploy)
 git add .
@@ -255,6 +281,7 @@ git push origin main
 ## Critical Environment Variables
 
 These MUST be set on both platforms:
+
 - ✅ `MONGODB_URI` - Without this, database won't connect
 - ✅ `JWT_SECRET` - Without this, authentication fails
 - ✅ `EMAIL_USER` & `EMAIL_PASSWORD` - Without these, emails don't send
@@ -266,6 +293,7 @@ These MUST be set on both platforms:
 ## Deployment Checklist
 
 ### Before Deploying
+
 - [ ] Code pushed to GitHub
 - [ ] All environment variables prepared
 - [ ] MongoDB Atlas connection string ready
@@ -275,6 +303,7 @@ These MUST be set on both platforms:
 - [ ] Vercel account created
 
 ### During Deployment
+
 - [ ] Deploy backend to Render first
 - [ ] Get backend URL from Render
 - [ ] Deploy frontend to Vercel
@@ -282,6 +311,7 @@ These MUST be set on both platforms:
 - [ ] Update Vercel frontend URL
 
 ### After Deployment
+
 - [ ] Test backend health endpoint
 - [ ] Test frontend signup
 - [ ] Test login
@@ -294,12 +324,14 @@ These MUST be set on both platforms:
 ## Support & Troubleshooting
 
 See `DEPLOYMENT_GUIDE.md` for:
+
 - Detailed step-by-step instructions
 - Troubleshooting specific errors
 - Testing procedures
 - Monitoring setup
 
 See `DEPLOYMENT_CHECKLIST.md` for:
+
 - Quick reference checklist
 - Common issues
 - Quick links
@@ -320,12 +352,12 @@ See `DEPLOYMENT_CHECKLIST.md` for:
 
 ## What's Deployed Where
 
-| Component | Platform | URL Pattern |
-|-----------|----------|------------|
-| Frontend (React) | Vercel | `*.vercel.app` |
-| Backend API | Render | `*.onrender.com` |
-| Database | MongoDB Atlas | `*.mongodb.net` |
-| Code Repository | GitHub | `github.com/...` |
+| Component        | Platform      | URL Pattern      |
+| ---------------- | ------------- | ---------------- |
+| Frontend (React) | Vercel        | `*.vercel.app`   |
+| Backend API      | Render        | `*.onrender.com` |
+| Database         | MongoDB Atlas | `*.mongodb.net`  |
+| Code Repository  | GitHub        | `github.com/...` |
 
 ---
 

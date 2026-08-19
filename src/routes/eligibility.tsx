@@ -3,10 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  CheckCircle,
-  AlertCircle,
-} from "lucide-react";
+import { CheckCircle, AlertCircle } from "lucide-react";
 
 export const Route = createFileRoute("/eligibility")({
   head: () => ({
@@ -62,26 +59,22 @@ const applicationSteps = [
   {
     step: 1,
     title: "Check eligibility",
-    description:
-      "Review the requirements before starting.",
+    description: "Review the requirements before starting.",
   },
   {
     step: 2,
     title: "Create an account",
-    description:
-      "Provide basic contact information.",
+    description: "Provide basic contact information.",
   },
   {
     step: 3,
     title: "Submit your project",
-    description:
-      "Describe your project and provide a budget.",
+    description: "Describe your project and provide a budget.",
   },
   {
     step: 4,
     title: "Application review",
-    description:
-      "Applications can be reviewed using the published criteria.",
+    description: "Applications can be reviewed using the published criteria.",
   },
 ];
 
@@ -97,28 +90,21 @@ function Eligibility() {
               </h1>
 
               <p className="text-lg text-gray-700">
-                Review the requirements before starting an
-                application.
+                Review the requirements before starting an application.
               </p>
             </div>
 
             <Card className="mb-10 border-2 border-yellow-300 bg-yellow-50 p-6">
               <div className="flex items-start gap-4">
-                <AlertCircle
-                  className="flex-shrink-0 text-yellow-600"
-                  size={24}
-                />
+                <AlertCircle className="flex-shrink-0 text-yellow-600" size={24} />
 
                 <div>
-                  <h2 className="mb-2 text-xl font-bold text-yellow-900">
-                    Demonstration Project
-                  </h2>
+                  <h2 className="mb-2 text-xl font-bold text-yellow-900">Demonstration Project</h2>
 
                   <p className="text-yellow-800">
-                    This portal is an independent software
-                    demonstration. It is not an official government
-                    website and does not guarantee that an applicant
-                    will receive funding.
+                    This portal is an independent software demonstration. It is not an official
+                    government website and does not guarantee that an applicant will receive
+                    funding.
                   </p>
                 </div>
               </div>
@@ -126,37 +112,24 @@ function Eligibility() {
 
             <Card className="mb-10 bg-green-50 p-8">
               <div className="mb-6 flex items-start gap-4">
-                <CheckCircle
-                  className="flex-shrink-0 text-green-600"
-                  size={28}
-                />
+                <CheckCircle className="flex-shrink-0 text-green-600" size={28} />
 
                 <div>
-                  <h2 className="font-serif text-2xl font-bold text-green-900">
-                    Who Can Apply
-                  </h2>
+                  <h2 className="font-serif text-2xl font-bold text-green-900">Who Can Apply</h2>
 
                   <p className="mt-2 text-green-800">
-                    The following requirements are used by this
-                    demonstration application.
+                    The following requirements are used by this demonstration application.
                   </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {criteria.map((criterion) => (
-                  <div
-                    key={criterion}
-                    className="rounded-lg border border-green-200 bg-white p-4"
-                  >
+                  <div key={criterion} className="rounded-lg border border-green-200 bg-white p-4">
                     <div className="flex gap-3">
-                      <span className="text-green-600">
-                        ✓
-                      </span>
+                      <span className="text-green-600">✓</span>
 
-                      <p className="text-gray-700">
-                        {criterion}
-                      </p>
+                      <p className="text-gray-700">{criterion}</p>
                     </div>
                   </div>
                 ))}
@@ -165,10 +138,7 @@ function Eligibility() {
 
             <Card className="mb-10 border-l-4 border-red-600 bg-red-50 p-6">
               <div className="flex gap-4">
-                <AlertCircle
-                  className="flex-shrink-0 text-red-600"
-                  size={24}
-                />
+                <AlertCircle className="flex-shrink-0 text-red-600" size={24} />
 
                 <div>
                   <h2 className="mb-3 text-xl font-bold text-red-900">
@@ -177,10 +147,7 @@ function Eligibility() {
 
                   <ul className="space-y-2 text-red-800">
                     {excluded.map((item) => (
-                      <li
-                        key={item}
-                        className="flex gap-2"
-                      >
+                      <li key={item} className="flex gap-2">
                         <span>•</span>
                         <span>{item}</span>
                       </li>
@@ -199,33 +166,18 @@ function Eligibility() {
                 <table className="w-full overflow-hidden rounded-lg bg-white shadow-lg">
                   <thead className="bg-blue-900 text-white">
                     <tr>
-                      <th className="p-4 text-left">
-                        Criterion
-                      </th>
+                      <th className="p-4 text-left">Criterion</th>
 
-                      <th className="p-4 text-left">
-                        Weight
-                      </th>
+                      <th className="p-4 text-left">Weight</th>
                     </tr>
                   </thead>
 
                   <tbody>
                     {rubric.map((item, index) => (
-                      <tr
-                        key={item.label}
-                        className={
-                          index % 2 === 0
-                            ? "bg-white"
-                            : "bg-blue-50"
-                        }
-                      >
-                        <td className="border-b p-4 font-semibold text-blue-900">
-                          {item.label}
-                        </td>
+                      <tr key={item.label} className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}>
+                        <td className="border-b p-4 font-semibold text-blue-900">{item.label}</td>
 
-                        <td className="border-b p-4 text-gray-700">
-                          {item.weight}
-                        </td>
+                        <td className="border-b p-4 text-gray-700">{item.weight}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -244,17 +196,11 @@ function Eligibility() {
                     key={item.step}
                     className="bg-gradient-to-br from-blue-600 to-blue-700 p-6 text-white"
                   >
-                    <div className="mb-3 text-4xl font-bold">
-                      {item.step}
-                    </div>
+                    <div className="mb-3 text-4xl font-bold">{item.step}</div>
 
-                    <h3 className="mb-2 text-lg font-bold">
-                      {item.title}
-                    </h3>
+                    <h3 className="mb-2 text-lg font-bold">{item.title}</h3>
 
-                    <p className="text-blue-100">
-                      {item.description}
-                    </p>
+                    <p className="text-blue-100">{item.description}</p>
                   </Card>
                 ))}
               </div>
@@ -266,33 +212,21 @@ function Eligibility() {
               </h2>
 
               <div className="space-y-4 text-gray-700">
-                <p>
-                  This application is part of an independent
-                  demonstration project.
-                </p>
+                <p>This application is part of an independent demonstration project.</p>
+
+                <p>No application fee is required by this demonstration portal.</p>
+
+                <p>Submission does not guarantee an award or funding.</p>
 
                 <p>
-                  No application fee is required by this
-                  demonstration portal.
-                </p>
-
-                <p>
-                  Submission does not guarantee an award or
-                  funding.
-                </p>
-
-                <p>
-                  Never send passwords, payment information, or
-                  unnecessary identity documents through an
-                  unverified website.
+                  Never send passwords, payment information, or unnecessary identity documents
+                  through an unverified website.
                 </p>
               </div>
             </Card>
 
             <div className="text-center">
-              <h2 className="mb-6 text-2xl font-bold text-blue-900">
-                Ready to Start?
-              </h2>
+              <h2 className="mb-6 text-2xl font-bold text-blue-900">Ready to Start?</h2>
 
               <Link to="/apply">
                 <Button className="bg-green-600 px-8 py-4 text-lg font-bold text-white hover:bg-green-700">

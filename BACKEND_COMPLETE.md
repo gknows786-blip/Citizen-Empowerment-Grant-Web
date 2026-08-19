@@ -3,6 +3,7 @@
 ## 📊 Backend Configuration Summary
 
 ### 1. ✅ Environment Variables (.env)
+
 ```
 ✅ MONGODB_URI=mongodb+srv://<your_db_user>:<your_db_password>@cluster0.mongodb.net/citizen-grant
 ✅ JWT_SECRET=<your_jwt_secret_min_32_chars>
@@ -13,12 +14,14 @@
 ```
 
 ### 2. ✅ Database Setup
+
 - **Service**: MongoDB Atlas
 - **Cluster**: cluster0.mhcfhmt.mongodb.net
 - **Database**: citizen-grant
 - **Status**: Ready to connect
 
 ### 3. ✅ Authentication System
+
 - ✅ User registration (signup) with password hashing
 - ✅ User login (signin) with password verification
 - ✅ JWT token generation (expires in 7 days)
@@ -27,6 +30,7 @@
 - ✅ Protected routes with token validation
 
 ### 4. ✅ Email Service (Nodemailer)
+
 - ✅ Gmail SMTP configured
 - ✅ App password configured
 - ✅ Email templates created:
@@ -36,12 +40,14 @@
   - Password reset link
 
 ### 5. ✅ Grant Package System
+
 - ✅ 5 package types: Basic, Silver, Gold, Platinum, Diamond
 - ✅ Package selection with automatic email
 - ✅ Payment confirmation workflow
 - ✅ Dashboard data retrieval
 
 ### 6. ✅ API Server Functions (TanStack Start)
+
 Created 8 server functions for frontend to call:
 
 1. `signupServerFn` - User registration
@@ -88,38 +94,42 @@ src/
 ## 🚀 How to Test Backend (After installing packages)
 
 ### Test 1: MongoDB Connection
+
 ```bash
 npm run dev
 # Check console for: "✅ MongoDB connected successfully"
 ```
 
 ### Test 2: User Signup
+
 ```javascript
 // In frontend or Postman:
-import { signupServerFn } from '@/lib/serverFunctions';
+import { signupServerFn } from "@/lib/serverFunctions";
 
 const result = await signupServerFn({
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john@example.com',
-  password: 'password123',
-  phone: '+1234567890',
-  dateOfBirth: '1995-01-15',
-  gender: 'Male',
-  occupation: 'Engineer',
-  address: '123 Main St',
-  city: 'New York',
-  state: 'NY',
-  zipCode: '10001',
-  country: 'USA',
-  maritalStatus: 'Single'
+  firstName: "John",
+  lastName: "Doe",
+  email: "john@example.com",
+  password: "password123",
+  phone: "+1234567890",
+  dateOfBirth: "1995-01-15",
+  gender: "Male",
+  occupation: "Engineer",
+  address: "123 Main St",
+  city: "New York",
+  state: "NY",
+  zipCode: "10001",
+  country: "USA",
+  maritalStatus: "Single",
 });
 // Should return: { success: true, token: '...', user: {...} }
 // Email sent to: john@example.com
 ```
 
 ### Test 3: Email Delivery
+
 When you sign up, you should receive an email to your registered email address with:
+
 - Welcome message
 - Your reference number (e.g., BE6006/85428)
 - Next steps for the grant application
@@ -156,12 +166,12 @@ The frontend will call these server functions:
 
 ```typescript
 // Example in a React component:
-import { signupServerFn } from '@/lib/serverFunctions';
-import { useState } from 'react';
+import { signupServerFn } from "@/lib/serverFunctions";
+import { useState } from "react";
 
 export function SignupForm() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (formData) => {
     setLoading(true);
@@ -169,13 +179,13 @@ export function SignupForm() {
       const result = await signupServerFn(formData);
       if (result.success) {
         // Store token and redirect to dashboard
-        localStorage.setItem('token', result.token);
-        window.location.href = '/dashboard';
+        localStorage.setItem("token", result.token);
+        window.location.href = "/dashboard";
       } else {
         setError(result.error);
       }
     } catch (err) {
-      setError('Failed to sign up');
+      setError("Failed to sign up");
     } finally {
       setLoading(false);
     }

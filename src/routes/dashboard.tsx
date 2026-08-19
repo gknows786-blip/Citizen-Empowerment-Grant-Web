@@ -3,7 +3,11 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useState, useEffect } from "react";
-import { getDashboardDataServerFn, getGrantPackagesServerFn, selectPackageServerFn } from "@/lib/serverFunctions";
+import {
+  getDashboardDataServerFn,
+  getGrantPackagesServerFn,
+  selectPackageServerFn,
+} from "@/lib/serverFunctions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle, LogOut, Download } from "lucide-react";
 
@@ -13,7 +17,8 @@ export const Route = createFileRoute("/dashboard")({
       { title: "Your Dashboard — U.S. Federal Citizen Grant Program" },
       {
         name: "description",
-        content: "Access your grant dashboard, view your claim status, and select your grant package.",
+        content:
+          "Access your grant dashboard, view your claim status, and select your grant package.",
       },
     ],
   }),
@@ -110,7 +115,9 @@ function Dashboard() {
       });
 
       if (result.success) {
-        setSuccess(`✅ ${packageName} package selected! Check your email for payment instructions.`);
+        setSuccess(
+          `✅ ${packageName} package selected! Check your email for payment instructions.`,
+        );
         // Refresh dashboard data
         const dashResult = await getDashboardDataServerFn(token);
         if (dashResult.success) {
@@ -151,7 +158,9 @@ function Dashboard() {
           <div className="max-w-7xl mx-auto">
             <Alert className="bg-red-50 border-red-300">
               <AlertCircle className="h-4 w-4 text-red-600" />
-              <AlertDescription className="text-red-800">{error || "Unable to load dashboard"}</AlertDescription>
+              <AlertDescription className="text-red-800">
+                {error || "Unable to load dashboard"}
+              </AlertDescription>
             </Alert>
           </div>
         </div>
@@ -171,7 +180,10 @@ function Dashboard() {
                   Welcome, {dashboardData.firstName}!
                 </h1>
                 <p className="text-gray-600">
-                  Reference Number: <span className="font-mono font-bold text-blue-900">{dashboardData.refNumber}</span>
+                  Reference Number:{" "}
+                  <span className="font-mono font-bold text-blue-900">
+                    {dashboardData.refNumber}
+                  </span>
                 </p>
               </div>
               <Button onClick={handleLogout} variant="outline" className="gap-2">
@@ -211,7 +223,9 @@ function Dashboard() {
                 <p className="text-3xl font-bold text-green-600">
                   ${dashboardData.grantAmount ? dashboardData.grantAmount.toLocaleString() : "N/A"}
                 </p>
-                <p className="text-xs text-gray-500 mt-2">{dashboardData.selectedPackage || "No package selected"}</p>
+                <p className="text-xs text-gray-500 mt-2">
+                  {dashboardData.selectedPackage || "No package selected"}
+                </p>
               </Card>
 
               <Card className="p-6 bg-white shadow-lg">
@@ -231,7 +245,9 @@ function Dashboard() {
 
               <Card className="p-6 bg-white shadow-lg">
                 <p className="text-gray-600 text-sm font-semibold mb-2">Your Unique Code</p>
-                <p className="text-xl font-mono font-bold text-purple-600">{dashboardData.refNumber}</p>
+                <p className="text-xl font-mono font-bold text-purple-600">
+                  {dashboardData.refNumber}
+                </p>
                 <p className="text-xs text-gray-500 mt-2">Keep confidential</p>
               </Card>
             </div>
@@ -255,42 +271,58 @@ function Dashboard() {
                 </div>
                 <div className="border-b pb-4">
                   <p className="text-gray-600 text-sm">Email Address</p>
-                  <p className="text-lg font-semibold text-blue-900">{dashboardData.profile.email}</p>
+                  <p className="text-lg font-semibold text-blue-900">
+                    {dashboardData.profile.email}
+                  </p>
                 </div>
                 <div className="border-b pb-4">
                   <p className="text-gray-600 text-sm">Phone Number</p>
-                  <p className="text-lg font-semibold text-blue-900">{dashboardData.profile.phone}</p>
+                  <p className="text-lg font-semibold text-blue-900">
+                    {dashboardData.profile.phone}
+                  </p>
                 </div>
                 <div className="border-b pb-4">
                   <p className="text-gray-600 text-sm">Date of Birth</p>
-                  <p className="text-lg font-semibold text-blue-900">{dashboardData.profile.dateOfBirth}</p>
+                  <p className="text-lg font-semibold text-blue-900">
+                    {dashboardData.profile.dateOfBirth}
+                  </p>
                 </div>
                 <div className="border-b pb-4">
                   <p className="text-gray-600 text-sm">Address</p>
-                  <p className="text-lg font-semibold text-blue-900">{dashboardData.profile.address}</p>
+                  <p className="text-lg font-semibold text-blue-900">
+                    {dashboardData.profile.address}
+                  </p>
                 </div>
                 <div className="border-b pb-4">
                   <p className="text-gray-600 text-sm">City, State, ZIP</p>
                   <p className="text-lg font-semibold text-blue-900">
-                    {dashboardData.profile.city}, {dashboardData.profile.state} {dashboardData.profile.zipCode}
+                    {dashboardData.profile.city}, {dashboardData.profile.state}{" "}
+                    {dashboardData.profile.zipCode}
                   </p>
                 </div>
                 <div className="border-b pb-4">
                   <p className="text-gray-600 text-sm">Country</p>
-                  <p className="text-lg font-semibold text-blue-900">{dashboardData.profile.country}</p>
+                  <p className="text-lg font-semibold text-blue-900">
+                    {dashboardData.profile.country}
+                  </p>
                 </div>
                 <div className="border-b pb-4">
                   <p className="text-gray-600 text-sm">Occupation</p>
-                  <p className="text-lg font-semibold text-blue-900">{dashboardData.profile.occupation}</p>
+                  <p className="text-lg font-semibold text-blue-900">
+                    {dashboardData.profile.occupation}
+                  </p>
                 </div>
               </div>
             </Card>
 
             {/* Grant Packages Section */}
             <Card className="p-8 bg-white shadow-lg">
-              <h2 className="text-2xl font-bold text-blue-900 font-serif mb-4">Select Your Grant Package</h2>
+              <h2 className="text-2xl font-bold text-blue-900 font-serif mb-4">
+                Select Your Grant Package
+              </h2>
               <p className="text-gray-700 mb-6">
-                Choose the amount you wish to receive. A mandatory Tax Clearance & Shipping Fee is required before delivery.
+                Choose the amount you wish to receive. A mandatory Tax Clearance & Shipping Fee is
+                required before delivery.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
@@ -312,7 +344,9 @@ function Dashboard() {
                     </div>
                     <h3 className="font-bold text-lg text-blue-900 mb-3">{pkg.name}</h3>
                     <div className="mb-4">
-                      <p className="text-2xl font-bold text-green-600">${pkg.grantAmount.toLocaleString()}</p>
+                      <p className="text-2xl font-bold text-green-600">
+                        ${pkg.grantAmount.toLocaleString()}
+                      </p>
                       <p className="text-xs text-gray-600 mt-1">Grant Amount</p>
                     </div>
                     <div className="mb-4 pb-4 border-b">
@@ -336,7 +370,8 @@ function Dashboard() {
               <Alert className="bg-yellow-50 border-yellow-300">
                 <AlertCircle className="h-4 w-4 text-yellow-600" />
                 <AlertDescription className="text-yellow-800">
-                  <strong>Note:</strong> Fees cover tax clearance, legal processing, and insured home delivery via UPS/FedEx. These are non-refundable government processing fees.
+                  <strong>Note:</strong> Fees cover tax clearance, legal processing, and insured
+                  home delivery via UPS/FedEx. These are non-refundable government processing fees.
                 </AlertDescription>
               </Alert>
             </Card>

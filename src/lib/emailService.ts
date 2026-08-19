@@ -1,7 +1,7 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
@@ -18,7 +18,7 @@ export const sendEmail = async (to: string, subject: string, html: string) => {
     });
     return true;
   } catch (error) {
-    console.error('Email send error:', error);
+    console.error("Email send error:", error);
     return false;
   }
 };
@@ -63,7 +63,12 @@ export const emailTemplates = {
     `,
   }),
 
-  packageSelectionEmail: (firstName: string, refNumber: string, grantAmount: number, fee: number) => ({
+  packageSelectionEmail: (
+    firstName: string,
+    refNumber: string,
+    grantAmount: number,
+    fee: number,
+  ) => ({
     subject: `URGENT: Payment Instructions for Your Federal Grant Delivery — Ref: ${refNumber}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -138,7 +143,7 @@ export const emailTemplates = {
   }),
 
   passwordReset: (resetUrl: string) => ({
-    subject: 'Password Reset - U.S. Federal Citizen Grant Program',
+    subject: "Password Reset - U.S. Federal Citizen Grant Program",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background-color: #1B2A4A; color: white; padding: 20px; text-align: center;">

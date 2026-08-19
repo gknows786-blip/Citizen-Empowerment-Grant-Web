@@ -4,11 +4,11 @@ services:
     env: node
     region: oregon
     plan: starter
-    
+
     # Build configuration
     buildCommand: npm install --no-audit --no-fund --maxsockets=4
     startCommand: node --import tsx src/backend.ts
-    
+
     # Environment variables (set in Render dashboard)
     envVars:
       - key: NODE_ENV
@@ -38,6 +38,6 @@ services:
 
     # Health check
     healthCheckPath: /api/health
-    
+
     # Auto-deploy
     autoDeploy: true

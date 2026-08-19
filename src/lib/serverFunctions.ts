@@ -26,10 +26,7 @@ const calculateAge = (dob: Date): number => {
 
   const monthDiff = today.getMonth() - dob.getMonth();
 
-  if (
-    monthDiff < 0 ||
-    (monthDiff === 0 && today.getDate() < dob.getDate())
-  ) {
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
     age--;
   }
 
@@ -145,17 +142,10 @@ export const signupServerFn = createServerFn({
 
       await user.save();
 
-      const token = generateToken(
-        user._id.toString(),
-        user.email,
-      );
+      const token = generateToken(user._id.toString(), user.email);
 
       try {
-        const { subject, html } =
-          emailTemplates.signupConfirmation(
-            firstName,
-            refNumber,
-          );
+        const { subject, html } = emailTemplates.signupConfirmation(firstName, refNumber);
 
         await sendEmail(email, subject, html);
       } catch (emailError) {
@@ -219,8 +209,7 @@ export const signinServerFn = createServerFn({
         };
       }
 
-      const isPasswordValid =
-        await user.comparePassword(password);
+      const isPasswordValid = await user.comparePassword(password);
 
       if (!isPasswordValid) {
         return {
@@ -229,10 +218,7 @@ export const signinServerFn = createServerFn({
         };
       }
 
-      const token = generateToken(
-        user._id.toString(),
-        user.email,
-      );
+      const token = generateToken(user._id.toString(), user.email);
 
       return {
         success: true,
@@ -286,24 +272,17 @@ export const forgotPasswordServerFn = createServerFn({
       if (!user) {
         return {
           success: true,
-          message:
-            "If the email exists, a password reset link has been sent",
+          message: "If the email exists, a password reset link has been sent",
         };
       }
 
-      const resetToken = generatePasswordResetToken(
-        user._id.toString(),
-      );
+      const resetToken = generatePasswordResetToken(user._id.toString());
 
-      const appUrl =
-        process.env.APP_URL ||
-        "http://localhost:3000";
+      const appUrl = process.env.APP_URL || "http://localhost:3000";
 
-      const resetUrl =
-        `${appUrl}/reset-password?token=${resetToken}`;
+      const resetUrl = `${appUrl}/reset-password?token=${resetToken}`;
 
-      const { subject, html } =
-        emailTemplates.passwordReset(resetUrl);
+      const { subject, html } = emailTemplates.passwordReset(resetUrl);
 
       await sendEmail(email, subject, html);
 
@@ -354,8 +333,7 @@ export const resetPasswordServerFn = createServerFn({
         };
       }
 
-      const decoded =
-        verifyPasswordResetToken(token);
+      const decoded = verifyPasswordResetToken(token);
 
       if (!decoded) {
         return {
@@ -398,76 +376,70 @@ export const resetPasswordServerFn = createServerFn({
 
 export const getUserProfileServerFn = createServerFn({
   method: "GET",
-}).handler(
-  async ({
-    data,
-  }: {
-    data: string;
-  }) => {
-    try {
-      const token = data;
+}).handler(async ({ data }: { data: string }) => {
+  try {
+    const token = data;
 
-      if (!token) {
-        return {
-          success: false,
-          error: "No token provided",
-        };
-      }
-
-      const decoded = verifyToken(token);
-
-      if (!decoded) {
-        return {
-          success: false,
-          error: "Invalid token",
-        };
-      }
-
-      const user = await User.findById(decoded.userId);
-
-      if (!user) {
-        return {
-          success: false,
-          error: "User not found",
-        };
-      }
-
-      return {
-        success: true,
-        user: {
-          id: user._id.toString(),
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          phone: user.phone,
-          dateOfBirth: user.dateOfBirth,
-          gender: user.gender,
-          occupation: user.occupation,
-          age: user.age,
-          address: user.address,
-          city: user.city,
-          state: user.state,
-          zipCode: user.zipCode,
-          country: user.country,
-          maritalStatus: user.maritalStatus,
-          refNumber: user.refNumber,
-          selectedPackage: user.selectedPackage,
-          grantAmount: user.grantAmount,
-          feeAmount: user.feeAmount,
-          paymentStatus: user.paymentStatus,
-          emailVerified: user.emailVerified,
-        },
-      };
-    } catch (error) {
-      console.error("Get profile error:", error);
-
+    if (!token) {
       return {
         success: false,
-        error: "Failed to get profile",
+        error: "No token provided",
       };
     }
-  },
-);
+
+    const decoded = verifyToken(token);
+
+    if (!decoded) {
+      return {
+        success: false,
+        error: "Invalid token",
+      };
+    }
+
+    const user = await User.findById(decoded.userId);
+
+    if (!user) {
+      return {
+        success: false,
+        error: "User not found",
+      };
+    }
+
+    return {
+      success: true,
+      user: {
+        id: user._id.toString(),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        dateOfBirth: user.dateOfBirth,
+        gender: user.gender,
+        occupation: user.occupation,
+        age: user.age,
+        address: user.address,
+        city: user.city,
+        state: user.state,
+        zipCode: user.zipCode,
+        country: user.country,
+        maritalStatus: user.maritalStatus,
+        refNumber: user.refNumber,
+        selectedPackage: user.selectedPackage,
+        grantAmount: user.grantAmount,
+        feeAmount: user.feeAmount,
+        paymentStatus: user.paymentStatus,
+        emailVerified: user.emailVerified,
+      },
+    };
+  } catch (error) {
+    console.error("Get profile error:", error);
+
+    return {
+      success: false,
+      error: "Failed to get profile",
+    };
+  }
+});
 
 /* -------------------------------------------------------------------------- */
 /* DEMO PROGRAM PACKAGES                                                      */
@@ -557,10 +529,7 @@ export const selectPackageServerFn = createServerFn({
         Diamond: 200000,
       };
 
-      if (
-        !packageName ||
-        !(packageName in packages)
-      ) {
+      if (!packageName || !(packageName in packages)) {
         return {
           success: false,
           error: "Invalid package name",
@@ -576,10 +545,7 @@ export const selectPackageServerFn = createServerFn({
         };
       }
 
-      const grantAmount =
-        packages[
-          packageName as keyof typeof packages
-        ];
+      const grantAmount = packages[packageName as keyof typeof packages];
 
       user.selectedPackage = packageName as any;
       user.grantAmount = grantAmount;
@@ -679,8 +645,7 @@ export const confirmPaymentServerFn = createServerFn({
 
       return {
         success: true,
-        message:
-          "Demo payment status recorded. No real payment was processed.",
+        message: "Demo payment status recorded. No real payment was processed.",
         data: {
           paymentStatus: user.paymentStatus,
           refNumber: user.refNumber,
@@ -704,73 +669,67 @@ export const confirmPaymentServerFn = createServerFn({
 
 export const getDashboardDataServerFn = createServerFn({
   method: "GET",
-}).handler(
-  async ({
-    data,
-  }: {
-    data: string;
-  }) => {
-    try {
-      const token = data;
+}).handler(async ({ data }: { data: string }) => {
+  try {
+    const token = data;
 
-      if (!token) {
-        return {
-          success: false,
-          error: "No token provided",
-        };
-      }
-
-      const decoded = verifyToken(token);
-
-      if (!decoded) {
-        return {
-          success: false,
-          error: "Invalid token",
-        };
-      }
-
-      const user = await User.findById(decoded.userId);
-
-      if (!user) {
-        return {
-          success: false,
-          error: "User not found",
-        };
-      }
-
-      return {
-        success: true,
-        data: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          refNumber: user.refNumber,
-          paymentStatus: user.paymentStatus,
-          selectedPackage: user.selectedPackage,
-          grantAmount: user.grantAmount,
-          feeAmount: user.feeAmount,
-
-          profile: {
-            email: user.email,
-            phone: user.phone,
-            address: user.address,
-            city: user.city,
-            state: user.state,
-            zipCode: user.zipCode,
-            country: user.country,
-            dateOfBirth: user.dateOfBirth,
-            gender: user.gender,
-            occupation: user.occupation,
-            maritalStatus: user.maritalStatus,
-          },
-        },
-      };
-    } catch (error) {
-      console.error("Dashboard error:", error);
-
+    if (!token) {
       return {
         success: false,
-        error: "Failed to fetch dashboard",
+        error: "No token provided",
       };
     }
-  },
-);
+
+    const decoded = verifyToken(token);
+
+    if (!decoded) {
+      return {
+        success: false,
+        error: "Invalid token",
+      };
+    }
+
+    const user = await User.findById(decoded.userId);
+
+    if (!user) {
+      return {
+        success: false,
+        error: "User not found",
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        refNumber: user.refNumber,
+        paymentStatus: user.paymentStatus,
+        selectedPackage: user.selectedPackage,
+        grantAmount: user.grantAmount,
+        feeAmount: user.feeAmount,
+
+        profile: {
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+          city: user.city,
+          state: user.state,
+          zipCode: user.zipCode,
+          country: user.country,
+          dateOfBirth: user.dateOfBirth,
+          gender: user.gender,
+          occupation: user.occupation,
+          maritalStatus: user.maritalStatus,
+        },
+      },
+    };
+  } catch (error) {
+    console.error("Dashboard error:", error);
+
+    return {
+      success: false,
+      error: "Failed to fetch dashboard",
+    };
+  }
+});

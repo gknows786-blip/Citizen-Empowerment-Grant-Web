@@ -1,8 +1,13 @@
-import { Router, Request, Response } from 'express';
-import { User } from '../models/User.js';
-import { generateToken, generateRefNumber, generatePasswordResetToken, verifyPasswordResetToken } from '../lib/authUtils.js';
-import { sendEmail, emailTemplates } from '../lib/emailService.js';
-import crypto from 'crypto';
+import { Router, Request, Response } from "express";
+import { User } from "../models/User.js";
+import {
+  generateToken,
+  generateRefNumber,
+  generatePasswordResetToken,
+  verifyPasswordResetToken,
+} from "../lib/authUtils.js";
+import { sendEmail, emailTemplates } from "../lib/emailService.js";
+import crypto from "crypto";
 
 const router = Router();
 
@@ -18,7 +23,7 @@ const calculateAge = (dob: Date): number => {
 };
 
 // Register (Sign Up)
-router.post('/signup', async (req: Request, res: Response) => {
+router.post("/signup", async (req: Request, res: Response) => {
   try {
     const {
       firstName,
@@ -40,13 +45,13 @@ router.post('/signup', async (req: Request, res: Response) => {
 
     // Validation
     if (!firstName || !lastName || !email || !password || !phone) {
-      return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ error: "Missing required fields" });
     }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ error: 'Email already registered' });
+      return res.status(409).json({ error: "Email already registered" });
     }
 
     // Calculate age
@@ -54,7 +59,7 @@ router.post('/signup', async (req: Request, res: Response) => {
     const age = calculateAge(dob);
 
     if (age < 18) {
-      return res.status(400).json({ error: 'Must be 18 years or older' });
+      return res.status(400).json({ error: "Must be 18 years or older" });
     }
 
     // Generate reference number
@@ -94,7 +99,7 @@ router.post('/signup', async (req: Request, res: Response) => {
     // Return success response
     res.status(201).json({
       success: true,
-      message: 'Registration successful!',
+      message: "Registration successful!",
       token,
       user: {
         id: user._id,
@@ -105,30 +110,30 @@ router.post('/signup', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Signup error:', error);
-    res.status(500).json({ error: 'Registration failed' });
+    console.error("Signup error:", error);
+    res.status(500).json({ error: "Registration failed" });
   }
 });
 
 // Login (Sign In)
-router.post('/signin', async (req: Request, res: Response) => {
+router.post("/signin", async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password required' });
+      return res.status(400).json({ error: "Email and password required" });
     }
 
     // Find user and include password field
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select("+password");
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: "Invalid credentials" });
     }
 
     // Compare passwords
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: "Invalid credentials" });
     }
 
     // Generate token
@@ -136,7 +141,7 @@ router.post('/signin', async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      message: 'Login successful!',
+      message: "Login successful!",
       token,
       user: {
         id: user._id,
@@ -147,24 +152,27 @@ router.post('/signin', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Signin error:', error);
-    res.status(500).json({ error: 'Login failed' });
+    console.error("Signin error:", error);
+    res.status(500).json({ error: "Login failed" });
   }
 });
 
 // Forgot Password
-router.post('/forgot-password', async (req: Request, res: Response) => {
+router.post("/forgot-password", async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ error: 'Email required' });
+      return res.status(400).json({ error: "Email required" });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
       // Don't reveal if email exists (security best practice)
-      return res.json({ success: true, message: 'If email exists, password reset link has been sent' });
+      return res.json({
+        success: true,
+        message: "If email exists, password reset link has been sent",
+      });
     }
 
     // Generate reset token
@@ -177,32 +185,32 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      message: 'Password reset link sent to your email',
+      message: "Password reset link sent to your email",
     });
   } catch (error) {
-    console.error('Forgot password error:', error);
-    res.status(500).json({ error: 'Failed to send reset email' });
+    console.error("Forgot password error:", error);
+    res.status(500).json({ error: "Failed to send reset email" });
   }
 });
 
 // Reset Password
-router.post('/reset-password', async (req: Request, res: Response) => {
+router.post("/reset-password", async (req: Request, res: Response) => {
   try {
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {
-      return res.status(400).json({ error: 'Token and new password required' });
+      return res.status(400).json({ error: "Token and new password required" });
     }
 
     // Verify token
     const decoded = verifyPasswordResetToken(token);
     if (!decoded) {
-      return res.status(401).json({ error: 'Invalid or expired token' });
+      return res.status(401).json({ error: "Invalid or expired token" });
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Update password
@@ -211,34 +219,34 @@ router.post('/reset-password', async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      message: 'Password reset successful',
+      message: "Password reset successful",
     });
   } catch (error) {
-    console.error('Reset password error:', error);
-    res.status(500).json({ error: 'Failed to reset password' });
+    console.error("Reset password error:", error);
+    res.status(500).json({ error: "Failed to reset password" });
   }
 });
 
 // Get user profile (protected route)
-router.get('/profile', async (req: Request, res: Response) => {
+router.get("/profile", async (req: Request, res: Response) => {
   try {
     // Get token from header
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'No token provided' });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "No token provided" });
     }
 
     const token = authHeader.substring(7);
-    const { verifyToken } = await import('../lib/authUtils.js');
+    const { verifyToken } = await import("../lib/authUtils.js");
     const decoded = verifyToken(token);
 
     if (!decoded) {
-      return res.status(401).json({ error: 'Invalid token' });
+      return res.status(401).json({ error: "Invalid token" });
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     res.json({
@@ -269,8 +277,8 @@ router.get('/profile', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Get profile error:', error);
-    res.status(500).json({ error: 'Failed to get profile' });
+    console.error("Get profile error:", error);
+    res.status(500).json({ error: "Failed to get profile" });
   }
 });
 

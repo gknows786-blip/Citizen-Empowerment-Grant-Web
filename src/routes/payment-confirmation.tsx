@@ -11,9 +11,7 @@ import { AlertCircle, CheckCircle } from "lucide-react";
 
 export const Route = createFileRoute("/payment-confirmation")({
   head: () => ({
-    meta: [
-      { title: "Payment Confirmation — U.S. Federal Citizen Grant Program" },
-    ],
+    meta: [{ title: "Payment Confirmation — U.S. Federal Citizen Grant Program" }],
   }),
   component: PaymentConfirmation,
 });
@@ -173,7 +171,9 @@ function PaymentConfirmation() {
             {success && (
               <Alert className="mb-6 bg-green-50 border-green-300">
                 <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertDescription className="text-green-800 font-semibold">{success}</AlertDescription>
+                <AlertDescription className="text-green-800 font-semibold">
+                  {success}
+                </AlertDescription>
               </Alert>
             )}
 
@@ -183,7 +183,9 @@ function PaymentConfirmation() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <p className="text-gray-600 text-sm">Name</p>
-                  <p className="text-lg font-semibold text-blue-900">{userData.firstName} {userData.lastName}</p>
+                  <p className="text-lg font-semibold text-blue-900">
+                    {userData.firstName} {userData.lastName}
+                  </p>
                 </div>
                 <div>
                   <p className="text-gray-600 text-sm">Email</p>
@@ -198,7 +200,9 @@ function PaymentConfirmation() {
 
             {/* Grant Summary */}
             <Card className="p-8 bg-white shadow-xl mb-6">
-              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">Selected Package Summary</h2>
+              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">
+                Selected Package Summary
+              </h2>
               <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-600">
                 <div className="grid grid-cols-3 gap-6 text-center">
                   <div>
@@ -207,7 +211,9 @@ function PaymentConfirmation() {
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm mb-2">GRANT AMOUNT</p>
-                    <p className="text-2xl font-bold text-green-600">${userData.grantAmount?.toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-green-600">
+                      ${userData.grantAmount?.toLocaleString()}
+                    </p>
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm mb-2">FEE REQUIRED</p>
@@ -219,12 +225,16 @@ function PaymentConfirmation() {
 
             {/* Bank Details */}
             <Card className="p-8 bg-white shadow-xl mb-6">
-              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">Bank Payment Details</h2>
+              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">
+                Bank Payment Details
+              </h2>
 
               <Alert className="mb-6 bg-red-50 border-red-300">
                 <AlertCircle className="h-4 w-4 text-red-600" />
                 <AlertDescription className="text-red-800">
-                  <strong>IMPORTANT:</strong> Please include your reference number <strong>{userData.refNumber}</strong> in the payment description to ensure proper processing.
+                  <strong>IMPORTANT:</strong> Please include your reference number{" "}
+                  <strong>{userData.refNumber}</strong> in the payment description to ensure proper
+                  processing.
                 </AlertDescription>
               </Alert>
 
@@ -235,7 +245,9 @@ function PaymentConfirmation() {
                 </div>
                 <div>
                   <p className="text-gray-600 text-sm">Account Name</p>
-                  <p className="text-lg font-semibold text-blue-900">Federal Grant Clearing House</p>
+                  <p className="text-lg font-semibold text-blue-900">
+                    Federal Grant Clearing House
+                  </p>
                 </div>
                 <div>
                   <p className="text-gray-600 text-sm">Account Number</p>
@@ -256,15 +268,21 @@ function PaymentConfirmation() {
 
             {/* Payment Confirmation Form */}
             <Card className="p-8 bg-white shadow-xl">
-              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">Confirm Your Payment</h2>
+              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">
+                Confirm Your Payment
+              </h2>
 
               <form onSubmit={handleSubmitPayment} className="space-y-6">
                 {/* Payment Status */}
                 <div className="space-y-3">
-                  <Label className="text-blue-900 font-semibold">Have you made the payment? *</Label>
+                  <Label className="text-blue-900 font-semibold">
+                    Have you made the payment? *
+                  </Label>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-blue-50"
-                      onClick={() => setHasPaymentOption("yes")}>
+                    <div
+                      className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-blue-50"
+                      onClick={() => setHasPaymentOption("yes")}
+                    >
                       <input
                         type="radio"
                         name="payment"
@@ -278,8 +296,10 @@ function PaymentConfirmation() {
                       </Label>
                     </div>
 
-                    <div className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-blue-50"
-                      onClick={() => setHasPaymentOption("no")}>
+                    <div
+                      className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-blue-50"
+                      onClick={() => setHasPaymentOption("no")}
+                    >
                       <input
                         type="radio"
                         name="payment"
@@ -288,9 +308,7 @@ function PaymentConfirmation() {
                         onChange={(e) => setHasPaymentOption(e.target.value)}
                         className="w-4 h-4"
                       />
-                      <Label className="cursor-pointer flex-1 mb-0">
-                        No, I will pay later
-                      </Label>
+                      <Label className="cursor-pointer flex-1 mb-0">No, I will pay later</Label>
                     </div>
                   </div>
                 </div>
@@ -309,7 +327,9 @@ function PaymentConfirmation() {
                         onChange={(e) => setTransactionId(e.target.value)}
                         className="mt-2"
                       />
-                      <p className="text-xs text-gray-500 mt-1">This can be found in your bank confirmation email</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        This can be found in your bank confirmation email
+                      </p>
                     </div>
 
                     <div>
@@ -333,7 +353,8 @@ function PaymentConfirmation() {
                     <Alert className="bg-green-50 border-green-300">
                       <CheckCircle className="h-4 w-4 text-green-600" />
                       <AlertDescription className="text-green-800">
-                        Your payment will be verified within 24 hours. You will receive a confirmation email with delivery details.
+                        Your payment will be verified within 24 hours. You will receive a
+                        confirmation email with delivery details.
                       </AlertDescription>
                     </Alert>
                   </>
@@ -344,7 +365,8 @@ function PaymentConfirmation() {
                   <Alert className="bg-yellow-50 border-yellow-300">
                     <AlertCircle className="h-4 w-4 text-yellow-600" />
                     <AlertDescription className="text-yellow-800">
-                      <strong>Note:</strong> Your grant will be returned to the Ministry of Economy Property as unclaimed if payment is not made within 48 hours.
+                      <strong>Note:</strong> Your grant will be returned to the Ministry of Economy
+                      Property as unclaimed if payment is not made within 48 hours.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -355,14 +377,18 @@ function PaymentConfirmation() {
                   disabled={submitting || !hasPaymentOption}
                   className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 text-lg"
                 >
-                  {submitting ? "Processing..." : `✅ Confirm ${hasPaymentOption === "yes" ? "Payment" : "Status"}`}
+                  {submitting
+                    ? "Processing..."
+                    : `✅ Confirm ${hasPaymentOption === "yes" ? "Payment" : "Status"}`}
                 </Button>
               </form>
 
               {/* Important Notice */}
               <div className="mt-6 p-4 bg-red-50 border border-red-300 rounded-lg">
                 <p className="text-red-800 text-sm font-semibold">
-                  ⚠️ <strong>IMPORTANT:</strong> Once your payment is confirmed, your grant will be prepared for secure delivery within 24 hours via UPS/FedEx. Do NOT share your reference number with anyone.
+                  ⚠️ <strong>IMPORTANT:</strong> Once your payment is confirmed, your grant will be
+                  prepared for secure delivery within 24 hours via UPS/FedEx. Do NOT share your
+                  reference number with anyone.
                 </p>
               </div>
             </Card>

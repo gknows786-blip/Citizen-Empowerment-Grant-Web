@@ -3,6 +3,7 @@
 ## 📋 What Has Been Created
 
 ### Backend Structure:
+
 ```
 src/
 ├── api/
@@ -19,6 +20,7 @@ src/
 ### API Endpoints Created:
 
 #### Authentication Endpoints:
+
 - `POST /api/auth/signup` - User registration
 - `POST /api/auth/signin` - User login
 - `POST /api/auth/forgot-password` - Initiate password reset
@@ -26,25 +28,31 @@ src/
 - `GET /api/auth/profile` - Get user profile (requires JWT token)
 
 #### Grant Endpoints:
+
 - `GET /api/grants/packages` - Get available grant packages
 - `POST /api/grants/select-package` - Select a grant package (requires JWT token)
 - `POST /api/grants/confirm-payment` - Confirm payment (requires JWT token)
 - `GET /api/grants/dashboard` - Get user dashboard data (requires JWT token)
 
 #### Health Check:
+
 - `GET /api/health` - API health status
 
 ## 🔐 What You Need to Provide
 
 ### 1. MongoDB Atlas Connection String
+
 **Where to get it:**
+
 - Go to https://www.mongodb.com/cloud/atlas (create account if needed)
 - Create a new cluster
 - Click "Connect" → "Drivers" → Copy the connection string
 - Format: `mongodb+srv://username:password@cluster.mongodb.net/citizen-grant?retryWrites=true&w=majority`
 
 ### 2. Google OAuth Credentials (for future Google Sign-In)
+
 **Where to get them:**
+
 - Go to https://console.cloud.google.com
 - Create a new project
 - Enable Google+ API
@@ -52,7 +60,9 @@ src/
 - Get Client ID and Client Secret
 
 ### 3. Gmail App Password (for Nodemailer)
+
 **Where to get it:**
+
 - Use a Gmail account for testing
 - Enable 2-factor authentication on your Google account
 - Go to https://myaccount.google.com/apppasswords
@@ -62,6 +72,7 @@ src/
 ## 📝 How to Set Up Environment Variables
 
 1. **Copy the .env.example file to .env:**
+
    ```bash
    cp .env.example .env
    ```
@@ -71,15 +82,15 @@ src/
    MONGODB_URI=mongodb+srv://your_username:your_password@your_cluster.mongodb.net/citizen-grant?retryWrites=true&w=majority
    JWT_SECRET=create_your_own_random_secret_key_here_minimum_32_chars
    JWT_EXPIRE=7d
-   
+
    GOOGLE_CLIENT_ID=your_google_client_id_here.apps.googleusercontent.com
    GOOGLE_CLIENT_SECRET=your_google_client_secret
    GOOGLE_CALLBACK_URL=http://localhost:5173/api/auth/google/callback
-   
+
    EMAIL_USER=your_email@gmail.com
    EMAIL_PASSWORD=your_16_char_app_password
    EMAIL_FROM=support@usfederalgrant.gov
-   
+
    NODE_ENV=development
    APP_URL=http://localhost:5173
    API_URL=http://localhost:5173/api
@@ -88,14 +99,17 @@ src/
 ## 🚀 Installation & Running
 
 1. **Install dependencies:**
+
    ```bash
    npm install
    ```
+
    (If npm has issues, try: `node -e "require('child_process').spawnSync('npm', ['install'], {stdio: 'inherit'})"`)
 
 2. **Create .env file** with your credentials (see above)
 
 3. **Run development server:**
+
    ```bash
    npm run dev
    ```
@@ -106,6 +120,7 @@ src/
 ## 📧 Email Templates Included
 
 The system automatically sends emails for:
+
 1. **Sign-up Confirmation** - Welcome message with reference number
 2. **Package Selection** - Payment instructions with deadline
 3. **Payment Confirmation** - Grant delivery update
@@ -122,6 +137,7 @@ The system automatically sends emails for:
 ## 📊 Database Schema
 
 The User model includes:
+
 - Personal info (name, email, phone, DOB, age)
 - Address (street, city, state/province, zip, country)
 - Grant info (selected package, amount, fee, payment status)

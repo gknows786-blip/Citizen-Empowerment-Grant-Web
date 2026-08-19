@@ -37,7 +37,7 @@ function CountdownTimer() {
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       setTimeLeft(
-        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`,
       );
     }, 1000);
 
@@ -63,7 +63,9 @@ function GovernmentHeader() {
         <h1 className="text-4xl font-bold mb-2 font-serif">
           U.S. Federal Citizen Grant & Empowerment Program
         </h1>
-        <p className="text-xl text-blue-100 mb-4 font-serif">Official Government Initiative for American Communities</p>
+        <p className="text-xl text-blue-100 mb-4 font-serif">
+          Official Government Initiative for American Communities
+        </p>
         <div className="flex items-center justify-center gap-2 text-green-300 font-semibold">
           <CheckCircle size={20} />
           Official Website of the United States Government
@@ -75,21 +77,27 @@ function GovernmentHeader() {
 
 function HeroSection() {
   return (
-    <div className="relative bg-cover bg-center py-16 px-4" style={{
-      backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1200 400\"><rect fill=\"%23f5f5f5\" width=\"1200\" height=\"400\"/></svg>')",
-    }}>
+    <div
+      className="relative bg-cover bg-center py-16 px-4"
+      style={{
+        backgroundImage:
+          'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><rect fill="%23f5f5f5" width="1200" height="400"/></svg>\')',
+      }}
+    >
       <div className="max-w-4xl mx-auto text-center text-white">
-        <h2 className="text-5xl font-bold mb-4 font-serif drop-shadow-lg">
-          CONGRATULATIONS!
-        </h2>
+        <h2 className="text-5xl font-bold mb-4 font-serif drop-shadow-lg">CONGRATULATIONS!</h2>
         <p className="text-3xl mb-2 font-semibold drop-shadow-md">
           You Have Been Selected to Receive a Federal Grant
         </p>
         <p className="text-2xl mb-8 font-serif drop-shadow-md">
-          The U.S. Government is empowering citizens with <span className="text-yellow-300 font-bold">FREE MONEY</span> — No Repayment Required
+          The U.S. Government is empowering citizens with{" "}
+          <span className="text-yellow-300 font-bold">FREE MONEY</span> — No Repayment Required
         </p>
         <Link to="/apply">
-          <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg font-bold">
+          <Button
+            size="lg"
+            className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg font-bold"
+          >
             CHECK YOUR ELIGIBILITY
           </Button>
         </Link>
@@ -103,22 +111,26 @@ function InfoBoxes() {
     {
       title: "What is This Program?",
       icon: <Shield className="w-12 h-12 text-blue-600" />,
-      content: "Federal government helping citizens with economic empowerment. Not a loan — Grant money. Approved by Congress.",
+      content:
+        "Federal government helping citizens with economic empowerment. Not a loan — Grant money. Approved by Congress.",
     },
     {
       title: "How It Works",
       icon: <CheckCircle className="w-12 h-12 text-green-600" />,
-      content: "Step 1: Fill the claim form\nStep 2: Verify your identity\nStep 3: Receive cash via UPS/FedEx\nStep 4: Enjoy your winnings!",
+      content:
+        "Step 1: Fill the claim form\nStep 2: Verify your identity\nStep 3: Receive cash via UPS/FedEx\nStep 4: Enjoy your winnings!",
     },
     {
       title: "Eligibility",
       icon: <Users className="w-12 h-12 text-purple-600" />,
-      content: "Must be a resident of any American country • Age 18+ • Valid government ID • Simple online application",
+      content:
+        "Must be a resident of any American country • Age 18+ • Valid government ID • Simple online application",
     },
     {
       title: "Benefits",
       icon: <TrendingUp className="w-12 h-12 text-orange-600" />,
-      content: "Up to $200,000 grant • Secure home delivery • Federal insurance protection • Fast processing",
+      content:
+        "Up to $200,000 grant • Secure home delivery • Federal insurance protection • Fast processing",
     },
   ];
 
@@ -126,7 +138,10 @@ function InfoBoxes() {
     <div className="max-w-7xl mx-auto px-4 py-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {boxes.map((box, idx) => (
-          <div key={idx} className="bg-white border-2 border-gray-300 rounded-lg p-8 shadow-lg hover:shadow-xl transition">
+          <div
+            key={idx}
+            className="bg-white border-2 border-gray-300 rounded-lg p-8 shadow-lg hover:shadow-xl transition"
+          >
             <div className="mb-4">{box.icon}</div>
             <h3 className="text-2xl font-bold text-blue-900 mb-4 font-serif">{box.title}</h3>
             <p className="text-gray-700 whitespace-pre-line">{box.content}</p>
@@ -145,10 +160,12 @@ function ImportantNotice() {
         <div>
           <h3 className="font-bold text-red-800 text-lg mb-2">⚠️ IMPORTANT NOTICE</h3>
           <p className="text-red-900 font-semibold">
-            Keep your winning information CONFIDENTIAL. Do NOT share with anyone. Violation may result in cancellation of your grant.
+            Keep your winning information CONFIDENTIAL. Do NOT share with anyone. Violation may
+            result in cancellation of your grant.
           </p>
           <p className="text-red-900 mt-2 text-sm">
-            The U.S. Treasury has strict federal laws protecting beneficiary information for security reasons.
+            The U.S. Treasury has strict federal laws protecting beneficiary information for
+            security reasons.
           </p>
         </div>
       </div>
@@ -191,8 +208,12 @@ function Testimonials() {
   return (
     <div className="bg-blue-50 py-16 px-4">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-4 font-serif text-blue-900">Real Stories from Grant Recipients</h2>
-        <p className="text-center text-gray-600 mb-12 text-lg">See what Americans just like you are saying about the program</p>
+        <h2 className="text-4xl font-bold text-center mb-4 font-serif text-blue-900">
+          Real Stories from Grant Recipients
+        </h2>
+        <p className="text-center text-gray-600 mb-12 text-lg">
+          See what Americans just like you are saying about the program
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {testimonials.map((testimonial, idx) => (
@@ -226,7 +247,9 @@ function Statistics() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center">
-              <div className="text-5xl font-bold text-yellow-400 mb-2 font-serif">{stat.number}</div>
+              <div className="text-5xl font-bold text-yellow-400 mb-2 font-serif">
+                {stat.number}
+              </div>
               <div className="text-lg text-blue-100">{stat.label}</div>
             </div>
           ))}
@@ -240,14 +263,21 @@ function MediaSection() {
   return (
     <div className="bg-white py-16 px-4 border-t-4 border-blue-900">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-8 font-serif text-blue-900">Featured In Major Media</h2>
+        <h2 className="text-3xl font-bold text-center mb-8 font-serif text-blue-900">
+          Featured In Major Media
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {["CNN", "Fox News", "NBC", "ABC", "CBS", "AP News", "Reuters", "Bloomberg"].map((media, idx) => (
-            <div key={idx} className="py-6 px-4 border border-gray-300 rounded-lg hover:shadow-md transition">
-              <p className="font-bold text-blue-900 text-lg">{media}</p>
-              <p className="text-sm text-gray-600 mt-2">Federal Grant Coverage</p>
-            </div>
-          ))}
+          {["CNN", "Fox News", "NBC", "ABC", "CBS", "AP News", "Reuters", "Bloomberg"].map(
+            (media, idx) => (
+              <div
+                key={idx}
+                className="py-6 px-4 border border-gray-300 rounded-lg hover:shadow-md transition"
+              >
+                <p className="font-bold text-blue-900 text-lg">{media}</p>
+                <p className="text-sm text-gray-600 mt-2">Federal Grant Coverage</p>
+              </div>
+            ),
+          )}
         </div>
       </div>
     </div>
@@ -269,22 +299,41 @@ function GovernmentFooter() {
           <div>
             <h3 className="font-bold mb-4 text-lg">Quick Links</h3>
             <ul className="text-blue-100 space-y-2">
-              <li><Link to="/" className="hover:text-white">Home</Link></li>
-              <li><Link to="/eligibility" className="hover:text-white">Eligibility</Link></li>
-              <li><Link to="/faq" className="hover:text-white">FAQ</Link></li>
-              <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
+              <li>
+                <Link to="/" className="hover:text-white">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/eligibility" className="hover:text-white">
+                  Eligibility
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="hover:text-white">
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white">
+                  Privacy Policy
+                </a>
+              </li>
             </ul>
           </div>
           <div>
             <h3 className="font-bold mb-4 text-lg">Official Information</h3>
             <p className="text-blue-100 text-sm">
-              This is an official website of the U.S. Government. All grant programs are approved by the U.S. Congress and administered by the Department of Economic Empowerment.
+              This is an official website of the U.S. Government. All grant programs are approved by
+              the U.S. Congress and administered by the Department of Economic Empowerment.
             </p>
           </div>
         </div>
 
         <div className="border-t border-blue-700 pt-8 text-center text-blue-200">
-          <p className="mb-2">© 2025 U.S. Department of Economic Empowerment. All rights reserved.</p>
+          <p className="mb-2">
+            © 2025 U.S. Department of Economic Empowerment. All rights reserved.
+          </p>
           <p className="text-sm">This is an official website of the United States Government.</p>
           <p className="text-sm mt-2">🔒 Secure • 🛡️ Protected • ✅ Verified</p>
         </div>

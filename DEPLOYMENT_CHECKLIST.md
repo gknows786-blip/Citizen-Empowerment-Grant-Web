@@ -3,6 +3,7 @@
 ## Before You Deploy
 
 ### Prerequisites
+
 - [ ] GitHub account with repository pushed
 - [ ] Vercel account (free at vercel.com)
 - [ ] Render account (free at render.com)
@@ -10,6 +11,7 @@
 - [ ] All credentials from `.env` file saved
 
 ### Verify Local Build Works
+
 ```bash
 npm install
 npm run build
@@ -86,6 +88,7 @@ npm run preview
 ## Environment Variables at a Glance
 
 ### Render (Backend)
+
 ```
 NODE_ENV=production
 MONGODB_URI=[your mongodb connection string]
@@ -101,6 +104,7 @@ CORS_ORIGIN=[your vercel url]
 ```
 
 ### Vercel (Frontend)
+
 ```
 VITE_API_URL=[your render backend url]
 MONGODB_URI=[your mongodb connection string]
@@ -117,6 +121,7 @@ EMAIL_PASSWORD=[your gmail app password]
 ## Testing After Deployment
 
 ### Backend Tests
+
 ```bash
 # Health check (should return 200)
 curl https://citizen-grant-api.onrender.com/api/health
@@ -133,6 +138,7 @@ curl -X POST https://citizen-grant-api.onrender.com/api/auth/signup \
 ```
 
 ### Frontend Tests
+
 1. Open `https://citizen-empowerment-grant.vercel.app`
 2. Click "Apply Now"
 3. Fill signup form
@@ -149,23 +155,27 @@ curl -X POST https://citizen-grant-api.onrender.com/api/auth/signup \
 ## Troubleshooting
 
 ### Backend won't start on Render
+
 - Check Render logs: Dashboard → Service → Logs
 - Verify Node.js version (needs 18+)
 - Ensure MONGODB_URI is correct
 - Check if src/backend.ts exists
 
 ### Frontend gives API errors
+
 - Verify VITE_API_URL in Vercel env vars
 - Check CORS is enabled on Render
 - Test backend health: https://citizen-grant-api.onrender.com/api/health
 - Check browser console for specific errors
 
 ### Database connection fails
+
 - Verify MongoDB connection string
 - Check MongoDB Atlas IP whitelist includes Render
 - Test connection locally first
 
 ### Emails not sending
+
 - Verify EMAIL_USER and EMAIL_PASSWORD
 - Check Gmail app passwords (not regular password)
 - Ensure "Less secure apps" allowed if needed
@@ -215,16 +225,19 @@ git push origin main
 ## Monitoring
 
 ### Render Logs
+
 - Real-time API logs
 - Error monitoring
 - Performance metrics
 
 ### Vercel Analytics
+
 - Frontend performance
 - Build times
 - Deployment history
 
 ### MongoDB Atlas
+
 - Database performance
 - Query logs
 - Backup settings
@@ -247,6 +260,7 @@ git push origin main
 ## Support
 
 For issues:
+
 1. Check Render logs
 2. Check Vercel logs
 3. Check MongoDB connection

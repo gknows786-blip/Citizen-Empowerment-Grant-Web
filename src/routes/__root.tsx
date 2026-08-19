@@ -74,10 +74,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Community Grants Portal — Independent Funding Demo" },
-      { name: "description", content: "An independent, non-governmental demonstration grant portal. No fees, no guarantees." },
+      {
+        name: "description",
+        content:
+          "An independent, non-governmental demonstration grant portal. No fees, no guarantees.",
+      },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Community Grants Portal" },
-      { property: "og:description", content: "An independent, non-governmental demonstration grant portal." },
+      {
+        property: "og:description",
+        content: "An independent, non-governmental demonstration grant portal.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

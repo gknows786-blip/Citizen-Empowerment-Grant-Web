@@ -1,7 +1,7 @@
-import { Router, Request, Response } from 'express';
-import { User } from '../models/User.js';
-import { sendEmail, emailTemplates } from '../lib/emailService.js';
-import { verifyToken } from '../lib/authUtils.js';
+import { Router, Request, Response } from "express";
+import { User } from "../models/User.js";
+import { sendEmail, emailTemplates } from "../lib/emailService.js";
+import { verifyToken } from "../lib/authUtils.js";
 
 const router = Router();
 
@@ -15,7 +15,7 @@ const grantPackages = {
 };
 
 // Get available packages
-router.get('/packages', (req: Request, res: Response) => {
+router.get("/packages", (req: Request, res: Response) => {
   const packages = Object.entries(grantPackages).map(([name, amounts]) => ({
     name,
     grantAmount: amounts.grant,
@@ -29,28 +29,28 @@ router.get('/packages', (req: Request, res: Response) => {
 });
 
 // Select a grant package
-router.post('/select-package', async (req: Request, res: Response) => {
+router.post("/select-package", async (req: Request, res: Response) => {
   try {
     // Verify token
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'No token provided' });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "No token provided" });
     }
 
     const token = authHeader.substring(7);
     const decoded = verifyToken(token);
     if (!decoded) {
-      return res.status(401).json({ error: 'Invalid token' });
+      return res.status(401).json({ error: "Invalid token" });
     }
 
     const { packageName } = req.body;
     if (!packageName || !(packageName in grantPackages)) {
-      return res.status(400).json({ error: 'Invalid package name' });
+      return res.status(400).json({ error: "Invalid package name" });
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Update user with selected package
@@ -58,7 +58,7 @@ router.post('/select-package', async (req: Request, res: Response) => {
     user.selectedPackage = packageName as any;
     user.grantAmount = packageData.grant;
     user.feeAmount = packageData.fee;
-    user.paymentStatus = 'pending';
+    user.paymentStatus = "pending";
     await user.save();
 
     // Send email with payment instructions
@@ -66,13 +66,13 @@ router.post('/select-package', async (req: Request, res: Response) => {
       user.firstName,
       user.refNumber,
       packageData.grant,
-      packageData.fee
+      packageData.fee,
     );
     await sendEmail(user.email, subject, html);
 
     res.json({
       success: true,
-      message: 'Package selected successfully',
+      message: "Package selected successfully",
       data: {
         selectedPackage: user.selectedPackage,
         grantAmount: user.grantAmount,
@@ -81,42 +81,42 @@ router.post('/select-package', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Select package error:', error);
-    res.status(500).json({ error: 'Failed to select package' });
+    console.error("Select package error:", error);
+    res.status(500).json({ error: "Failed to select package" });
   }
 });
 
 // Confirm payment
-router.post('/confirm-payment', async (req: Request, res: Response) => {
+router.post("/confirm-payment", async (req: Request, res: Response) => {
   try {
     // Verify token
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'No token provided' });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "No token provided" });
     }
 
     const token = authHeader.substring(7);
     const decoded = verifyToken(token);
     if (!decoded) {
-      return res.status(401).json({ error: 'Invalid token' });
+      return res.status(401).json({ error: "Invalid token" });
     }
 
     const { transactionId, receiptPath } = req.body;
     if (!transactionId) {
-      return res.status(400).json({ error: 'Transaction ID required' });
+      return res.status(400).json({ error: "Transaction ID required" });
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     if (!user.grantAmount || !user.feeAmount) {
-      return res.status(400).json({ error: 'Please select a package first' });
+      return res.status(400).json({ error: "Please select a package first" });
     }
 
     // Update payment status
-    user.paymentStatus = 'paid';
+    user.paymentStatus = "paid";
     user.paymentReceipt = receiptPath || transactionId;
     await user.save();
 
@@ -124,13 +124,13 @@ router.post('/confirm-payment', async (req: Request, res: Response) => {
     const { subject, html } = emailTemplates.paymentConfirmation(
       user.firstName,
       user.refNumber,
-      user.grantAmount
+      user.grantAmount,
     );
     await sendEmail(user.email, subject, html);
 
     res.json({
       success: true,
-      message: 'Payment confirmed! Your grant will be delivered within 24 hours.',
+      message: "Payment confirmed! Your grant will be delivered within 24 hours.",
       data: {
         paymentStatus: user.paymentStatus,
         refNumber: user.refNumber,
@@ -138,29 +138,29 @@ router.post('/confirm-payment', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Confirm payment error:', error);
-    res.status(500).json({ error: 'Failed to confirm payment' });
+    console.error("Confirm payment error:", error);
+    res.status(500).json({ error: "Failed to confirm payment" });
   }
 });
 
 // Get user dashboard data
-router.get('/dashboard', async (req: Request, res: Response) => {
+router.get("/dashboard", async (req: Request, res: Response) => {
   try {
     // Verify token
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'No token provided' });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "No token provided" });
     }
 
     const token = authHeader.substring(7);
     const decoded = verifyToken(token);
     if (!decoded) {
-      return res.status(401).json({ error: 'Invalid token' });
+      return res.status(401).json({ error: "Invalid token" });
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     res.json({
@@ -190,8 +190,8 @@ router.get('/dashboard', async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Dashboard error:', error);
-    res.status(500).json({ error: 'Failed to fetch dashboard' });
+    console.error("Dashboard error:", error);
+    res.status(500).json({ error: "Failed to fetch dashboard" });
   }
 });
 
