@@ -48,7 +48,7 @@ const userSchema = new Schema<IUser>(
     country: { type: String, required: true },
     maritalStatus: { type: String, enum: ["Single", "Married", "Divorced", "Widowed"] },
     personalIdNumber: { type: String },
-    refNumber: { type: String, default: "BE6006/85428", unique: true },
+    refNumber: { type: String, required: true, unique: true },
     selectedPackage: { type: String, enum: ["Basic", "Silver", "Gold", "Platinum", "Diamond"] },
     grantAmount: { type: Number },
     feeAmount: { type: Number },
@@ -67,7 +67,7 @@ userSchema.pre("save", async function (next) {
   try {
     const bcrypt = await import("bcryptjs");
     const salt = await bcrypt.default.genSalt(10);
-    this.password = await bcrypt.default.hash(this.password || "", salt);
+    this["password"] = await bcrypt.default.hash(this["password"] || "", salt);
     next();
   } catch (error) {
     next(error as Error);
@@ -75,9 +75,9 @@ userSchema.pre("save", async function (next) {
 });
 
 // Compare password method
-userSchema.methods.comparePassword = async function (password: string) {
+userSchema.methods["comparePassword"] = async function (this: IUser, password: string) {
   const bcrypt = await import("bcryptjs");
-  return bcrypt.default.compare(password, this.password);
+  return bcrypt.default.compare(password, this["password"] || "");
 };
 
 export const User = mongoose.model<IUser>("User", userSchema);

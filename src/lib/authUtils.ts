@@ -1,21 +1,28 @@
 import jwt from "jsonwebtoken";
 
+const getEnv = (key: string): string => {
+  return (process.env as Record<string, string | undefined>)[key] || "";
+};
+
 export interface ITokenPayload {
   userId: string;
   email: string;
-  iat?: number;
-  exp?: number;
+  iat?: number | undefined;
+  exp?: number | undefined;
 }
 
 export const generateToken = (userId: string, email: string): string => {
-  return jwt.sign({ userId, email }, process.env.JWT_SECRET || "your_secret_key", {
-    expiresIn: process.env.JWT_EXPIRE || "7d",
+  return jwt.sign({ userId, email }, getEnv("JWT_SECRET") || "federal_grant_jwt_secret_key_2025", {
+    expiresIn: "7d",
   });
 };
 
 export const verifyToken = (token: string): ITokenPayload | null => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "your_secret_key") as ITokenPayload;
+    const decoded = jwt.verify(
+      token,
+      getEnv("JWT_SECRET") || "federal_grant_jwt_secret_key_2025",
+    ) as ITokenPayload;
     return decoded;
   } catch (error) {
     console.error("Token verification error:", error);
@@ -24,22 +31,29 @@ export const verifyToken = (token: string): ITokenPayload | null => {
 };
 
 export const generateRefNumber = (): string => {
-  // Generate something like: BE6006/85428
-  const prefix = "BE" + Math.random().toString().slice(2, 6);
-  const suffix = Math.random().toString().slice(2, 7);
-  return `${prefix}/${suffix}`;
+  // Generate authentic looking federal reference number like: US-8542-9912
+  const part1 = Math.floor(1000 + Math.random() * 9000);
+  const part2 = Math.floor(1000 + Math.random() * 9000);
+  return `US-${part1}-${part2}`;
 };
 
 export const generatePasswordResetToken = (userId: string): string => {
-  return jwt.sign({ userId, type: "password-reset" }, process.env.JWT_SECRET || "your_secret_key", {
-    expiresIn: "1h",
-  });
+  return jwt.sign(
+    { userId, type: "password-reset" },
+    getEnv("JWT_SECRET") || "federal_grant_jwt_secret_key_2025",
+    {
+      expiresIn: "1h",
+    },
+  );
 };
 
 export const verifyPasswordResetToken = (token: string): { userId: string } | null => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "your_secret_key") as any;
-    if (decoded.type === "password-reset") {
+    const decoded = jwt.verify(
+      token,
+      getEnv("JWT_SECRET") || "federal_grant_jwt_secret_key_2025",
+    ) as any;
+    if (decoded && decoded.type === "password-reset" && decoded.userId) {
       return { userId: decoded.userId };
     }
     return null;

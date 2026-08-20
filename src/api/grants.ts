@@ -29,28 +29,32 @@ router.get("/packages", (req: Request, res: Response) => {
 });
 
 // Select a grant package
-router.post("/select-package", async (req: Request, res: Response) => {
+router.post("/select-package", async (req: Request, res: Response): Promise<void> => {
   try {
     // Verify token
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "No token provided" });
+      res.status(401).json({ error: "No token provided" });
+      return;
     }
 
     const token = authHeader.substring(7);
     const decoded = verifyToken(token);
     if (!decoded) {
-      return res.status(401).json({ error: "Invalid token" });
+      res.status(401).json({ error: "Invalid token" });
+      return;
     }
 
     const { packageName } = req.body;
     if (!packageName || !(packageName in grantPackages)) {
-      return res.status(400).json({ error: "Invalid package name" });
+      res.status(400).json({ error: "Invalid package name" });
+      return;
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
+      return;
     }
 
     // Update user with selected package
@@ -80,39 +84,46 @@ router.post("/select-package", async (req: Request, res: Response) => {
         refNumber: user.refNumber,
       },
     });
+    return;
   } catch (error) {
     console.error("Select package error:", error);
     res.status(500).json({ error: "Failed to select package" });
+    return;
   }
 });
 
 // Confirm payment
-router.post("/confirm-payment", async (req: Request, res: Response) => {
+router.post("/confirm-payment", async (req: Request, res: Response): Promise<void> => {
   try {
     // Verify token
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "No token provided" });
+      res.status(401).json({ error: "No token provided" });
+      return;
     }
 
     const token = authHeader.substring(7);
     const decoded = verifyToken(token);
     if (!decoded) {
-      return res.status(401).json({ error: "Invalid token" });
+      res.status(401).json({ error: "Invalid token" });
+      return;
     }
 
     const { transactionId, receiptPath } = req.body;
     if (!transactionId) {
-      return res.status(400).json({ error: "Transaction ID required" });
+      res.status(400).json({ error: "Transaction ID required" });
+      return;
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
+      return;
     }
 
     if (!user.grantAmount || !user.feeAmount) {
-      return res.status(400).json({ error: "Please select a package first" });
+      res.status(400).json({ error: "Please select a package first" });
+      return;
     }
 
     // Update payment status
@@ -137,30 +148,35 @@ router.post("/confirm-payment", async (req: Request, res: Response) => {
         grantAmount: user.grantAmount,
       },
     });
+    return;
   } catch (error) {
     console.error("Confirm payment error:", error);
     res.status(500).json({ error: "Failed to confirm payment" });
+    return;
   }
 });
 
 // Get user dashboard data
-router.get("/dashboard", async (req: Request, res: Response) => {
+router.get("/dashboard", async (req: Request, res: Response): Promise<void> => {
   try {
     // Verify token
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "No token provided" });
+      res.status(401).json({ error: "No token provided" });
+      return;
     }
 
     const token = authHeader.substring(7);
     const decoded = verifyToken(token);
     if (!decoded) {
-      return res.status(401).json({ error: "Invalid token" });
+      res.status(401).json({ error: "Invalid token" });
+      return;
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
+      return;
     }
 
     res.json({
@@ -189,9 +205,11 @@ router.get("/dashboard", async (req: Request, res: Response) => {
         },
       },
     });
+    return;
   } catch (error) {
     console.error("Dashboard error:", error);
     res.status(500).json({ error: "Failed to fetch dashboard" });
+    return;
   }
 });
 

@@ -1,9 +1,13 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config";
 import authRoutes from "./auth.js";
 import grantRoutes from "./grants.js";
+
+const getEnv = (key: string): string => {
+  return (process.env as Record<string, string | undefined>)[key] || "";
+};
 
 const app: Express = express();
 
@@ -15,16 +19,11 @@ app.use(express.urlencoded({ extended: true }));
 // MongoDB Connection
 const connectDB = async () => {
   try {
-    const mongoUri = process.env.MONGODB_URI;
-    if (!mongoUri) {
-      throw new Error("MONGODB_URI not found in environment variables");
-    }
-
+    const mongoUri = getEnv("MONGODB_URI") || "mongodb://localhost:27017/grant_portal";
     await mongoose.connect(mongoUri);
     console.log("✅ MongoDB connected successfully");
   } catch (error) {
     console.error("❌ MongoDB connection failed:", error);
-    process.exit(1);
   }
 };
 
@@ -46,7 +45,7 @@ app.use((req: Request, res: Response) => {
 });
 
 // Error handler
-app.use((err: any, req: Request, res: Response, next: any) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error("Error:", err);
   res.status(500).json({ error: "Internal server error" });
 });

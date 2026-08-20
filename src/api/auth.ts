@@ -5,11 +5,15 @@ import {
   generateRefNumber,
   generatePasswordResetToken,
   verifyPasswordResetToken,
+  verifyToken,
 } from "../lib/authUtils.js";
-import { sendEmail, emailTemplates } from "../lib/emailService.js";
-import crypto from "crypto";
+import { sendEmail, sendAdminNotification, emailTemplates } from "../lib/emailService.js";
 
 const router = Router();
+
+const getEnv = (key: string): string => {
+  return (process.env as Record<string, string | undefined>)[key] || "";
+};
 
 // Helper to calculate age
 const calculateAge = (dob: Date): number => {
@@ -23,7 +27,7 @@ const calculateAge = (dob: Date): number => {
 };
 
 // Register (Sign Up)
-router.post("/signup", async (req: Request, res: Response) => {
+router.post("/signup", async (req: Request, res: Response): Promise<void> => {
   try {
     const {
       firstName,
@@ -45,13 +49,15 @@ router.post("/signup", async (req: Request, res: Response) => {
 
     // Validation
     if (!firstName || !lastName || !email || !password || !phone) {
-      return res.status(400).json({ error: "Missing required fields" });
+      res.status(400).json({ error: "Missing required fields" });
+      return;
     }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ error: "Email already registered" });
+      res.status(409).json({ error: "Email already registered" });
+      return;
     }
 
     // Calculate age
@@ -59,7 +65,8 @@ router.post("/signup", async (req: Request, res: Response) => {
     const age = calculateAge(dob);
 
     if (age < 18) {
-      return res.status(400).json({ error: "Must be 18 years or older" });
+      res.status(400).json({ error: "Must be 18 years or older" });
+      return;
     }
 
     // Generate reference number
@@ -92,9 +99,32 @@ router.post("/signup", async (req: Request, res: Response) => {
     // Generate JWT token
     const token = generateToken(user._id.toString(), user.email);
 
-    // Send confirmation email
-    const { subject, html } = emailTemplates.signupConfirmation(firstName, refNumber);
-    await sendEmail(email, subject, html);
+    // Send confirmation email to user
+    try {
+      const { subject, html } = emailTemplates.signupConfirmation(firstName, refNumber);
+      await sendEmail(email, subject, html);
+    } catch (emailErr) {
+      console.error("User email error:", emailErr);
+    }
+
+    // Send Admin Notification to platform owner
+    try {
+      const adminNotice = emailTemplates.adminNewUserRegistered({
+        firstName,
+        lastName,
+        email,
+        phone,
+        dateOfBirth: dob,
+        occupation,
+        city,
+        state,
+        country,
+        refNumber,
+      });
+      await sendAdminNotification(adminNotice.subject, adminNotice.html);
+    } catch (adminEmailErr) {
+      console.error("Admin notification error:", adminEmailErr);
+    }
 
     // Return success response
     res.status(201).json({
@@ -109,35 +139,53 @@ router.post("/signup", async (req: Request, res: Response) => {
         refNumber: user.refNumber,
       },
     });
+    return;
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ error: "Registration failed" });
+    return;
   }
 });
 
 // Login (Sign In)
-router.post("/signin", async (req: Request, res: Response) => {
+router.post("/signin", async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: "Email and password required" });
+      res.status(400).json({ error: "Email and password required" });
+      return;
     }
 
     // Find user and include password field
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
     }
 
     // Compare passwords
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
     }
 
     // Generate token
     const token = generateToken(user._id.toString(), user.email);
+
+    // Send Admin Notification on User Sign-in
+    try {
+      const adminNotice = emailTemplates.adminUserSignedIn({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        refNumber: user.refNumber,
+      });
+      await sendAdminNotification(adminNotice.subject, adminNotice.html);
+    } catch (adminEmailErr) {
+      console.error("Admin signin notification error:", adminEmailErr);
+    }
 
     res.json({
       success: true,
@@ -151,33 +199,37 @@ router.post("/signin", async (req: Request, res: Response) => {
         refNumber: user.refNumber,
       },
     });
+    return;
   } catch (error) {
     console.error("Signin error:", error);
     res.status(500).json({ error: "Login failed" });
+    return;
   }
 });
 
 // Forgot Password
-router.post("/forgot-password", async (req: Request, res: Response) => {
+router.post("/forgot-password", async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ error: "Email required" });
+      res.status(400).json({ error: "Email required" });
+      return;
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      // Don't reveal if email exists (security best practice)
-      return res.json({
+      res.json({
         success: true,
         message: "If email exists, password reset link has been sent",
       });
+      return;
     }
 
     // Generate reset token
     const resetToken = generatePasswordResetToken(user._id.toString());
-    const resetUrl = `${process.env.APP_URL}/reset-password?token=${resetToken}`;
+    const appUrl = getEnv("APP_URL") || "http://localhost:3000";
+    const resetUrl = `${appUrl}/reset-password?token=${resetToken}`;
 
     // Send password reset email
     const { subject, html } = emailTemplates.passwordReset(resetUrl);
@@ -187,30 +239,35 @@ router.post("/forgot-password", async (req: Request, res: Response) => {
       success: true,
       message: "Password reset link sent to your email",
     });
+    return;
   } catch (error) {
     console.error("Forgot password error:", error);
     res.status(500).json({ error: "Failed to send reset email" });
+    return;
   }
 });
 
 // Reset Password
-router.post("/reset-password", async (req: Request, res: Response) => {
+router.post("/reset-password", async (req: Request, res: Response): Promise<void> => {
   try {
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {
-      return res.status(400).json({ error: "Token and new password required" });
+      res.status(400).json({ error: "Token and new password required" });
+      return;
     }
 
     // Verify token
     const decoded = verifyPasswordResetToken(token);
     if (!decoded) {
-      return res.status(401).json({ error: "Invalid or expired token" });
+      res.status(401).json({ error: "Invalid or expired token" });
+      return;
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
+      return;
     }
 
     // Update password
@@ -221,32 +278,36 @@ router.post("/reset-password", async (req: Request, res: Response) => {
       success: true,
       message: "Password reset successful",
     });
+    return;
   } catch (error) {
     console.error("Reset password error:", error);
     res.status(500).json({ error: "Failed to reset password" });
+    return;
   }
 });
 
 // Get user profile (protected route)
-router.get("/profile", async (req: Request, res: Response) => {
+router.get("/profile", async (req: Request, res: Response): Promise<void> => {
   try {
     // Get token from header
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "No token provided" });
+      res.status(401).json({ error: "No token provided" });
+      return;
     }
 
     const token = authHeader.substring(7);
-    const { verifyToken } = await import("../lib/authUtils.js");
     const decoded = verifyToken(token);
 
     if (!decoded) {
-      return res.status(401).json({ error: "Invalid token" });
+      res.status(401).json({ error: "Invalid token" });
+      return;
     }
 
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
+      return;
     }
 
     res.json({
@@ -276,9 +337,11 @@ router.get("/profile", async (req: Request, res: Response) => {
         emailVerified: user.emailVerified,
       },
     });
+    return;
   } catch (error) {
     console.error("Get profile error:", error);
     res.status(500).json({ error: "Failed to get profile" });
+    return;
   }
 });
 

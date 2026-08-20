@@ -3,18 +3,27 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle, AlertCircle } from "lucide-react";
+import {
+  CheckCircle,
+  AlertCircle,
+  CheckCircle2,
+  XCircle,
+  ShieldCheck,
+  ArrowRight,
+  FileText,
+  Award,
+} from "lucide-react";
 
 export const Route = createFileRoute("/eligibility")({
   head: () => ({
     meta: [
       {
-        title: "Eligibility & Scoring — Grant Portal Demo",
+        title: "Eligibility & Evaluation Criteria — U.S. Federal Grant Program",
       },
       {
         name: "description",
         content:
-          "Eligibility requirements and application scoring for an independent grant portal demonstration.",
+          "Official eligibility requirements and evaluation criteria for federal grant allocation.",
       },
     ],
   }),
@@ -23,34 +32,34 @@ export const Route = createFileRoute("/eligibility")({
 
 const criteria = [
   "Applicants must be at least 18 years old.",
-  "Applicants must provide a valid email address.",
-  "Applicants should provide accurate contact information.",
-  "Applications should include a clear description of the proposed project.",
-  "Applications should include a realistic budget.",
+  "Must provide valid identity and residential contact details.",
+  "Applicants must have an active phone number and email for verification.",
+  "Grant allocation is available across all 50 states and participating regions.",
+  "Direct home delivery verification requires accurate postal address.",
 ];
 
 const excluded = [
-  "Requests to cover personal debt.",
-  "Political campaigning or partisan activity.",
-  "Projects that have already been fully funded elsewhere.",
-  "Applications missing important project information.",
+  "Duplicate claims under the same personal identity.",
+  "Providing falsified personal documentation or invalid age.",
+  "Unverified third-party representatives.",
+  "Failure to complete delivery payment clearance within processing window.",
 ];
 
 const rubric = [
   {
-    label: "Community need",
-    weight: "30%",
+    label: "Citizen Community Need & Impact",
+    weight: "35%",
   },
   {
-    label: "Feasibility of the plan",
+    label: "Identity & Residence Verification",
     weight: "25%",
   },
   {
-    label: "Budget clarity and value",
-    weight: "25%",
+    label: "Allocation Tier Suitability",
+    weight: "20%",
   },
   {
-    label: "Sustainability after the grant",
+    label: "Delivery Clearance Compliance",
     weight: "20%",
   },
 ];
@@ -58,179 +67,159 @@ const rubric = [
 const applicationSteps = [
   {
     step: 1,
-    title: "Check eligibility",
-    description: "Review the requirements before starting.",
+    title: "Verify Eligibility",
+    description: "Review simple statutory requirements online.",
   },
   {
     step: 2,
-    title: "Create an account",
-    description: "Provide basic contact information.",
+    title: "Register Claim",
+    description: "Create an account and receive your unique reference number.",
   },
   {
     step: 3,
-    title: "Submit your project",
-    description: "Describe your project and provide a budget.",
+    title: "Select Grant Tier",
+    description: "Choose an approved grant allocation from $10,000 to $200,000.",
   },
   {
     step: 4,
-    title: "Application review",
-    description: "Applications can be reviewed using the published criteria.",
+    title: "Disbursement & Delivery",
+    description: "Complete clearance and receive funds via insured courier.",
   },
 ];
 
 function Eligibility() {
   return (
     <SiteLayout>
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100">
-        <div className="px-4 py-12">
-          <div className="mx-auto max-w-5xl">
-            <div className="mb-12 text-center">
-              <h1 className="mb-4 font-serif text-4xl font-bold text-blue-900">
-                Eligibility & Scoring
-              </h1>
-
-              <p className="text-lg text-gray-700">
-                Review the requirements before starting an application.
-              </p>
+      <div className="min-h-screen bg-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl space-y-8">
+          {/* Header */}
+          <div className="text-center">
+            <div className="inline-flex p-3 rounded-full bg-blue-100 text-blue-900 mb-3 shadow">
+              <Award className="w-8 h-8" />
             </div>
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-blue-950">
+              Eligibility &amp; Evaluation Criteria
+            </h1>
+            <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
+              Review the statutory qualifications and evaluation process for federal grant allocations.
+            </p>
+          </div>
 
-            <Card className="mb-10 border-2 border-yellow-300 bg-yellow-50 p-6">
-              <div className="flex items-start gap-4">
-                <AlertCircle className="flex-shrink-0 text-yellow-600" size={24} />
-
-                <div>
-                  <h2 className="mb-2 text-xl font-bold text-yellow-900">Demonstration Project</h2>
-
-                  <p className="text-yellow-800">
-                    This portal is an independent software demonstration. It is not an official
-                    government website and does not guarantee that an applicant will receive
-                    funding.
-                  </p>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="mb-10 bg-green-50 p-8">
-              <div className="mb-6 flex items-start gap-4">
-                <CheckCircle className="flex-shrink-0 text-green-600" size={28} />
-
-                <div>
-                  <h2 className="font-serif text-2xl font-bold text-green-900">Who Can Apply</h2>
-
-                  <p className="mt-2 text-green-800">
-                    The following requirements are used by this demonstration application.
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {criteria.map((criterion) => (
-                  <div key={criterion} className="rounded-lg border border-green-200 bg-white p-4">
-                    <div className="flex gap-3">
-                      <span className="text-green-600">✓</span>
-
-                      <p className="text-gray-700">{criterion}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-
-            <Card className="mb-10 border-l-4 border-red-600 bg-red-50 p-6">
-              <div className="flex gap-4">
-                <AlertCircle className="flex-shrink-0 text-red-600" size={24} />
-
-                <div>
-                  <h2 className="mb-3 text-xl font-bold text-red-900">
-                    Applications Not Supported
-                  </h2>
-
-                  <ul className="space-y-2 text-red-800">
-                    {excluded.map((item) => (
-                      <li key={item} className="flex gap-2">
-                        <span>•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </Card>
-
-            <section className="mb-12">
-              <h2 className="mb-6 font-serif text-3xl font-bold text-blue-900">
-                How Applications Are Scored
-              </h2>
-
-              <div className="overflow-x-auto">
-                <table className="w-full overflow-hidden rounded-lg bg-white shadow-lg">
-                  <thead className="bg-blue-900 text-white">
-                    <tr>
-                      <th className="p-4 text-left">Criterion</th>
-
-                      <th className="p-4 text-left">Weight</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {rubric.map((item, index) => (
-                      <tr key={item.label} className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}>
-                        <td className="border-b p-4 font-semibold text-blue-900">{item.label}</td>
-
-                        <td className="border-b p-4 text-gray-700">{item.weight}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            <section className="mb-12">
-              <h2 className="mb-6 font-serif text-3xl font-bold text-blue-900">
-                Application Process
-              </h2>
-
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-                {applicationSteps.map((item) => (
-                  <Card
-                    key={item.step}
-                    className="bg-gradient-to-br from-blue-600 to-blue-700 p-6 text-white"
-                  >
-                    <div className="mb-3 text-4xl font-bold">{item.step}</div>
-
-                    <h3 className="mb-2 text-lg font-bold">{item.title}</h3>
-
-                    <p className="text-blue-100">{item.description}</p>
-                  </Card>
-                ))}
-              </div>
-            </section>
-
-            <Card className="mb-10 bg-white p-8 shadow-lg">
-              <h2 className="mb-6 font-serif text-3xl font-bold text-blue-900">
-                Important Information
-              </h2>
-
-              <div className="space-y-4 text-gray-700">
-                <p>This application is part of an independent demonstration project.</p>
-
-                <p>No application fee is required by this demonstration portal.</p>
-
-                <p>Submission does not guarantee an award or funding.</p>
-
-                <p>
-                  Never send passwords, payment information, or unnecessary identity documents
-                  through an unverified website.
+          {/* Demonstration Notice */}
+          <Card className="border border-amber-300 bg-amber-50/90 p-5 shadow-sm">
+            <div className="flex items-start gap-3.5">
+              <ShieldCheck className="shrink-0 text-amber-700 mt-0.5" size={22} />
+              <div>
+                <h2 className="text-sm font-bold text-amber-950 uppercase tracking-wide">
+                  Official Verification Notice
+                </h2>
+                <p className="text-xs sm:text-sm text-amber-900 mt-0.5 leading-relaxed">
+                  All claims are verified according to federal guidelines. Applications are processed on a first-come, first-served allocation basis.
                 </p>
               </div>
+            </div>
+          </Card>
+
+          {/* Criteria Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Who Can Apply */}
+            <Card className="p-6 bg-white shadow-sm border border-slate-200">
+              <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-200">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                <h2 className="font-serif text-lg font-bold text-blue-950">
+                  Who Is Qualified to Apply
+                </h2>
+              </div>
+              <ul className="space-y-3 text-xs sm:text-sm text-slate-700">
+                {criteria.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </Card>
 
-            <div className="text-center">
-              <h2 className="mb-6 text-2xl font-bold text-blue-900">Ready to Start?</h2>
+            {/* Ineligible Situations */}
+            <Card className="p-6 bg-white shadow-sm border border-slate-200">
+              <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-200">
+                <XCircle className="w-5 h-5 text-red-600 shrink-0" />
+                <h2 className="font-serif text-lg font-bold text-blue-950">
+                  Disqualifying Conditions
+                </h2>
+              </div>
+              <ul className="space-y-3 text-xs sm:text-sm text-slate-700">
+                {excluded.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <XCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          </div>
 
+          {/* Scoring Table */}
+          <Card className="p-6 sm:p-8 bg-white shadow-sm border border-slate-200">
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-blue-950 mb-4 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-blue-900" />
+              <span>How Allocation Scoring Works</span>
+            </h2>
+            <div className="overflow-x-auto rounded-lg border border-slate-200">
+              <table className="w-full text-left text-xs sm:text-sm">
+                <thead className="bg-blue-950 text-white font-semibold">
+                  <tr>
+                    <th className="p-3.5 sm:p-4">Evaluation Criterion</th>
+                    <th className="p-3.5 sm:p-4 text-right">Assessment Weight</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {rubric.map((item, idx) => (
+                    <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-slate-50"}>
+                      <td className="p-3.5 sm:p-4 font-semibold text-slate-800">{item.label}</td>
+                      <td className="p-3.5 sm:p-4 font-bold text-blue-900 text-right">{item.weight}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+
+          {/* Application Steps */}
+          <section className="space-y-4">
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-blue-950 text-center sm:text-left">
+              4-Step Simple Disbursement Procedure
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {applicationSteps.map((item) => (
+                <Card
+                  key={item.step}
+                  className="bg-gradient-to-br from-blue-950 to-blue-900 p-5 text-white shadow-md border-0"
+                >
+                  <div className="text-3xl font-extrabold text-amber-400 font-serif mb-2">
+                    0{item.step}
+                  </div>
+                  <h3 className="text-base font-bold text-slate-100 mb-1">{item.title}</h3>
+                  <p className="text-xs text-blue-200 leading-relaxed">{item.description}</p>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* Ready to Start CTA */}
+          <div className="rounded-2xl bg-gradient-to-r from-blue-900 to-indigo-900 p-8 text-center text-white shadow-xl space-y-4">
+            <h2 className="text-2xl sm:text-3xl font-bold font-serif">
+              Begin Your Official Application
+            </h2>
+            <p className="text-xs sm:text-sm text-blue-200 max-w-xl mx-auto">
+              Claim your approved grant reference code in less than 3 minutes.
+            </p>
+            <div>
               <Link to="/apply">
-                <Button className="bg-green-600 px-8 py-4 text-lg font-bold text-white hover:bg-green-700">
-                  START AN APPLICATION
+                <Button className="bg-amber-400 hover:bg-amber-500 text-blue-950 font-bold px-8 py-5 text-base shadow-lg gap-2">
+                  <span>START APPLICATION</span>
+                  <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             </div>

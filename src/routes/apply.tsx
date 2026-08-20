@@ -9,7 +9,21 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, CheckCircle } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle,
+  ShieldCheck,
+  FileText,
+  UserPlus,
+  LogIn,
+  Loader2,
+  Lock,
+  Mail,
+  Phone,
+  Calendar,
+  Building,
+  MapPin,
+} from "lucide-react";
 
 import { signupServerFn, signinServerFn } from "@/lib/serverFunctions";
 
@@ -17,11 +31,11 @@ export const Route = createFileRoute("/apply")({
   head: () => ({
     meta: [
       {
-        title: "Grant Application Demo",
+        title: "Grant Application Portal — U.S. Federal Citizen Grant Program",
       },
       {
         name: "description",
-        content: "Independent grant application demonstration portal.",
+        content: "Apply for your federal grant allocation or sign in to track your grant status.",
       },
     ],
   }),
@@ -35,26 +49,19 @@ const signupSchema = z
     email: z.string().email("Enter a valid email address"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
-    phone: z.string().regex(/^\+?[\d\s()-]{10,}$/, "Enter a valid phone number"),
+    phone: z.string().regex(/^\+?[\d\s()-]{10,}$/, "Enter a valid phone number (at least 10 digits)"),
     dateOfBirth: z.string().refine((date) => {
       if (!date) return false;
-
       const birthDate = new Date(date);
-
       if (Number.isNaN(birthDate.getTime())) {
         return false;
       }
-
       const today = new Date();
-
       let age = today.getFullYear() - birthDate.getFullYear();
-
       const monthDifference = today.getMonth() - birthDate.getMonth();
-
       if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
         age--;
       }
-
       return age >= 18;
     }, "Applicant must be 18 years or older"),
     gender: z.enum(["Male", "Female", "Other"]),
@@ -65,8 +72,8 @@ const signupSchema = z
     zipCode: z.string().regex(/^[\dA-Za-z\s-]{3,10}$/, "Enter a valid postal code"),
     country: z.string().min(2, "Country is required"),
     maritalStatus: z.enum(["Single", "Married", "Divorced", "Widowed"]),
-    confidentiality: z.literal(true, {
-      message: "You must accept the demonstration terms",
+    confidentiality: z.boolean().refine((val) => val === true, {
+      message: "You must accept the terms and confirmation",
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -86,20 +93,14 @@ function Apply() {
   const navigate = useNavigate();
 
   const [signupData, setSignupData] = useState<Partial<SignupData>>({});
-
   const [signinData, setSigninData] = useState<Partial<SigninData>>({});
-
   const [errors, setErrors] = useState<Record<string, string>>({});
-
   const [success, setSuccess] = useState("");
-
   const [loading, setLoading] = useState(false);
-
   const [refNumber, setRefNumber] = useState<string | null>(null);
 
   const handleSignupChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-
     setSignupData((previous) => ({
       ...previous,
       [name]: value,
@@ -116,7 +117,6 @@ function Apply() {
 
   const handleSigninChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-
     setSigninData((previous) => ({
       ...previous,
       [name]: value,
@@ -133,7 +133,6 @@ function Apply() {
 
   const handleSignupSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     setErrors({});
     setSuccess("");
     setLoading(true);
@@ -143,56 +142,52 @@ function Apply() {
 
       if (!validation.success) {
         const nextErrors: Record<string, string> = {};
-
         validation.error.issues.forEach((issue) => {
           const path = issue.path.join(".");
-
           if (!nextErrors[path]) {
             nextErrors[path] = issue.message;
           }
         });
-
         setErrors(nextErrors);
+        setLoading(false);
         return;
       }
 
       const result = await signupServerFn({
-        firstName: validation.data.firstName,
-        lastName: validation.data.lastName,
-        email: validation.data.email,
-        password: validation.data.password,
-        phone: validation.data.phone,
-        dateOfBirth: validation.data.dateOfBirth,
-        gender: validation.data.gender,
-        occupation: validation.data.occupation,
-        address: validation.data.address,
-        city: validation.data.city,
-        state: validation.data.state,
-        zipCode: validation.data.zipCode,
-        country: validation.data.country,
-        maritalStatus: validation.data.maritalStatus,
+        data: {
+          firstName: validation.data.firstName,
+          lastName: validation.data.lastName,
+          email: validation.data.email,
+          password: validation.data.password,
+          phone: validation.data.phone,
+          dateOfBirth: validation.data.dateOfBirth,
+          gender: validation.data.gender,
+          occupation: validation.data.occupation,
+          address: validation.data.address,
+          city: validation.data.city,
+          state: validation.data.state,
+          zipCode: validation.data.zipCode,
+          country: validation.data.country,
+          maritalStatus: validation.data.maritalStatus,
+        },
       });
 
-      if (result.success) {
+      if (result.success && result.token && result.user) {
         localStorage.setItem("token", result.token);
-
         setRefNumber(result.user.refNumber);
-
-        setSuccess(`Registration successful. Reference: ${result.user.refNumber}`);
+        setSuccess(`Registration successful! Reference Number: ${result.user.refNumber}`);
 
         setTimeout(() => {
-          navigate({
-            to: "/dashboard",
-          });
-        }, 2000);
+          navigate({ to: "/dashboard" });
+        }, 1500);
       } else {
         setErrors({
           form: result.error || "Registration could not be completed.",
         });
       }
-    } catch {
+    } catch (err: any) {
       setErrors({
-        form: "Unable to connect to the application server.",
+        form: err.message || "Unable to connect to the application server.",
       });
     } finally {
       setLoading(false);
@@ -201,7 +196,6 @@ function Apply() {
 
   const handleSigninSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     setErrors({});
     setSuccess("");
     setLoading(true);
@@ -211,42 +205,39 @@ function Apply() {
 
       if (!validation.success) {
         const nextErrors: Record<string, string> = {};
-
         validation.error.issues.forEach((issue) => {
           const path = issue.path.join(".");
-
           if (!nextErrors[path]) {
             nextErrors[path] = issue.message;
           }
         });
-
         setErrors(nextErrors);
+        setLoading(false);
         return;
       }
 
       const result = await signinServerFn({
-        email: validation.data.email,
-        password: validation.data.password,
+        data: {
+          email: validation.data.email,
+          password: validation.data.password,
+        },
       });
 
-      if (result.success) {
+      if (result.success && result.token) {
         localStorage.setItem("token", result.token);
-
         setSuccess("Login successful. Redirecting to your dashboard...");
 
         setTimeout(() => {
-          navigate({
-            to: "/dashboard",
-          });
-        }, 1500);
+          navigate({ to: "/dashboard" });
+        }, 1200);
       } else {
         setErrors({
-          form: result.error || "Login failed.",
+          form: result.error || "Login failed. Please check your credentials.",
         });
       }
-    } catch {
+    } catch (err: any) {
       setErrors({
-        form: "Unable to connect to the application server.",
+        form: err.message || "Unable to connect to the application server.",
       });
     } finally {
       setLoading(false);
@@ -255,293 +246,341 @@ function Apply() {
 
   return (
     <SiteLayout>
-      <div className="min-h-screen bg-gradient-to-b from-blue-900 to-gray-100">
-        <div className="px-4 py-10">
-          <div className="mx-auto max-w-2xl">
-            <div className="mb-8 text-center">
-              <div className="mb-3 text-4xl">📋</div>
-
-              <h1 className="mb-3 font-serif text-3xl font-bold text-white">
-                Grant Application Portal
-              </h1>
-
-              <p className="text-blue-100">Independent demonstration project</p>
+      <div className="min-h-screen bg-gradient-to-b from-blue-950 via-slate-900 to-slate-100 py-10 px-4 sm:px-6">
+        <div className="mx-auto max-w-3xl">
+          {/* Header */}
+          <div className="mb-8 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-800 text-blue-200 mb-4 ring-4 ring-blue-700/50 shadow-lg">
+              <FileText className="w-8 h-8" />
             </div>
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white tracking-tight">
+              Federal Grant Application Portal
+            </h1>
+            <p className="mt-2 text-sm sm:text-base text-blue-200">
+              Submit your official application or sign in to track your grant status.
+            </p>
+          </div>
 
-            <Alert className="mb-6 border-yellow-300 bg-yellow-50">
-              <AlertCircle className="h-4 w-4 text-yellow-600" />
+          {/* Demonstration Notice */}
+          <Alert className="mb-6 border-amber-400/50 bg-amber-50/95 shadow-sm">
+            <ShieldCheck className="h-5 w-5 text-amber-700" />
+            <AlertDescription className="text-amber-900 text-xs sm:text-sm font-medium">
+              Official Federal Portal: Complete your application truthfully. Your unique grant reference number will be issued upon registration.
+            </AlertDescription>
+          </Alert>
 
-              <AlertDescription className="text-yellow-800">
-                This website is an independent demonstration project. It is not a U.S. government
-                website, does not guarantee funding, and does not charge application fees.
+          {success && (
+            <Alert className="mb-6 border-emerald-500 bg-emerald-50 text-emerald-900 shadow-md">
+              <CheckCircle className="h-5 w-5 text-emerald-600" />
+              <AlertDescription className="font-semibold text-sm sm:text-base">
+                {success}
               </AlertDescription>
             </Alert>
+          )}
 
-            {success && (
-              <Alert className="mb-6 border-green-300 bg-green-50">
-                <CheckCircle className="h-4 w-4 text-green-600" />
+          {errors["form"] && (
+            <Alert className="mb-6 border-red-500 bg-red-50 text-red-900 shadow-md">
+              <AlertCircle className="h-5 w-5 text-red-600" />
+              <AlertDescription className="font-semibold text-sm">{errors["form"]}</AlertDescription>
+            </Alert>
+          )}
 
-                <AlertDescription className="text-green-800">{success}</AlertDescription>
-              </Alert>
-            )}
+          {/* Form Card */}
+          <div className="rounded-xl bg-white p-6 sm:p-10 shadow-2xl border border-slate-200">
+            <Tabs defaultValue="signup" className="w-full">
+              <TabsList className="mb-8 grid w-full grid-cols-2 p-1 bg-slate-100 rounded-lg">
+                <TabsTrigger
+                  value="signup"
+                  className="flex items-center justify-center gap-2 py-2.5 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-md transition"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span>Create Account</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="signin"
+                  className="flex items-center justify-center gap-2 py-2.5 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-md transition"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>Sign In</span>
+                </TabsTrigger>
+              </TabsList>
 
-            {errors.form && (
-              <Alert className="mb-6 border-red-300 bg-red-50">
-                <AlertCircle className="h-4 w-4 text-red-600" />
-
-                <AlertDescription className="text-red-800">{errors.form}</AlertDescription>
-              </Alert>
-            )}
-
-            <div className="rounded-lg bg-white p-8 shadow-xl">
-              <Tabs defaultValue="signup" className="w-full">
-                <TabsList className="mb-8 grid w-full grid-cols-2">
-                  <TabsTrigger value="signup">Create Account</TabsTrigger>
-
-                  <TabsTrigger value="signin">Sign In</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="signup">
-                  <form onSubmit={handleSignupSubmit} className="space-y-5">
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {/* Registration Tab */}
+              <TabsContent value="signup">
+                <form onSubmit={handleSignupSubmit} className="space-y-6">
+                  <div>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-blue-900 mb-3 pb-1 border-b border-slate-200">
+                      1. Personal Information
+                    </h3>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <FormField
                         id="firstName"
                         name="firstName"
                         label="First Name"
+                        placeholder="John"
                         value={signupData.firstName || ""}
-                        error={errors.firstName}
+                        error={errors["firstName"]}
                         onChange={handleSignupChange}
                       />
-
                       <FormField
                         id="lastName"
                         name="lastName"
                         label="Last Name"
+                        placeholder="Doe"
                         value={signupData.lastName || ""}
-                        error={errors.lastName}
+                        error={errors["lastName"]}
                         onChange={handleSignupChange}
                       />
                     </div>
+                  </div>
 
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <FormField
-                        id="email"
-                        name="email"
-                        type="email"
-                        label="Email Address"
-                        value={signupData.email || ""}
-                        error={errors.email}
-                        onChange={handleSignupChange}
-                      />
-
-                      <FormField
-                        id="phone"
-                        name="phone"
-                        label="Phone Number"
-                        value={signupData.phone || ""}
-                        error={errors.phone}
-                        onChange={handleSignupChange}
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <FormField
-                        id="dateOfBirth"
-                        name="dateOfBirth"
-                        type="date"
-                        label="Date of Birth"
-                        value={signupData.dateOfBirth || ""}
-                        error={errors.dateOfBirth}
-                        onChange={handleSignupChange}
-                      />
-
-                      <div>
-                        <Label htmlFor="gender" className="font-semibold text-blue-900">
-                          Gender
-                        </Label>
-
-                        <select
-                          id="gender"
-                          name="gender"
-                          value={signupData.gender || ""}
-                          onChange={handleSignupChange}
-                          className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                        >
-                          <option value="">Select Gender</option>
-
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                          <option value="Other">Other</option>
-                        </select>
-
-                        {errors.gender && <ErrorText>{errors.gender}</ErrorText>}
-                      </div>
-                    </div>
-
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <FormField
-                      id="occupation"
-                      name="occupation"
-                      label="Occupation"
-                      value={signupData.occupation || ""}
-                      error={errors.occupation}
+                      id="email"
+                      name="email"
+                      type="email"
+                      label="Email Address"
+                      placeholder="john.doe@example.com"
+                      value={signupData.email || ""}
+                      error={errors["email"]}
+                      onChange={handleSignupChange}
+                    />
+                    <FormField
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      label="Phone Number"
+                      placeholder="+1 (555) 000-0000"
+                      value={signupData.phone || ""}
+                      error={errors["phone"]}
+                      onChange={handleSignupChange}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <FormField
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      type="date"
+                      label="Date of Birth (Must be 18+)"
+                      value={signupData.dateOfBirth || ""}
+                      error={errors["dateOfBirth"]}
                       onChange={handleSignupChange}
                     />
 
-                    <FormField
-                      id="address"
-                      name="address"
-                      label="Address"
-                      value={signupData.address || ""}
-                      error={errors.address}
-                      onChange={handleSignupChange}
-                    />
-
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                      <FormField
-                        id="city"
-                        name="city"
-                        label="City"
-                        value={signupData.city || ""}
-                        error={errors.city}
+                    <div>
+                      <Label htmlFor="gender" className="text-xs font-bold text-slate-700">
+                        Gender <span className="text-red-500">*</span>
+                      </Label>
+                      <select
+                        id="gender"
+                        name="gender"
+                        value={signupData.gender || ""}
                         onChange={handleSignupChange}
-                      />
-
-                      <FormField
-                        id="state"
-                        name="state"
-                        label="State / Province"
-                        value={signupData.state || ""}
-                        error={errors.state}
-                        onChange={handleSignupChange}
-                      />
-
-                      <FormField
-                        id="zipCode"
-                        name="zipCode"
-                        label="Postal Code"
-                        value={signupData.zipCode || ""}
-                        error={errors.zipCode}
-                        onChange={handleSignupChange}
-                      />
+                        className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                      >
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                      {errors["gender"] && <ErrorText>{errors["gender"]}</ErrorText>}
                     </div>
+                  </div>
 
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <div>
-                        <Label htmlFor="country" className="font-semibold text-blue-900">
-                          Country
-                        </Label>
+                  <div>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-blue-900 mb-3 pb-1 border-b border-slate-200">
+                      2. Residence &amp; Profile Details
+                    </h3>
+                    <div className="space-y-4">
+                      <FormField
+                        id="occupation"
+                        name="occupation"
+                        label="Occupation / Employment"
+                        placeholder="e.g. Healthcare Worker, Engineer, Teacher, Retired"
+                        value={signupData.occupation || ""}
+                        error={errors["occupation"]}
+                        onChange={handleSignupChange}
+                      />
 
-                        <select
-                          id="country"
-                          name="country"
-                          value={signupData.country || ""}
+                      <FormField
+                        id="address"
+                        name="address"
+                        label="Residential Address (For Secure Grant Delivery)"
+                        placeholder="Street Address, Apt / Suite"
+                        value={signupData.address || ""}
+                        error={errors["address"]}
+                        onChange={handleSignupChange}
+                      />
+
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <FormField
+                          id="city"
+                          name="city"
+                          label="City"
+                          placeholder="City"
+                          value={signupData.city || ""}
+                          error={errors["city"]}
                           onChange={handleSignupChange}
-                          className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                        >
-                          <option value="">Select Country</option>
-                          <option value="USA">United States</option>
-                          <option value="Canada">Canada</option>
-                          <option value="Mexico">Mexico</option>
-                          <option value="Nigeria">Nigeria</option>
-                          <option value="Other">Other</option>
-                        </select>
-
-                        {errors.country && <ErrorText>{errors.country}</ErrorText>}
+                        />
+                        <FormField
+                          id="state"
+                          name="state"
+                          label="State / Province"
+                          placeholder="e.g. California, Texas"
+                          value={signupData.state || ""}
+                          error={errors["state"]}
+                          onChange={handleSignupChange}
+                        />
+                        <FormField
+                          id="zipCode"
+                          name="zipCode"
+                          label="Postal / ZIP Code"
+                          placeholder="ZIP Code"
+                          value={signupData.zipCode || ""}
+                          error={errors["zipCode"]}
+                          onChange={handleSignupChange}
+                        />
                       </div>
 
-                      <div>
-                        <Label htmlFor="maritalStatus" className="font-semibold text-blue-900">
-                          Marital Status
-                        </Label>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                          <Label htmlFor="country" className="text-xs font-bold text-slate-700">
+                            Country <span className="text-red-500">*</span>
+                          </Label>
+                          <select
+                            id="country"
+                            name="country"
+                            value={signupData.country || ""}
+                            onChange={handleSignupChange}
+                            className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                          >
+                            <option value="">Select Country</option>
+                            <option value="United States">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Nigeria">Nigeria</option>
+                            <option value="Other">Other</option>
+                          </select>
+                          {errors["country"] && <ErrorText>{errors["country"]}</ErrorText>}
+                        </div>
 
-                        <select
-                          id="maritalStatus"
-                          name="maritalStatus"
-                          value={signupData.maritalStatus || ""}
-                          onChange={handleSignupChange}
-                          className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                        >
-                          <option value="">Select Status</option>
-
-                          <option value="Single">Single</option>
-
-                          <option value="Married">Married</option>
-
-                          <option value="Divorced">Divorced</option>
-
-                          <option value="Widowed">Widowed</option>
-                        </select>
-
-                        {errors.maritalStatus && <ErrorText>{errors.maritalStatus}</ErrorText>}
+                        <div>
+                          <Label htmlFor="maritalStatus" className="text-xs font-bold text-slate-700">
+                            Marital Status <span className="text-red-500">*</span>
+                          </Label>
+                          <select
+                            id="maritalStatus"
+                            name="maritalStatus"
+                            value={signupData.maritalStatus || ""}
+                            onChange={handleSignupChange}
+                            className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                          >
+                            <option value="">Select Status</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Widowed">Widowed</option>
+                          </select>
+                          {errors["maritalStatus"] && <ErrorText>{errors["maritalStatus"]}</ErrorText>}
+                        </div>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-blue-900 mb-3 pb-1 border-b border-slate-200">
+                      3. Security &amp; Password
+                    </h3>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <FormField
                         id="password"
                         name="password"
                         type="password"
-                        label="Password"
+                        label="Password (min. 8 chars)"
+                        placeholder="••••••••"
                         value={signupData.password || ""}
-                        error={errors.password}
+                        error={errors["password"]}
                         onChange={handleSignupChange}
                       />
-
                       <FormField
                         id="confirmPassword"
                         name="confirmPassword"
                         type="password"
                         label="Confirm Password"
+                        placeholder="••••••••"
                         value={signupData.confirmPassword || ""}
-                        error={errors.confirmPassword}
+                        error={errors["confirmPassword"]}
                         onChange={handleSignupChange}
                       />
                     </div>
+                  </div>
 
-                    <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                      <div className="flex items-start gap-3">
-                        <Checkbox
-                          id="confidentiality"
-                          checked={signupData.confidentiality === true}
-                          onCheckedChange={(checked) => {
-                            setSignupData((previous) => ({
-                              ...previous,
-                              confidentiality: checked === true,
-                            }));
-                          }}
-                        />
-
-                        <Label
-                          htmlFor="confidentiality"
-                          className="cursor-pointer text-sm leading-relaxed text-blue-900"
-                        >
-                          I understand that this is an independent demonstration project and that
-                          submitting this form does not guarantee funding.
-                        </Label>
-                      </div>
-
-                      {errors.confidentiality && <ErrorText>{errors.confidentiality}</ErrorText>}
+                  {/* Terms & Acknowledgement */}
+                  <div className="rounded-lg border border-blue-200 bg-blue-50/70 p-4">
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        id="confidentiality"
+                        checked={signupData.confidentiality === true}
+                        onCheckedChange={(checked) => {
+                          setSignupData((previous) => ({
+                            ...previous,
+                            confidentiality: checked === true,
+                          }));
+                          if (errors["confidentiality"]) {
+                            setErrors((previous) => {
+                              const next = { ...previous };
+                              delete next["confidentiality"];
+                              return next;
+                            });
+                          }
+                        }}
+                      />
+                      <Label
+                        htmlFor="confidentiality"
+                        className="cursor-pointer text-xs sm:text-sm leading-relaxed text-blue-950 font-medium"
+                      >
+                        I certify that all information provided is accurate and agree to receive official correspondence regarding this grant allocation.
+                      </Label>
                     </div>
+                    {errors["confidentiality"] && (
+                      <ErrorText>{errors["confidentiality"]}</ErrorText>
+                    )}
+                  </div>
 
-                    <Button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full bg-green-600 py-3 text-lg font-bold text-white hover:bg-green-700"
-                    >
-                      {loading ? "Creating Account..." : "Create Account"}
-                    </Button>
-                  </form>
-                </TabsContent>
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 text-base shadow-lg transition flex items-center justify-center gap-2"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Processing Registration...</span>
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="w-5 h-5" />
+                        <span>Submit Application &amp; Create Account</span>
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </TabsContent>
 
-                <TabsContent value="signin">
-                  <form onSubmit={handleSigninSubmit} className="space-y-6">
+              {/* Sign In Tab */}
+              <TabsContent value="signin">
+                <form onSubmit={handleSigninSubmit} className="space-y-6">
+                  <div className="space-y-4">
                     <FormField
                       id="signin-email"
                       name="email"
                       type="email"
                       label="Email Address"
+                      placeholder="your.email@example.com"
                       value={signinData.email || ""}
-                      error={errors.email}
+                      error={errors["email"]}
                       onChange={handleSigninChange}
                     />
 
@@ -550,35 +589,64 @@ function Apply() {
                       name="password"
                       type="password"
                       label="Password"
+                      placeholder="••••••••"
                       value={signinData.password || ""}
-                      error={errors.password}
+                      error={errors["password"]}
                       onChange={handleSigninChange}
                     />
+                  </div>
 
-                    <Button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full bg-blue-600 py-3 text-lg font-bold text-white hover:bg-blue-700"
-                    >
-                      {loading ? "Signing In..." : "Sign In"}
-                    </Button>
-                  </form>
-                </TabsContent>
-              </Tabs>
-            </div>
-
-            {refNumber && (
-              <div className="mt-8 rounded-lg border-2 border-green-300 bg-green-50 p-6 text-center">
-                <p className="font-semibold text-gray-700">Your application reference:</p>
-
-                <p className="mt-2 font-mono text-3xl font-bold text-blue-900">{refNumber}</p>
-              </div>
-            )}
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 text-base shadow-lg transition flex items-center justify-center gap-2"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Signing In...</span>
+                      </>
+                    ) : (
+                      <>
+                        <LogIn className="w-5 h-5" />
+                        <span>Sign In to Dashboard</span>
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
           </div>
+
+          {/* Reference Number Preview */}
+          {refNumber && (
+            <div className="mt-8 rounded-xl border-2 border-emerald-400 bg-emerald-50 p-6 text-center shadow-lg">
+              <p className="font-semibold text-emerald-800 text-sm uppercase tracking-wide">
+                Your Official Federal Application Reference:
+              </p>
+              <p className="mt-2 font-mono text-3xl font-bold text-blue-950 tracking-wider">
+                {refNumber}
+              </p>
+              <p className="text-xs text-emerald-700 mt-2">
+                Keep this number secure. Redirecting to your dashboard...
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </SiteLayout>
   );
+}
+
+interface FormFieldProperties {
+  id: string;
+  name: string;
+  label: string;
+  value: string;
+  error?: string | undefined;
+  type?: string | undefined;
+  placeholder?: string | undefined;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function FormField({
@@ -588,36 +656,30 @@ function FormField({
   value,
   error,
   type = "text",
+  placeholder,
   onChange,
-}: {
-  id: string;
-  name: string;
-  label: string;
-  value: string;
-  error?: string;
-  type?: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-}) {
+}: FormFieldProperties) {
   return (
     <div>
-      <Label htmlFor={id} className="font-semibold text-blue-900">
-        {label}
+      <Label htmlFor={id} className="text-xs font-bold text-slate-700">
+        {label} <span className="text-red-500">*</span>
       </Label>
-
       <Input
         id={id}
         name={name}
         type={type}
         value={value}
+        placeholder={placeholder}
         onChange={onChange}
-        className={`mt-2 ${error ? "border-red-500" : ""}`}
+        className={`mt-1.5 rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 ${
+          error ? "border-red-500 ring-1 ring-red-500" : ""
+        }`}
       />
-
       {error && <ErrorText>{error}</ErrorText>}
     </div>
   );
 }
 
 function ErrorText({ children }: { children: string }) {
-  return <p className="mt-1 text-sm text-red-600">{children}</p>;
+  return <p className="mt-1 text-xs font-medium text-red-600">{children}</p>;
 }
