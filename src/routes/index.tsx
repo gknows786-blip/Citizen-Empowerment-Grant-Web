@@ -32,7 +32,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-function CountdownTimer() {
+function UnifiedHeroSection() {
   const [timeLeft, setTimeLeft] = useState("47:59:59");
 
   useEffect(() => {
@@ -54,82 +54,157 @@ function CountdownTimer() {
   }, []);
 
   return (
-    <div className="bg-red-700 text-white py-2.5 px-4 text-center font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-inner">
-      <Clock className="w-4 h-4 text-amber-300 animate-pulse" />
-      <span>Federal Grant Claim Active Allocation Window Expires In:</span>
-      <span className="font-mono text-base sm:text-lg bg-red-900/80 px-2.5 py-0.5 rounded border border-red-500/50">
-        {timeLeft}
-      </span>
-    </div>
-  );
-}
+    <section className="relative overflow-hidden border-b border-blue-900 bg-slate-950 text-white">
+      {/* 1. Top Patriotic Flag Stripe */}
+      <div className="h-1.5 w-full bg-gradient-to-r from-red-600 via-white to-blue-600"></div>
 
-function GovernmentHeader() {
-  return (
-    <div className="bg-gradient-to-b from-blue-950 via-blue-900 to-blue-950 text-white border-b border-blue-800">
-      {/* Patriotic Flag Banner */}
-      <div className="h-1.5 bg-gradient-to-r from-red-600 via-white to-blue-600"></div>
+      {/* 2. Carousel / Marquee Ticker Bar */}
+      <div className="relative overflow-hidden border-b border-amber-400/20 bg-gradient-to-r from-red-950 via-red-900 to-red-950 py-2.5 shadow-inner">
+        <div className="animate-marquee whitespace-nowrap text-xs sm:text-sm font-semibold tracking-wide text-white">
+          <div className="inline-flex items-center gap-8 px-4">
+            <span className="inline-flex items-center gap-2">
+              <Clock className="h-4 w-4 text-amber-300 animate-pulse" />
+              <span>Federal Grant Claim Active Allocation Window Expires In:</span>
+              <span className="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded border border-amber-400/40">
+                {timeLeft}
+              </span>
+            </span>
+            <span className="text-amber-400/70">&bull;</span>
+            <span className="inline-flex items-center gap-1.5 text-blue-100">
+              <ShieldCheck className="h-4 w-4 text-emerald-400" />
+              <span>Congressional Citizen Grant Allocation Act Active &bull; Section 402 Federal Disbursal</span>
+            </span>
+            <span className="text-amber-400/70">&bull;</span>
+            <span className="inline-flex items-center gap-1.5 text-amber-200">
+              <Sparkles className="h-4 w-4 text-amber-400" />
+              <span>2,847+ Approved Beneficiary Packages Dispatched via Insured Courier</span>
+            </span>
+            <span className="text-amber-400/70">&bull;</span>
+            <span className="inline-flex items-center gap-1.5 text-emerald-200">
+              <CheckCircle className="h-4 w-4 text-emerald-400" />
+              <span>100% Non-Repayable Federal Funds &bull; No Collateral or Loan Requirement</span>
+            </span>
+          </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 text-center">
-        <div className="inline-flex p-3 rounded-full bg-blue-800 ring-4 ring-amber-400/40 text-amber-400 mb-4 shadow-xl">
-          <ShieldCheck className="w-10 h-10" />
-        </div>
-        <h1 className="text-3xl sm:text-5xl font-bold mb-3 font-serif tracking-tight text-white">
-          U.S. Federal Citizen Grant &amp; Empowerment Program
-        </h1>
-        <p className="text-base sm:text-xl text-blue-200 mb-4 font-serif max-w-2xl mx-auto">
-          Direct Citizen Empowerment Initiative &bull; Federal Grant Disbursement
-        </p>
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs sm:text-sm font-semibold">
-          <CheckCircle className="w-4 h-4 text-emerald-400" />
-          <span>Official Portal &bull; Verified Federal Assistance Distribution</span>
+          {/* Duplicate loop sequence for seamless infinite carousel marquee */}
+          <div className="inline-flex items-center gap-8 px-4">
+            <span className="inline-flex items-center gap-2">
+              <Clock className="h-4 w-4 text-amber-300 animate-pulse" />
+              <span>Federal Grant Claim Active Allocation Window Expires In:</span>
+              <span className="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded border border-amber-400/40">
+                {timeLeft}
+              </span>
+            </span>
+            <span className="text-amber-400/70">&bull;</span>
+            <span className="inline-flex items-center gap-1.5 text-blue-100">
+              <ShieldCheck className="h-4 w-4 text-emerald-400" />
+              <span>Congressional Citizen Grant Allocation Act Active &bull; Section 402 Federal Disbursal</span>
+            </span>
+            <span className="text-amber-400/70">&bull;</span>
+            <span className="inline-flex items-center gap-1.5 text-amber-200">
+              <Sparkles className="h-4 w-4 text-amber-400" />
+              <span>2,847+ Approved Beneficiary Packages Dispatched via Insured Courier</span>
+            </span>
+            <span className="text-amber-400/70">&bull;</span>
+            <span className="inline-flex items-center gap-1.5 text-emerald-200">
+              <CheckCircle className="h-4 w-4 text-emerald-400" />
+              <span>100% Non-Repayable Federal Funds &bull; No Collateral or Loan Requirement</span>
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
 
-function HeroSection() {
-  return (
-    <div className="relative bg-gradient-to-b from-blue-950 to-slate-900 py-16 sm:py-24 px-4 text-white overflow-hidden">
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <div className="inline-flex items-center gap-1.5 bg-amber-400/10 text-amber-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-amber-400/30">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Congressional Citizen Grant Allocation</span>
-        </div>
-        <h2 className="text-4xl sm:text-6xl font-extrabold mb-4 font-serif text-amber-300 drop-shadow-md">
-          CLAIM YOUR GRANT
-        </h2>
-        <p className="text-xl sm:text-3xl font-semibold text-slate-100 mb-4">
-          Direct Economic Assistance &amp; Empowerment For Citizens
-        </p>
-        <p className="text-base sm:text-xl mb-8 text-blue-200 max-w-2xl mx-auto">
-          Approved federal funding distributed to qualified residents.{" "}
-          <span className="text-amber-300 font-bold">No Repayment Required &bull; Zero Collateral</span>
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/apply" className="w-full sm:w-auto">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-6 text-base sm:text-lg font-bold shadow-xl flex items-center justify-center gap-2"
-            >
-              <span>CLAIM YOUR ALLOCATION NOW</span>
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-          </Link>
-          <Link to="/eligibility" className="w-full sm:w-auto">
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto border-blue-400 text-blue-100 hover:bg-blue-900/60 px-6 py-6 text-base font-semibold"
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              <span>Check Eligibility</span>
-            </Button>
-          </Link>
+      {/* 3. Main Hero Body with U.S. Federal Government Background Image */}
+      <div
+        className="relative bg-cover bg-center bg-no-repeat py-14 sm:py-20 px-4 sm:px-6 lg:px-8"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(10, 22, 48, 0.93) 0%, rgba(15, 23, 42, 0.88) 50%, rgba(10, 15, 30, 0.98) 100%), url('https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=2000&q=85')`,
+        }}
+      >
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
+          {/* Top Seal & Agency Branding */}
+          <div className="mb-6 flex flex-col items-center">
+            <div className="inline-flex p-3 rounded-full bg-blue-900/80 ring-4 ring-amber-400/40 text-amber-400 mb-3 shadow-2xl backdrop-blur-sm">
+              <ShieldCheck className="w-10 h-10 sm:w-12 sm:h-12" />
+            </div>
+            <h1 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white drop-shadow-md">
+              U.S. Federal Citizen Grant &amp; Empowerment Program
+            </h1>
+            <p className="mt-2 text-sm sm:text-base lg:text-lg text-blue-200 font-serif max-w-2xl">
+              Direct Citizen Empowerment Initiative &bull; Federal Grant Disbursement
+            </p>
+
+            {/* Official Badge Pill */}
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-950/80 border border-emerald-500/40 px-4 py-1.5 text-xs sm:text-sm font-semibold text-emerald-300 shadow-md backdrop-blur-sm">
+              <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0" />
+              <span>Official Portal &bull; Verified Federal Assistance Distribution</span>
+            </div>
+          </div>
+
+          {/* Core Value Proposition Box */}
+          <div className="my-6 rounded-2xl bg-blue-950/40 border border-blue-500/20 p-6 sm:p-8 backdrop-blur-md shadow-2xl">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-amber-300 mb-3">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Congressional Citizen Grant Allocation</span>
+            </div>
+
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-extrabold text-amber-300 tracking-tight drop-shadow-lg mb-2">
+              CLAIM YOUR GRANT
+            </h2>
+
+            <p className="text-lg sm:text-2xl font-semibold text-slate-100 mb-3">
+              Direct Economic Assistance &amp; Empowerment For Citizens
+            </p>
+
+            <p className="text-sm sm:text-lg text-blue-200 max-w-2xl mx-auto leading-relaxed">
+              Approved federal funding distributed to qualified residents.{" "}
+              <span className="text-amber-300 font-bold block sm:inline">
+                No Repayment Required &bull; Zero Collateral
+              </span>
+            </p>
+
+            {/* Action Buttons */}
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/apply" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-6 text-base sm:text-lg font-bold shadow-xl flex items-center justify-center gap-2 border border-emerald-400/40"
+                >
+                  <span>CLAIM YOUR ALLOCATION NOW</span>
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+              </Link>
+              <Link to="/eligibility" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto border-blue-400/60 bg-blue-950/40 text-blue-100 hover:bg-blue-900/70 px-6 py-6 text-base font-semibold backdrop-blur-sm"
+                >
+                  <FileText className="w-4 h-4 mr-2 text-amber-400" />
+                  <span>Check Eligibility &amp; Scoring</span>
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Bottom Security / Highlights Strip */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs sm:text-sm text-slate-300 pt-2">
+            <div className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-black/30 border border-white/5">
+              <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>100% Non-Repayable Grant</span>
+            </div>
+            <div className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-black/30 border border-white/5">
+              <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0" />
+              <span>Insured Armored Courier Dispatch</span>
+            </div>
+            <div className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-black/30 border border-white/5">
+              <Award className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>Instant Unique Reference Code</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -340,9 +415,7 @@ function CallToAction() {
 function Home() {
   return (
     <SiteLayout>
-      <GovernmentHeader />
-      <CountdownTimer />
-      <HeroSection />
+      <UnifiedHeroSection />
       <InfoBoxes />
       <ImportantNotice />
       <Testimonials />
