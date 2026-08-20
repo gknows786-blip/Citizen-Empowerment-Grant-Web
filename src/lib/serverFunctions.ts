@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import mongoose from "mongoose";
 import { User } from "../models/User.js";
 import {
   generateToken,
@@ -11,6 +12,20 @@ import { sendEmail, sendAdminNotification, emailTemplates } from "../lib/emailSe
 
 const getEnv = (key: string): string => {
   return (process.env as Record<string, string | undefined>)[key] || "";
+};
+
+// Ensure MongoDB is connected in serverless / Nitro runtime
+export const ensureDbConnected = async () => {
+  if (mongoose.connection && mongoose.connection.readyState >= 1) {
+    return;
+  }
+  const mongoUri = getEnv("MONGODB_URI") || "mongodb://localhost:27017/grant_portal";
+  try {
+    await mongoose.connect(mongoUri);
+    console.log("✅ MongoDB connected in server function");
+  } catch (err) {
+    console.error("❌ MongoDB connection error in server function:", err);
+  }
 };
 
 const calculateAge = (dob: Date): number => {
@@ -58,6 +73,7 @@ export const signupServerFn = createServerFn({ method: "POST" })
   .validator((data: SignupInput) => data)
   .handler(async ({ data }) => {
     try {
+      await ensureDbConnected();
       const {
         firstName,
         lastName,
@@ -193,6 +209,7 @@ export const signinServerFn = createServerFn({ method: "POST" })
   .validator((data: SigninInput) => data)
   .handler(async ({ data }) => {
     try {
+      await ensureDbConnected();
       const { email, password } = data;
 
       if (!email || !password) {
@@ -262,6 +279,7 @@ export const forgotPasswordServerFn = createServerFn({ method: "POST" })
   .validator((data: { email: string }) => data)
   .handler(async ({ data }) => {
     try {
+      await ensureDbConnected();
       const { email } = data;
 
       if (!email) {
@@ -307,6 +325,7 @@ export const resetPasswordServerFn = createServerFn({ method: "POST" })
   .validator((data: { token: string; newPassword: string }) => data)
   .handler(async ({ data }) => {
     try {
+      await ensureDbConnected();
       const { token, newPassword } = data;
 
       if (!token || !newPassword) {
@@ -363,6 +382,7 @@ export const getDashboardDataServerFn = createServerFn({ method: "POST" })
   .validator((data: { token: string }) => data)
   .handler(async ({ data }) => {
     try {
+      await ensureDbConnected();
       const { token } = data;
 
       if (!token) {
@@ -442,6 +462,7 @@ export const selectPackageServerFn = createServerFn({ method: "POST" })
   .validator((data: { token: string; packageName: string }) => data)
   .handler(async ({ data }) => {
     try {
+      await ensureDbConnected();
       const { token, packageName } = data;
 
       if (!token) {
@@ -522,6 +543,7 @@ export const confirmPaymentServerFn = createServerFn({ method: "POST" })
   .validator((data: { token: string; transactionId: string; receiptPath?: string | undefined }) => data)
   .handler(async ({ data }) => {
     try {
+      await ensureDbConnected();
       const { token, transactionId, receiptPath } = data;
 
       if (!token) {

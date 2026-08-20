@@ -46,34 +46,41 @@ export const Route = createFileRoute("/apply")({
 
 const signupSchema = z
   .object({
-    firstName: z.string().min(2, "First name is required"),
-    lastName: z.string().min(2, "Last name is required"),
-    email: z.string().email("Enter a valid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string(),
-    phone: z.string().regex(/^\+?[\d\s()-]{10,}$/, "Enter a valid phone number (at least 10 digits)"),
-    dateOfBirth: z.string().refine((date) => {
-      if (!date) return false;
-      const birthDate = new Date(date);
-      if (Number.isNaN(birthDate.getTime())) {
-        return false;
-      }
-      const today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const monthDifference = today.getMonth() - birthDate.getMonth();
-      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-      return age >= 18;
-    }, "Applicant must be 18 years or older"),
-    gender: z.enum(["Male", "Female", "Other"]),
-    occupation: z.string().min(2, "Occupation is required"),
-    address: z.string().min(5, "Address is required"),
-    city: z.string().min(2, "City is required"),
-    state: z.string().min(2, "State is required"),
-    zipCode: z.string().regex(/^[\dA-Za-z\s-]{3,10}$/, "Enter a valid postal code"),
-    country: z.string().min(2, "Country is required"),
-    maritalStatus: z.enum(["Single", "Married", "Divorced", "Widowed"]),
+    firstName: z.string({ required_error: "First name is required" }).min(2, "First name is required"),
+    lastName: z.string({ required_error: "Last name is required" }).min(2, "Last name is required"),
+    email: z.string({ required_error: "Email is required" }).email("Enter a valid email address"),
+    password: z.string({ required_error: "Password is required" }).min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string({ required_error: "Please confirm your password" }).min(1, "Please confirm your password"),
+    phone: z.string({ required_error: "Phone number is required" }).regex(/^\+?[\d\s()-]{10,}$/, "Enter a valid phone number (at least 10 digits)"),
+    dateOfBirth: z
+      .string({ required_error: "Date of birth is required" })
+      .min(1, "Date of birth is required")
+      .refine((date) => {
+        if (!date) return false;
+        const birthDate = new Date(date);
+        if (Number.isNaN(birthDate.getTime())) {
+          return false;
+        }
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age >= 18;
+      }, "Applicant must be 18 years or older"),
+    gender: z.enum(["Male", "Female", "Other"], {
+      errorMap: () => ({ message: "Please select your gender" }),
+    }),
+    occupation: z.string({ required_error: "Occupation is required" }).min(2, "Occupation is required"),
+    address: z.string({ required_error: "Address is required" }).min(5, "Address is required (at least 5 characters)"),
+    city: z.string({ required_error: "City is required" }).min(2, "City is required"),
+    state: z.string({ required_error: "State is required" }).min(2, "State is required"),
+    zipCode: z.string({ required_error: "Postal code is required" }).regex(/^[\dA-Za-z\s-]{3,10}$/, "Enter a valid postal code"),
+    country: z.string({ required_error: "Country is required" }).min(2, "Please select your country"),
+    maritalStatus: z.enum(["Single", "Married", "Divorced", "Widowed"], {
+      errorMap: () => ({ message: "Please select your marital status" }),
+    }),
     confidentiality: z.boolean().refine((val) => val === true, {
       message: "You must accept the terms and confirmation",
     }),
@@ -150,8 +157,21 @@ function Apply() {
             nextErrors[path] = issue.message;
           }
         });
+        nextErrors["form"] = "Please complete all required fields highlighted below.";
         setErrors(nextErrors);
         setLoading(false);
+
+        // Auto-scroll to the first invalid field
+        const firstErrorKey = Object.keys(nextErrors).find((k) => k !== "form");
+        if (firstErrorKey) {
+          setTimeout(() => {
+            const el = document.getElementById(firstErrorKey);
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth", block: "center" });
+              el.focus();
+            }
+          }, 50);
+        }
         return;
       }
 
@@ -213,6 +233,7 @@ function Apply() {
             nextErrors[path] = issue.message;
           }
         });
+        nextErrors["form"] = "Please enter your valid email address and password.";
         setErrors(nextErrors);
         setLoading(false);
         return;
@@ -551,6 +572,13 @@ function Apply() {
                     )}
                   </div>
 
+                  {errors["form"] && (
+                    <Alert className="border-red-500 bg-red-50 text-red-900 shadow-md">
+                      <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
+                      <AlertDescription className="font-semibold text-sm">{errors["form"]}</AlertDescription>
+                    </Alert>
+                  )}
+
                   <Button
                     type="submit"
                     disabled={loading}
@@ -597,6 +625,13 @@ function Apply() {
                       onChange={handleSigninChange}
                     />
                   </div>
+
+                  {errors["form"] && (
+                    <Alert className="border-red-500 bg-red-50 text-red-900 shadow-md">
+                      <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
+                      <AlertDescription className="font-semibold text-sm">{errors["form"]}</AlertDescription>
+                    </Alert>
+                  )}
 
                   <Button
                     type="submit"
