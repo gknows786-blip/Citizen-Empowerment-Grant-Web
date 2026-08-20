@@ -1,5 +1,5 @@
-import { Link, useLocation } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect, type ReactNode } from "react";
 import {
   ShieldCheck,
   Phone,
@@ -12,19 +12,41 @@ import {
   Menu,
   X,
   LayoutDashboard,
+  Home,
+  FileCheck,
+  FileSpreadsheet,
+  HelpCircle,
+  LogOut,
 } from "lucide-react";
 
 const nav = [
-  { to: "/", label: "Home" },
-  { to: "/eligibility", label: "Eligibility" },
-  { to: "/apply", label: "Apply Now" },
-  { to: "/faq", label: "FAQ" },
+  { to: "/", label: "Home", icon: Home },
+  { to: "/eligibility", label: "Eligibility", icon: FileCheck },
+  { to: "/apply", label: "Apply Now", icon: FileSpreadsheet },
+  { to: "/faq", label: "FAQ", icon: HelpCircle },
 ] as const;
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isAuthenticated = typeof window !== "undefined" && Boolean(localStorage.getItem("token"));
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    setIsAuthenticated(Boolean(localStorage.getItem("token")));
+  }, [location.pathname]);
+
+  // Automatically close mobile menu when navigating to another route
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    setMobileMenuOpen(false);
+    navigate({ to: "/" });
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
@@ -35,17 +57,22 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       </div>
 
       {/* Header */}
-      <header className="border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md sticky top-0 z-40">
+      <header className="border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md sticky top-0 z-50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-          <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-800 ring-2 ring-amber-400 shadow text-amber-300">
+          {/* Logo */}
+          <Link
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-3 hover:opacity-90 transition select-none"
+          >
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-800 ring-2 ring-amber-400 shadow text-amber-300 shrink-0">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <span className="block font-serif text-base sm:text-lg font-bold leading-tight text-white tracking-wide">
+              <span className="block font-serif text-sm sm:text-lg font-bold leading-tight text-white tracking-wide">
                 U.S. Federal Citizen Grant Program
               </span>
-              <span className="block text-[11px] text-blue-200 uppercase tracking-wider font-semibold">
+              <span className="block text-[10px] sm:text-[11px] text-blue-200 uppercase tracking-wider font-semibold">
                 Official Government Portal
               </span>
             </div>
@@ -61,7 +88,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                   to={item.to}
                   className={`rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-colors ${
                     isActive
-                      ? "bg-amber-400 text-blue-950 shadow-sm"
+                      ? "bg-amber-400 text-blue-950 shadow-sm font-bold"
                       : "text-blue-100 hover:bg-blue-800 hover:text-white"
                   }`}
                 >
@@ -74,7 +101,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 to="/dashboard"
                 className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-colors ${
                   location.pathname === "/dashboard"
-                    ? "bg-amber-400 text-blue-950 shadow-sm"
+                    ? "bg-amber-400 text-blue-950 shadow-sm font-bold"
                     : "bg-emerald-600 text-white hover:bg-emerald-700"
                 }`}
               >
@@ -84,46 +111,80 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             )}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-blue-100 hover:text-white hover:bg-blue-800 rounded-md"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile Menu Toggle Button (Large, Touch-Friendly, Accessible) */}
+          <div className="flex items-center md:hidden">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-label={mobileMenuOpen ? "Close main menu" : "Open main menu"}
+              aria-expanded={mobileMenuOpen}
+              className="relative inline-flex items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-lg bg-blue-800/80 border border-blue-600/50 text-white hover:bg-blue-700 active:scale-95 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6 text-amber-300" />
+              ) : (
+                <Menu className="w-6 h-6 text-white" />
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Navigation Dropdown */}
+        {/* Mobile Navigation Dropdown Menu with Backdrop & Clear Items */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-blue-800 bg-blue-950 px-4 py-3 space-y-1">
-            {nav.map((item) => {
-              const isActive = location.pathname === item.to;
-              return (
+          <div className="md:hidden border-t border-blue-800/80 bg-blue-950 px-4 py-4 space-y-2 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+            <div className="space-y-1">
+              {nav.map((item) => {
+                const isActive = location.pathname === item.to;
+                const IconComponent = item.icon;
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition-all ${
+                      isActive
+                        ? "bg-amber-400 text-blue-950 font-bold shadow"
+                        : "text-blue-100 hover:bg-blue-900 hover:text-white"
+                    }`}
+                  >
+                    <IconComponent className={`w-5 h-5 ${isActive ? "text-blue-950" : "text-amber-400"}`} />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Authenticated Controls in Mobile Menu */}
+            {isAuthenticated ? (
+              <div className="pt-2 border-t border-blue-800/60 space-y-2">
                 <Link
-                  key={item.to}
-                  to={item.to}
+                  to="/dashboard"
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
-                    isActive
-                      ? "bg-amber-400 text-blue-950 font-bold"
-                      : "text-blue-100 hover:bg-blue-800 hover:text-white"
-                  }`}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow"
                 >
-                  {item.label}
+                  <LayoutDashboard className="w-5 h-5" />
+                  <span>Open My Grant Dashboard</span>
                 </Link>
-              );
-            })}
-            {isAuthenticated && (
-              <Link
-                to="/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 rounded-md bg-emerald-600 px-3 py-2 text-sm font-bold text-white hover:bg-emerald-700 mt-2"
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                <span>My Grant Dashboard</span>
-              </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/40 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/50"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <div className="pt-2 border-t border-blue-800/60">
+                <Link
+                  to="/apply"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"
+                >
+                  <FileSpreadsheet className="w-5 h-5" />
+                  <span>Start Application / Sign In</span>
+                </Link>
+              </div>
             )}
           </div>
         )}

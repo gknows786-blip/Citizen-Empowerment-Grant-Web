@@ -123,65 +123,48 @@ function UnifiedHeroSection() {
       >
         <div className="relative z-10 mx-auto max-w-4xl text-center">
           {/* Top Seal & Agency Branding */}
-          <div className="mb-6 flex flex-col items-center">
-            <div className="inline-flex p-3 rounded-full bg-blue-900/80 ring-4 ring-amber-400/40 text-amber-400 mb-3 shadow-2xl backdrop-blur-sm">
-              <ShieldCheck className="w-10 h-10 sm:w-12 sm:h-12" />
+          <div className="mb-4 flex flex-col items-center">
+            <div className="inline-flex p-2.5 rounded-full bg-blue-900/80 ring-2 ring-amber-400/50 text-amber-400 mb-2.5 shadow-xl backdrop-blur-sm">
+              <ShieldCheck className="w-8 h-8 sm:w-10 sm:h-10" />
             </div>
-            <h1 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white drop-shadow-md">
+            <h1 className="font-serif text-xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white drop-shadow-md">
               U.S. Federal Citizen Grant &amp; Empowerment Program
             </h1>
-            <p className="mt-2 text-sm sm:text-base lg:text-lg text-blue-200 font-serif max-w-2xl">
-              Direct Citizen Empowerment Initiative &bull; Federal Grant Disbursement
+            <p className="mt-1 text-xs sm:text-sm text-blue-200 font-medium max-w-xl">
+              Official Economic Assistance &bull; Verified Federal Grant Disbursement
             </p>
-
-            {/* Official Badge Pill */}
-            <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-950/80 border border-emerald-500/40 px-4 py-1.5 text-xs sm:text-sm font-semibold text-emerald-300 shadow-md backdrop-blur-sm">
-              <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0" />
-              <span>Official Portal &bull; Verified Federal Assistance Distribution</span>
-            </div>
           </div>
 
-          {/* Core Value Proposition Box */}
-          <div className="my-6 rounded-2xl bg-blue-950/40 border border-blue-500/20 p-6 sm:p-8 backdrop-blur-md shadow-2xl">
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-amber-300 mb-3">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Congressional Citizen Grant Allocation</span>
-            </div>
-
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-extrabold text-amber-300 tracking-tight drop-shadow-lg mb-2">
+          {/* Core Action Card */}
+          <div className="my-5 max-w-2xl mx-auto rounded-2xl bg-blue-950/60 border border-blue-400/30 p-5 sm:p-7 backdrop-blur-md shadow-2xl">
+            <h2 className="font-serif text-2xl sm:text-4xl font-extrabold text-amber-300 tracking-tight drop-shadow-md">
               CLAIM YOUR GRANT
             </h2>
 
-            <p className="text-lg sm:text-2xl font-semibold text-slate-100 mb-3">
-              Direct Economic Assistance &amp; Empowerment For Citizens
-            </p>
-
-            <p className="text-sm sm:text-lg text-blue-200 max-w-2xl mx-auto leading-relaxed">
-              Approved federal funding distributed to qualified residents.{" "}
-              <span className="text-amber-300 font-bold block sm:inline">
-                No Repayment Required &bull; Zero Collateral
-              </span>
+            <p className="mt-2 text-xs sm:text-sm text-blue-100 max-w-lg mx-auto leading-relaxed">
+              Approved federal economic funding for qualified citizens &bull;{" "}
+              <span className="text-amber-300 font-bold">No Repayment Required &bull; Zero Collateral</span>
             </p>
 
             {/* Action Buttons */}
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link to="/apply" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-6 text-base sm:text-lg font-bold shadow-xl flex items-center justify-center gap-2 border border-emerald-400/40"
+                  className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 text-sm sm:text-base font-bold shadow-lg flex items-center justify-center gap-2 border border-emerald-400/40"
                 >
                   <span>CLAIM YOUR ALLOCATION NOW</span>
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link to="/eligibility" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto border-blue-400/60 bg-blue-950/40 text-blue-100 hover:bg-blue-900/70 px-6 py-6 text-base font-semibold backdrop-blur-sm"
+                  className="w-full sm:w-auto border-blue-400/50 bg-blue-900/40 text-blue-100 hover:bg-blue-900/80 px-5 py-3 text-sm font-semibold backdrop-blur-sm"
                 >
-                  <FileText className="w-4 h-4 mr-2 text-amber-400" />
-                  <span>Check Eligibility &amp; Scoring</span>
+                  <FileText className="w-4 h-4 mr-1.5 text-amber-400" />
+                  <span>Check Eligibility</span>
                 </Button>
               </Link>
             </div>

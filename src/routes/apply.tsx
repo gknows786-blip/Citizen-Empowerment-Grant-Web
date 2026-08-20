@@ -23,6 +23,8 @@ import {
   Calendar,
   Building,
   MapPin,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 import { signupServerFn, signinServerFn } from "@/lib/serverFunctions";
@@ -659,22 +661,38 @@ function FormField({
   placeholder,
   onChange,
 }: FormFieldProperties) {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPasswordField = type === "password";
+  const inputType = isPasswordField ? (showPassword ? "text" : "password") : type;
+
   return (
     <div>
       <Label htmlFor={id} className="text-xs font-bold text-slate-700">
         {label} <span className="text-red-500">*</span>
       </Label>
-      <Input
-        id={id}
-        name={name}
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        className={`mt-1.5 rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 ${
-          error ? "border-red-500 ring-1 ring-red-500" : ""
-        }`}
-      />
+      <div className="relative mt-1.5">
+        <Input
+          id={id}
+          name={name}
+          type={inputType}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          className={`rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 ${
+            isPasswordField ? "pr-10" : ""
+          } ${error ? "border-red-500 ring-1 ring-red-500" : ""}`}
+        />
+        {isPasswordField && (
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded"
+          >
+            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          </button>
+        )}
+      </div>
       {error && <ErrorText>{error}</ErrorText>}
     </div>
   );
