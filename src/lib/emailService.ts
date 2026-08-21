@@ -5,10 +5,12 @@ const getEnv = (key: string): string => {
 };
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: getEnv("SMTP_HOST"),
+  port: Number(getEnv("SMTP_PORT") || 587),
+  secure: false,
   auth: {
-    user: getEnv("EMAIL_USER"),
-    pass: getEnv("EMAIL_PASSWORD"),
+    user: getEnv("SMTP_USER"),
+    pass: getEnv("SMTP_PASSWORD"),
   },
 });
 
