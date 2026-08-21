@@ -5,11 +5,10 @@ const getEnv = (key: string): string => {
 }; 
 
 const getApiUrl = (): string => {
-  const apiUrl = getEnv("API_URL").trim();
+  const apiUrl = getEnv("VITE_API_URL").trim();
 
   return apiUrl.replace(/\/+$/, "");
 };
-
 const apiRequest = async (
   endpoint: string,
   options: RequestInit = {},
