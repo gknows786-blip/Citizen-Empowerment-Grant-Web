@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { z } from "zod";
 
@@ -906,6 +906,15 @@ function Apply() {
                     )}
                   </div>
 
+                  <div className="text-right -mt-2">
+                    <Link
+                      to="/forgot-password"
+                      className="text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline"
+                    >
+                      Forgot your password?
+                    </Link>
+                  </div>
+
                   {errors["form"] && (
                     <Alert className="border-red-500 bg-red-50 text-red-900 shadow-md">
                       <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
@@ -975,6 +984,15 @@ function Apply() {
                       onChange={handleSigninChange}
                     />
 
+                  </div>
+
+                  <div className="text-right -mt-2">
+                    <Link
+                      to="/forgot-password"
+                      className="text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline"
+                    >
+                      Forgot your password?
+                    </Link>
                   </div>
 
                   {errors["form"] && (
@@ -1152,3 +1170,4 @@ function ErrorText({
     </p>
   );
 }
+

@@ -14,6 +14,7 @@ import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as EligibilityRouteImport } from './routes/eligibility'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as PaymentConfirmationRouteImport } from './routes/payment-confirmation'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PaymentConfirmationRoute = PaymentConfirmationRouteImport.update({
   id: '/payment-confirmation',
   path: '/payment-confirmation',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/eligibility': typeof EligibilityRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/payment-confirmation': typeof PaymentConfirmationRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/eligibility': typeof EligibilityRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/payment-confirmation': typeof PaymentConfirmationRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/eligibility': typeof EligibilityRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/payment-confirmation': typeof PaymentConfirmationRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/eligibility'
     | '/faq'
+    | '/forgot-password'
     | '/payment-confirmation'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/eligibility'
     | '/faq'
+    | '/forgot-password'
     | '/payment-confirmation'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/eligibility'
     | '/faq'
+    | '/forgot-password'
     | '/payment-confirmation'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   EligibilityRoute: typeof EligibilityRoute
   FaqRoute: typeof FaqRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   PaymentConfirmationRoute: typeof PaymentConfirmationRoute
 }
 
@@ -145,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/payment-confirmation': {
       id: '/payment-confirmation'
       path: '/payment-confirmation'
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   EligibilityRoute: EligibilityRoute,
   FaqRoute: FaqRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   PaymentConfirmationRoute: PaymentConfirmationRoute,
 }
 export const routeTree = rootRouteImport
