@@ -7,8 +7,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import {
+  Alert,
+  AlertDescription,
+} from "@/components/ui/alert";
+
 import {
   AlertCircle,
   CheckCircle,
@@ -17,17 +26,14 @@ import {
   UserPlus,
   LogIn,
   Loader2,
-  Lock,
-  Mail,
-  Phone,
-  Calendar,
-  Building,
-  MapPin,
   Eye,
   EyeOff,
 } from "lucide-react";
 
-import { signupServerFn, signinServerFn } from "@/lib/serverFunctions";
+import {
+  signupServerFn,
+  signinServerFn,
+} from "@/lib/serverFunctions";
 
 export const Route = createFileRoute("/apply")({
   head: () => ({
@@ -37,7 +43,8 @@ export const Route = createFileRoute("/apply")({
       },
       {
         name: "description",
-        content: "Apply for your federal grant allocation or sign in to track your grant status.",
+        content:
+          "Apply for your federal grant allocation or sign in to track your grant status.",
       },
     ],
   }),
@@ -46,53 +53,125 @@ export const Route = createFileRoute("/apply")({
 
 const signupSchema = z
   .object({
-    firstName: z.string({ required_error: "First name is required" }).min(2, "First name is required"),
-    lastName: z.string({ required_error: "Last name is required" }).min(2, "Last name is required"),
-    email: z.string({ required_error: "Email is required" }).email("Enter a valid email address"),
-    password: z.string({ required_error: "Password is required" }).min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string({ required_error: "Please confirm your password" }).min(1, "Please confirm your password"),
-    phone: z.string({ required_error: "Phone number is required" }).regex(/^\+?[\d\s()-]{10,}$/, "Enter a valid phone number (at least 10 digits)"),
+    firstName: z
+      .string({ required_error: "First name is required" })
+      .min(2, "First name is required"),
+
+    lastName: z
+      .string({ required_error: "Last name is required" })
+      .min(2, "Last name is required"),
+
+    email: z
+      .string({ required_error: "Email is required" })
+      .email("Enter a valid email address"),
+
+    password: z
+      .string({ required_error: "Password is required" })
+      .min(8, "Password must be at least 8 characters"),
+
+    confirmPassword: z
+      .string({ required_error: "Please confirm your password" })
+      .min(1, "Please confirm your password"),
+
+    phone: z
+      .string({ required_error: "Phone number is required" })
+      .regex(
+        /^\+?[\d\s()-]{10,}$/,
+        "Enter a valid phone number (at least 10 digits)",
+      ),
+
     dateOfBirth: z
       .string({ required_error: "Date of birth is required" })
       .min(1, "Date of birth is required")
       .refine((date) => {
         if (!date) return false;
+
         const birthDate = new Date(date);
+
         if (Number.isNaN(birthDate.getTime())) {
           return false;
         }
+
         const today = new Date();
+
         let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDifference = today.getMonth() - birthDate.getMonth();
-        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+
+        const monthDifference =
+          today.getMonth() - birthDate.getMonth();
+
+        if (
+          monthDifference < 0 ||
+          (monthDifference === 0 &&
+            today.getDate() < birthDate.getDate())
+        ) {
           age--;
         }
+
         return age >= 18;
       }, "Applicant must be 18 years or older"),
+
     gender: z.enum(["Male", "Female", "Other"], {
-      errorMap: () => ({ message: "Please select your gender" }),
+      errorMap: () => ({
+        message: "Please select your gender",
+      }),
     }),
-    occupation: z.string({ required_error: "Occupation is required" }).min(2, "Occupation is required"),
-    address: z.string({ required_error: "Address is required" }).min(5, "Address is required (at least 5 characters)"),
-    city: z.string({ required_error: "City is required" }).min(2, "City is required"),
-    state: z.string({ required_error: "State is required" }).min(2, "State is required"),
-    zipCode: z.string({ required_error: "Postal code is required" }).regex(/^[\dA-Za-z\s-]{3,10}$/, "Enter a valid postal code"),
-    country: z.string({ required_error: "Country is required" }).min(2, "Please select your country"),
-    maritalStatus: z.enum(["Single", "Married", "Divorced", "Widowed"], {
-      errorMap: () => ({ message: "Please select your marital status" }),
-    }),
+
+    occupation: z
+      .string({ required_error: "Occupation is required" })
+      .min(2, "Occupation is required"),
+
+    address: z
+      .string({ required_error: "Address is required" })
+      .min(5, "Address is required (at least 5 characters)"),
+
+    city: z
+      .string({ required_error: "City is required" })
+      .min(2, "City is required"),
+
+    state: z
+      .string({ required_error: "State is required" })
+      .min(2, "State is required"),
+
+    zipCode: z
+      .string({ required_error: "Postal code is required" })
+      .regex(
+        /^[\dA-Za-z\s-]{3,10}$/,
+        "Enter a valid postal code",
+      ),
+
+    country: z
+      .string({ required_error: "Country is required" })
+      .min(2, "Please select your country"),
+
+    maritalStatus: z.enum(
+      ["Single", "Married", "Divorced", "Widowed"],
+      {
+        errorMap: () => ({
+          message: "Please select your marital status",
+        }),
+      },
+    ),
+
     confidentiality: z.boolean().refine((val) => val === true, {
       message: "You must accept the terms and confirmation",
     }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Passwords do not match",
-  });
+  .refine(
+    (data) => data.password === data.confirmPassword,
+    {
+      path: ["confirmPassword"],
+      message: "Passwords do not match",
+    },
+  );
 
 const signinSchema = z.object({
-  email: z.string().email("Enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
+  email: z
+    .string()
+    .email("Enter a valid email address"),
+
+  password: z
+    .string()
+    .min(1, "Password is required"),
 });
 
 type SignupData = z.infer<typeof signupSchema>;
@@ -101,15 +180,29 @@ type SigninData = z.infer<typeof signinSchema>;
 function Apply() {
   const navigate = useNavigate();
 
-  const [signupData, setSignupData] = useState<Partial<SignupData>>({});
-  const [signinData, setSigninData] = useState<Partial<SigninData>>({});
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [refNumber, setRefNumber] = useState<string | null>(null);
+  const [signupData, setSignupData] =
+    useState<Partial<SignupData>>({});
 
-  const handleSignupChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const [signinData, setSigninData] =
+    useState<Partial<SigninData>>({});
+
+  const [errors, setErrors] =
+    useState<Record<string, string>>({});
+
+  const [success, setSuccess] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const [refNumber, setRefNumber] =
+    useState<string | null>(null);
+
+  const handleSignupChange = (
+    event: ChangeEvent<
+      HTMLInputElement | HTMLSelectElement
+    >,
+  ) => {
     const { name, value } = event.target;
+
     setSignupData((previous) => ({
       ...previous,
       [name]: value,
@@ -124,8 +217,11 @@ function Apply() {
     }
   };
 
-  const handleSigninChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSigninChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     const { name, value } = event.target;
+
     setSigninData((previous) => ({
       ...previous,
       [name]: value,
@@ -140,8 +236,11 @@ function Apply() {
     }
   };
 
-  const handleSignupSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSignupSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
+
     setErrors({});
     setSuccess("");
     setLoading(true);
@@ -151,30 +250,52 @@ function Apply() {
 
       if (!validation.success) {
         const nextErrors: Record<string, string> = {};
+
         validation.error.issues.forEach((issue) => {
           const path = issue.path.join(".");
+
           if (!nextErrors[path]) {
             nextErrors[path] = issue.message;
           }
         });
-        nextErrors["form"] = "Please complete all required fields highlighted below.";
+
+        nextErrors.form =
+          "Please complete all required fields highlighted below.";
+
         setErrors(nextErrors);
         setLoading(false);
 
-        // Auto-scroll to the first invalid field
-        const firstErrorKey = Object.keys(nextErrors).find((k) => k !== "form");
+        const firstErrorKey = Object.keys(nextErrors).find(
+          (key) => key !== "form",
+        );
+
         if (firstErrorKey) {
           setTimeout(() => {
-            const el = document.getElementById(firstErrorKey);
-            if (el) {
-              el.scrollIntoView({ behavior: "smooth", block: "center" });
-              el.focus();
+            const element =
+              document.getElementById(firstErrorKey);
+
+            if (element) {
+              element.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+
+              element.focus();
             }
           }, 50);
         }
+
         return;
       }
 
+      /*
+       * IMPORTANT:
+       *
+       * The frontend does NOT directly call Render here.
+       *
+       * signupServerFn is responsible for handling the
+       * server-side request and connecting to your backend.
+       */
       const result = await signupServerFn({
         data: {
           firstName: validation.data.firstName,
@@ -194,51 +315,91 @@ function Apply() {
         },
       });
 
-      if (result.success && result.token && result.user) {
-        localStorage.setItem("token", result.token);
+      if (
+        result.success &&
+        result.token &&
+        result.user
+      ) {
+        localStorage.setItem(
+          "token",
+          result.token,
+        );
+
         setRefNumber(result.user.refNumber);
-        setSuccess(`Registration successful! Reference Number: ${result.user.refNumber}`);
+
+        setSuccess(
+          `Registration successful! Reference Number: ${result.user.refNumber}`,
+        );
 
         setTimeout(() => {
-          navigate({ to: "/dashboard" });
+          navigate({
+            to: "/dashboard",
+          });
         }, 1500);
       } else {
         setErrors({
-          form: result.error || "Registration could not be completed.",
+          form:
+            result.error ||
+            "Registration could not be completed.",
         });
       }
-    } catch (err: any) {
+    } catch (error: unknown) {
+      console.error(
+        "Frontend signup error:",
+        error,
+      );
+
       setErrors({
-        form: err.message || "Unable to connect to the application server.",
+        form:
+          error instanceof Error
+            ? error.message
+            : "Unable to connect to the application server.",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSigninSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSigninSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
+
     setErrors({});
     setSuccess("");
     setLoading(true);
 
     try {
-      const validation = signinSchema.safeParse(signinData);
+      const validation =
+        signinSchema.safeParse(signinData);
 
       if (!validation.success) {
         const nextErrors: Record<string, string> = {};
+
         validation.error.issues.forEach((issue) => {
           const path = issue.path.join(".");
+
           if (!nextErrors[path]) {
             nextErrors[path] = issue.message;
           }
         });
-        nextErrors["form"] = "Please enter your valid email address and password.";
+
+        nextErrors.form =
+          "Please enter your valid email address and password.";
+
         setErrors(nextErrors);
         setLoading(false);
+
         return;
       }
 
+      /*
+       * IMPORTANT:
+       *
+       * The frontend calls the TanStack server function.
+       * The server function is responsible for communicating
+       * with your Render backend.
+       */
       const result = await signinServerFn({
         data: {
           email: validation.data.email,
@@ -246,21 +407,42 @@ function Apply() {
         },
       });
 
-      if (result.success && result.token) {
-        localStorage.setItem("token", result.token);
-        setSuccess("Login successful. Redirecting to your dashboard...");
+      if (
+        result.success &&
+        result.token
+      ) {
+        localStorage.setItem(
+          "token",
+          result.token,
+        );
+
+        setSuccess(
+          "Login successful. Redirecting to your dashboard...",
+        );
 
         setTimeout(() => {
-          navigate({ to: "/dashboard" });
+          navigate({
+            to: "/dashboard",
+          });
         }, 1200);
       } else {
         setErrors({
-          form: result.error || "Login failed. Please check your credentials.",
+          form:
+            result.error ||
+            "Login failed. Please check your credentials.",
         });
       }
-    } catch (err: any) {
+    } catch (error: unknown) {
+      console.error(
+        "Frontend signin error:",
+        error,
+      );
+
       setErrors({
-        form: err.message || "Unable to connect to the application server.",
+        form:
+          error instanceof Error
+            ? error.message
+            : "Unable to connect to the application server.",
       });
     } finally {
       setLoading(false);
@@ -271,30 +453,39 @@ function Apply() {
     <SiteLayout>
       <div className="min-h-screen bg-gradient-to-b from-blue-950 via-slate-900 to-slate-100 py-10 px-4 sm:px-6">
         <div className="mx-auto max-w-3xl">
+
           {/* Header */}
           <div className="mb-8 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-800 text-blue-200 mb-4 ring-4 ring-blue-700/50 shadow-lg">
               <FileText className="w-8 h-8" />
             </div>
+
             <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white tracking-tight">
               Federal Grant Application Portal
             </h1>
+
             <p className="mt-2 text-sm sm:text-base text-blue-200">
-              Submit your official application or sign in to track your grant status.
+              Submit your official application or sign in
+              to track your grant status.
             </p>
           </div>
 
           {/* Demonstration Notice */}
           <Alert className="mb-6 border-amber-400/50 bg-amber-50/95 shadow-sm">
             <ShieldCheck className="h-5 w-5 text-amber-700" />
+
             <AlertDescription className="text-amber-900 text-xs sm:text-sm font-medium">
-              Official Federal Portal: Complete your application truthfully. Your unique grant reference number will be issued upon registration.
+              Official Federal Portal: Complete your
+              application truthfully. Your unique grant
+              reference number will be issued upon
+              registration.
             </AlertDescription>
           </Alert>
 
           {success && (
             <Alert className="mb-6 border-emerald-500 bg-emerald-50 text-emerald-900 shadow-md">
               <CheckCircle className="h-5 w-5 text-emerald-600" />
+
               <AlertDescription className="font-semibold text-sm sm:text-base">
                 {success}
               </AlertDescription>
@@ -304,38 +495,56 @@ function Apply() {
           {errors["form"] && (
             <Alert className="mb-6 border-red-500 bg-red-50 text-red-900 shadow-md">
               <AlertCircle className="h-5 w-5 text-red-600" />
-              <AlertDescription className="font-semibold text-sm">{errors["form"]}</AlertDescription>
+
+              <AlertDescription className="font-semibold text-sm">
+                {errors["form"]}
+              </AlertDescription>
             </Alert>
           )}
 
           {/* Form Card */}
           <div className="rounded-xl bg-white p-6 sm:p-10 shadow-2xl border border-slate-200">
-            <Tabs defaultValue="signup" className="w-full">
+
+            <Tabs
+              defaultValue="signup"
+              className="w-full"
+            >
               <TabsList className="mb-8 grid w-full grid-cols-2 p-1 bg-slate-100 rounded-lg">
+
                 <TabsTrigger
                   value="signup"
                   className="flex items-center justify-center gap-2 py-2.5 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-md transition"
                 >
                   <UserPlus className="w-4 h-4" />
+
                   <span>Create Account</span>
                 </TabsTrigger>
+
                 <TabsTrigger
                   value="signin"
                   className="flex items-center justify-center gap-2 py-2.5 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-md transition"
                 >
                   <LogIn className="w-4 h-4" />
+
                   <span>Sign In</span>
                 </TabsTrigger>
+
               </TabsList>
 
               {/* Registration Tab */}
               <TabsContent value="signup">
-                <form onSubmit={handleSignupSubmit} className="space-y-6">
+                <form
+                  onSubmit={handleSignupSubmit}
+                  className="space-y-6"
+                >
+
                   <div>
                     <h3 className="text-xs font-bold uppercase tracking-wider text-blue-900 mb-3 pb-1 border-b border-slate-200">
                       1. Personal Information
                     </h3>
+
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
                       <FormField
                         id="firstName"
                         name="firstName"
@@ -345,6 +554,7 @@ function Apply() {
                         error={errors["firstName"]}
                         onChange={handleSignupChange}
                       />
+
                       <FormField
                         id="lastName"
                         name="lastName"
@@ -354,10 +564,12 @@ function Apply() {
                         error={errors["lastName"]}
                         onChange={handleSignupChange}
                       />
+
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
                     <FormField
                       id="email"
                       name="email"
@@ -368,6 +580,7 @@ function Apply() {
                       error={errors["email"]}
                       onChange={handleSignupChange}
                     />
+
                     <FormField
                       id="phone"
                       name="phone"
@@ -378,9 +591,11 @@ function Apply() {
                       error={errors["phone"]}
                       onChange={handleSignupChange}
                     />
+
                   </div>
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
                     <FormField
                       id="dateOfBirth"
                       name="dateOfBirth"
@@ -392,9 +607,16 @@ function Apply() {
                     />
 
                     <div>
-                      <Label htmlFor="gender" className="text-xs font-bold text-slate-700">
-                        Gender <span className="text-red-500">*</span>
+                      <Label
+                        htmlFor="gender"
+                        className="text-xs font-bold text-slate-700"
+                      >
+                        Gender{" "}
+                        <span className="text-red-500">
+                          *
+                        </span>
                       </Label>
+
                       <select
                         id="gender"
                         name="gender"
@@ -402,20 +624,39 @@ function Apply() {
                         onChange={handleSignupChange}
                         className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
                       >
-                        <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        <option value="">
+                          Select Gender
+                        </option>
+
+                        <option value="Male">
+                          Male
+                        </option>
+
+                        <option value="Female">
+                          Female
+                        </option>
+
+                        <option value="Other">
+                          Other
+                        </option>
                       </select>
-                      {errors["gender"] && <ErrorText>{errors["gender"]}</ErrorText>}
+
+                      {errors["gender"] && (
+                        <ErrorText>
+                          {errors["gender"]}
+                        </ErrorText>
+                      )}
                     </div>
+
                   </div>
 
                   <div>
                     <h3 className="text-xs font-bold uppercase tracking-wider text-blue-900 mb-3 pb-1 border-b border-slate-200">
                       2. Residence &amp; Profile Details
                     </h3>
+
                     <div className="space-y-4">
+
                       <FormField
                         id="occupation"
                         name="occupation"
@@ -437,6 +678,7 @@ function Apply() {
                       />
 
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
                         <FormField
                           id="city"
                           name="city"
@@ -446,6 +688,7 @@ function Apply() {
                           error={errors["city"]}
                           onChange={handleSignupChange}
                         />
+
                         <FormField
                           id="state"
                           name="state"
@@ -455,6 +698,7 @@ function Apply() {
                           error={errors["state"]}
                           onChange={handleSignupChange}
                         />
+
                         <FormField
                           id="zipCode"
                           name="zipCode"
@@ -464,13 +708,22 @@ function Apply() {
                           error={errors["zipCode"]}
                           onChange={handleSignupChange}
                         />
+
                       </div>
 
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
                         <div>
-                          <Label htmlFor="country" className="text-xs font-bold text-slate-700">
-                            Country <span className="text-red-500">*</span>
+                          <Label
+                            htmlFor="country"
+                            className="text-xs font-bold text-slate-700"
+                          >
+                            Country{" "}
+                            <span className="text-red-500">
+                              *
+                            </span>
                           </Label>
+
                           <select
                             id="country"
                             name="country"
@@ -478,36 +731,90 @@ function Apply() {
                             onChange={handleSignupChange}
                             className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
                           >
-                            <option value="">Select Country</option>
-                            <option value="United States">United States</option>
-                            <option value="Canada">Canada</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Nigeria">Nigeria</option>
-                            <option value="Other">Other</option>
+                            <option value="">
+                              Select Country
+                            </option>
+
+                            <option value="United States">
+                              United States
+                            </option>
+
+                            <option value="Canada">
+                              Canada
+                            </option>
+
+                            <option value="United Kingdom">
+                              United Kingdom
+                            </option>
+
+                            <option value="Australia">
+                              Australia
+                            </option>
+
+                            <option value="Nigeria">
+                              Nigeria
+                            </option>
+
+                            <option value="Other">
+                              Other
+                            </option>
                           </select>
-                          {errors["country"] && <ErrorText>{errors["country"]}</ErrorText>}
+
+                          {errors["country"] && (
+                            <ErrorText>
+                              {errors["country"]}
+                            </ErrorText>
+                          )}
                         </div>
 
                         <div>
-                          <Label htmlFor="maritalStatus" className="text-xs font-bold text-slate-700">
-                            Marital Status <span className="text-red-500">*</span>
+                          <Label
+                            htmlFor="maritalStatus"
+                            className="text-xs font-bold text-slate-700"
+                          >
+                            Marital Status{" "}
+                            <span className="text-red-500">
+                              *
+                            </span>
                           </Label>
+
                           <select
                             id="maritalStatus"
                             name="maritalStatus"
-                            value={signupData.maritalStatus || ""}
+                            value={
+                              signupData.maritalStatus || ""
+                            }
                             onChange={handleSignupChange}
                             className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
                           >
-                            <option value="">Select Status</option>
-                            <option value="Single">Single</option>
-                            <option value="Married">Married</option>
-                            <option value="Divorced">Divorced</option>
-                            <option value="Widowed">Widowed</option>
+                            <option value="">
+                              Select Status
+                            </option>
+
+                            <option value="Single">
+                              Single
+                            </option>
+
+                            <option value="Married">
+                              Married
+                            </option>
+
+                            <option value="Divorced">
+                              Divorced
+                            </option>
+
+                            <option value="Widowed">
+                              Widowed
+                            </option>
                           </select>
-                          {errors["maritalStatus"] && <ErrorText>{errors["maritalStatus"]}</ErrorText>}
+
+                          {errors["maritalStatus"] && (
+                            <ErrorText>
+                              {errors["maritalStatus"]}
+                            </ErrorText>
+                          )}
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -516,7 +823,9 @@ function Apply() {
                     <h3 className="text-xs font-bold uppercase tracking-wider text-blue-900 mb-3 pb-1 border-b border-slate-200">
                       3. Security &amp; Password
                     </h3>
+
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
                       <FormField
                         id="password"
                         name="password"
@@ -527,55 +836,83 @@ function Apply() {
                         error={errors["password"]}
                         onChange={handleSignupChange}
                       />
+
                       <FormField
                         id="confirmPassword"
                         name="confirmPassword"
                         type="password"
                         label="Confirm Password"
                         placeholder="••••••••"
-                        value={signupData.confirmPassword || ""}
+                        value={
+                          signupData.confirmPassword || ""
+                        }
                         error={errors["confirmPassword"]}
                         onChange={handleSignupChange}
                       />
+
                     </div>
                   </div>
 
                   {/* Terms & Acknowledgement */}
                   <div className="rounded-lg border border-blue-200 bg-blue-50/70 p-4">
                     <div className="flex items-start gap-3">
+
                       <Checkbox
                         id="confidentiality"
-                        checked={signupData.confidentiality === true}
+                        checked={
+                          signupData.confidentiality === true
+                        }
                         onCheckedChange={(checked) => {
                           setSignupData((previous) => ({
                             ...previous,
-                            confidentiality: checked === true,
+                            confidentiality:
+                              checked === true,
                           }));
-                          if (errors["confidentiality"]) {
+
+                          if (
+                            errors["confidentiality"]
+                          ) {
                             setErrors((previous) => {
-                              const next = { ...previous };
-                              delete next["confidentiality"];
+                              const next = {
+                                ...previous,
+                              };
+
+                              delete next[
+                                "confidentiality"
+                              ];
+
                               return next;
                             });
                           }
                         }}
                       />
+
                       <Label
                         htmlFor="confidentiality"
                         className="cursor-pointer text-xs sm:text-sm leading-relaxed text-blue-950 font-medium"
                       >
-                        I certify that all information provided is accurate and agree to receive official correspondence regarding this grant allocation.
+                        I certify that all information
+                        provided is accurate and agree to
+                        receive official correspondence
+                        regarding this grant allocation.
                       </Label>
+
                     </div>
+
                     {errors["confidentiality"] && (
-                      <ErrorText>{errors["confidentiality"]}</ErrorText>
+                      <ErrorText>
+                        {errors["confidentiality"]}
+                      </ErrorText>
                     )}
                   </div>
 
                   {errors["form"] && (
                     <Alert className="border-red-500 bg-red-50 text-red-900 shadow-md">
                       <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
-                      <AlertDescription className="font-semibold text-sm">{errors["form"]}</AlertDescription>
+
+                      <AlertDescription className="font-semibold text-sm">
+                        {errors["form"]}
+                      </AlertDescription>
                     </Alert>
                   )}
 
@@ -587,22 +924,35 @@ function Apply() {
                     {loading ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Processing Registration...</span>
+
+                        <span>
+                          Processing Registration...
+                        </span>
                       </>
                     ) : (
                       <>
                         <UserPlus className="w-5 h-5" />
-                        <span>Submit Application &amp; Create Account</span>
+
+                        <span>
+                          Submit Application &amp; Create
+                          Account
+                        </span>
                       </>
                     )}
                   </Button>
+
                 </form>
               </TabsContent>
 
               {/* Sign In Tab */}
               <TabsContent value="signin">
-                <form onSubmit={handleSigninSubmit} className="space-y-6">
+                <form
+                  onSubmit={handleSigninSubmit}
+                  className="space-y-6"
+                >
+
                   <div className="space-y-4">
+
                     <FormField
                       id="signin-email"
                       name="email"
@@ -624,12 +974,16 @@ function Apply() {
                       error={errors["password"]}
                       onChange={handleSigninChange}
                     />
+
                   </div>
 
                   {errors["form"] && (
                     <Alert className="border-red-500 bg-red-50 text-red-900 shadow-md">
                       <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
-                      <AlertDescription className="font-semibold text-sm">{errors["form"]}</AlertDescription>
+
+                      <AlertDescription className="font-semibold text-sm">
+                        {errors["form"]}
+                      </AlertDescription>
                     </Alert>
                   )}
 
@@ -641,34 +995,49 @@ function Apply() {
                     {loading ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Signing In...</span>
+
+                        <span>
+                          Signing In...
+                        </span>
                       </>
                     ) : (
                       <>
                         <LogIn className="w-5 h-5" />
-                        <span>Sign In to Dashboard</span>
+
+                        <span>
+                          Sign In to Dashboard
+                        </span>
                       </>
                     )}
                   </Button>
+
                 </form>
               </TabsContent>
+
             </Tabs>
           </div>
 
           {/* Reference Number Preview */}
           {refNumber && (
             <div className="mt-8 rounded-xl border-2 border-emerald-400 bg-emerald-50 p-6 text-center shadow-lg">
+
               <p className="font-semibold text-emerald-800 text-sm uppercase tracking-wide">
-                Your Official Federal Application Reference:
+                Your Official Federal Application
+                Reference:
               </p>
+
               <p className="mt-2 font-mono text-3xl font-bold text-blue-950 tracking-wider">
                 {refNumber}
               </p>
+
               <p className="text-xs text-emerald-700 mt-2">
-                Keep this number secure. Redirecting to your dashboard...
+                Keep this number secure. Redirecting to
+                your dashboard...
               </p>
+
             </div>
           )}
+
         </div>
       </div>
     </SiteLayout>
@@ -683,7 +1052,9 @@ interface FormFieldProperties {
   error?: string | undefined;
   type?: string | undefined;
   placeholder?: string | undefined;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => void;
 }
 
 function FormField({
@@ -696,15 +1067,30 @@ function FormField({
   placeholder,
   onChange,
 }: FormFieldProperties) {
-  const [showPassword, setShowPassword] = useState(false);
-  const isPasswordField = type === "password";
-  const inputType = isPasswordField ? (showPassword ? "text" : "password") : type;
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const isPasswordField =
+    type === "password";
+
+  const inputType = isPasswordField
+    ? showPassword
+      ? "text"
+      : "password"
+    : type;
 
   return (
     <div>
-      <Label htmlFor={id} className="text-xs font-bold text-slate-700">
-        {label} <span className="text-red-500">*</span>
+      <Label
+        htmlFor={id}
+        className="text-xs font-bold text-slate-700"
+      >
+        {label}{" "}
+        <span className="text-red-500">
+          *
+        </span>
       </Label>
+
       <div className="relative mt-1.5">
         <Input
           id={id}
@@ -715,24 +1101,54 @@ function FormField({
           onChange={onChange}
           className={`rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 ${
             isPasswordField ? "pr-10" : ""
-          } ${error ? "border-red-500 ring-1 ring-red-500" : ""}`}
+          } ${
+            error
+              ? "border-red-500 ring-1 ring-red-500"
+              : ""
+          }`}
         />
+
         {isPasswordField && (
           <button
             type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() =>
+              setShowPassword(
+                (previous) => !previous,
+              )
+            }
+            aria-label={
+              showPassword
+                ? "Hide password"
+                : "Show password"
+            }
             className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded"
           >
-            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            {showPassword ? (
+              <EyeOff className="w-4 h-4" />
+            ) : (
+              <Eye className="w-4 h-4" />
+            )}
           </button>
         )}
       </div>
-      {error && <ErrorText>{error}</ErrorText>}
+
+      {error && (
+        <ErrorText>
+          {error}
+        </ErrorText>
+      )}
     </div>
   );
 }
 
-function ErrorText({ children }: { children: string }) {
-  return <p className="mt-1 text-xs font-medium text-red-600">{children}</p>;
+function ErrorText({
+  children,
+}: {
+  children: string;
+}) {
+  return (
+    <p className="mt-1 text-xs font-medium text-red-600">
+      {children}
+    </p>
+  );
 }
