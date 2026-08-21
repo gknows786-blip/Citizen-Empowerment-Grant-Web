@@ -1,8 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 
 const getEnv = (key: string): string => {
-  return (process.env as Record<string, string | undefined>)[key] || "";
-};
+  return import.meta.env[key] || "";
+}; 
 
 const getApiUrl = (): string => {
   const apiUrl = getEnv("API_URL").trim();
@@ -410,7 +410,6 @@ export const selectPackageServerFn = createServerFn({
 /* -------------------------------------------------------------------------- */
 /* CONFIRM PAYMENT                                                            */
 /* -------------------------------------------------------------------------- */
-
 export const confirmPaymentServerFn = createServerFn({
   method: "POST",
 })
@@ -439,8 +438,7 @@ export const confirmPaymentServerFn = createServerFn({
       if (!transactionId) {
         return {
           success: false,
-          error:
-            "Transaction ID or confirmation code is required",
+          error: "Transaction ID or confirmation code is required",
         };
       }
 
