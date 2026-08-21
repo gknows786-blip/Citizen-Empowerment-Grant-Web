@@ -1,7 +1,7 @@
-import { createServerFn } from "@tanstack/react-start";
+﻿import { createServerFn } from "@tanstack/react-start";
 
 const getEnv = (key: string): string => {
-  return import.meta.env[key] || "";
+  return process.env[key] || import.meta.env[key] || "";
 }; 
 
 const getApiUrl = (): string => {
