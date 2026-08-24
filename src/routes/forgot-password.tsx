@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { forgotPasswordServerFn } from "../lib/serverFunctions";
+import { SiteLayout } from "@/components/SiteLayout";
 
 export const Route = createFileRoute("/forgot-password")({
   component: ForgotPasswordPage,
@@ -32,7 +33,7 @@ function ForgotPasswordPage() {
 
       if (result.success) {
         setMessage(
-          "If an account exists with this email, a password reset email has been sent."
+          "If an account exists with this email, a password reset email has been sent.",
         );
         setEmail("");
       } else {
@@ -46,143 +47,74 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-        background: "#f8fafc",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "440px",
-          background: "#ffffff",
-          padding: "32px",
-          borderRadius: "16px",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-        }}
-      >
-        <h1
-          style={{
-            marginBottom: "8px",
-            fontSize: "28px",
-            fontWeight: 700,
-          }}
-        >
-          Forgot Password?
-        </h1>
+    <SiteLayout>
+      <div className="min-h-[70vh] bg-slate-50 px-4 py-12 flex items-center justify-center">
+        <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border border-slate-200">
+          <div className="mb-6">
+            <p className="text-xs font-bold uppercase tracking-wider text-blue-700">
+              U.S. Federal Citizen Grant Program
+            </p>
 
-        <p
-          style={{
-            color: "#64748b",
-            marginBottom: "24px",
-            lineHeight: 1.6,
-          }}
-        >
-          Enter your email address and we'll send you instructions to reset
-          your password.
-        </p>
+            <h1 className="mt-2 text-2xl font-bold text-slate-900">
+              Forgot Password?
+            </h1>
 
-        <form onSubmit={handleSubmit}>
-          <label
-            htmlFor="email"
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontWeight: 600,
-            }}
-          >
-            Email Address
-          </label>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              Enter your email address and we'll send you instructions to reset
+              your password.
+            </p>
+          </div>
 
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            autoComplete="email"
-            style={{
-              width: "100%",
-              padding: "13px 14px",
-              border: "1px solid #cbd5e1",
-              borderRadius: "8px",
-              fontSize: "16px",
-              boxSizing: "border-box",
-              marginBottom: "16px",
-            }}
-          />
-
-          {error && (
-            <div
-              style={{
-                padding: "12px",
-                marginBottom: "16px",
-                borderRadius: "8px",
-                background: "#fef2f2",
-                color: "#b91c1c",
-              }}
+          <form onSubmit={handleSubmit}>
+            <label
+              htmlFor="email"
+              className="mb-2 block text-sm font-semibold text-slate-700"
             >
-              {error}
-            </div>
-          )}
+              Email Address
+            </label>
 
-          {message && (
-            <div
-              style={{
-                padding: "12px",
-                marginBottom: "16px",
-                borderRadius: "8px",
-                background: "#f0fdf4",
-                color: "#15803d",
-              }}
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              autoComplete="email"
+              className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-3 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+            />
+
+            {error && (
+              <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-700">
+                {error}
+              </div>
+            )}
+
+            {message && (
+              <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm font-medium text-emerald-700">
+                {message}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-lg bg-blue-900 px-4 py-3 font-bold text-white shadow-md transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {message}
-            </div>
-          )}
+              {loading ? "Sending..." : "Send Reset Link"}
+            </button>
+          </form>
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: "100%",
-              padding: "14px",
-              border: "none",
-              borderRadius: "8px",
-              background: "#1e3a8a",
-              color: "#ffffff",
-              fontSize: "16px",
-              fontWeight: 600,
-              cursor: loading ? "not-allowed" : "pointer",
-              opacity: loading ? 0.7 : 1,
-            }}
-          >
-            {loading ? "Sending..." : "Send Reset Link"}
-          </button>
-        </form>
-
-        <div
-          style={{
-            marginTop: "24px",
-            textAlign: "center",
-          }}
-        >
-          <Link
-            to="/apply" search={{ tab: "signup" }}
-            style={{
-              color: "#1e3a8a",
-              textDecoration: "none",
-              fontWeight: 600,
-            }}
-          >
-            ← Back to Login
-          </Link>
+          <div className="mt-6 text-center">
+            <Link
+              to="/apply"
+              search={{ tab: "signin" }}
+              className="text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline"
+            >
+              ← Back to Sign In
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </SiteLayout>
   );
 }
