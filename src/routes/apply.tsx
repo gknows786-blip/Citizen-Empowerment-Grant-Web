@@ -522,7 +522,7 @@ function Apply() {
 
                 <TabsTrigger
                   value="signin"
-                  className="flex items-center justify-center gap-2 py-2.5 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-md transition"
+                  className="h-11 w-full flex items-center justify-center gap-2 px-3 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-lg transition-all duration-200"
                 >
                   <LogIn className="w-4 h-4" />
 
@@ -906,15 +906,6 @@ function Apply() {
                     )}
                   </div>
 
-                  <div className="text-right -mt-2">
-                    <Link
-                      to="/forgot-password"
-                      className="text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline"
-                    >
-                      Forgot your password?
-                    </Link>
-                  </div>
-
                   {errors["form"] && (
                     <Alert className="border-red-500 bg-red-50 text-red-900 shadow-md">
                       <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
@@ -984,15 +975,6 @@ function Apply() {
                       onChange={handleSigninChange}
                     />
 
-                  </div>
-
-                  <div className="text-right -mt-2">
-                    <Link
-                      to="/forgot-password"
-                      className="text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline"
-                    >
-                      Forgot your password?
-                    </Link>
                   </div>
 
                   {errors["form"] && (
@@ -1170,4 +1152,5 @@ function ErrorText({
     </p>
   );
 }
+
 
