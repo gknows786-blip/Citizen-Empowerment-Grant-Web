@@ -35,7 +35,10 @@ import {
   signinServerFn,
 } from "@/lib/serverFunctions";
 
-export const Route = createFileRoute("/apply")({\n  validateSearch: (search: Record<string, unknown>) => ({\n    tab: search.tab === "signin" ? "signin" : "signup",\n  }),
+export const Route = createFileRoute("/apply")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    tab: search["tab"] === "signin" ? "signin" : "signup",
+  }),
   head: () => ({
     meta: [
       {
@@ -177,7 +180,9 @@ const signinSchema = z.object({
 type SignupData = z.infer<typeof signupSchema>;
 type SigninData = z.infer<typeof signinSchema>;
 
-function Apply() {\n  const navigate = useNavigate();\n  const { tab } = Route.useSearch();
+function Apply() {
+  const navigate = useNavigate();
+  const { tab } = Route.useSearch();
 
   const [signupData, setSignupData] =
     useState<Partial<SignupData>>({});
@@ -258,7 +263,7 @@ function Apply() {\n  const navigate = useNavigate();\n  const { tab } = Route.u
           }
         });
 
-        nextErrors.form =
+        nextErrors["form"] =
           "Please complete all required fields highlighted below.";
 
         setErrors(nextErrors);
@@ -383,7 +388,7 @@ function Apply() {\n  const navigate = useNavigate();\n  const { tab } = Route.u
           }
         });
 
-        nextErrors.form =
+        nextErrors["form"] =
           "Please enter your valid email address and password.";
 
         setErrors(nextErrors);
@@ -504,7 +509,15 @@ function Apply() {\n  const navigate = useNavigate();\n  const { tab } = Route.u
           {/* Form Card */}
           <div className="rounded-xl bg-white p-6 sm:p-10 shadow-2xl border border-slate-200">
 
-            <Tabs\n              value={tab}\n              onValueChange={(value) => {\n                navigate({\n                  to: "/apply",\n                  search: { tab: value === "signin" ? "signin" : "signup" },\n                  replace: true,\n                });\n              }}
+            <Tabs
+              value={tab}
+              onValueChange={(value) => {
+                navigate({
+                  to: "/apply",
+                  search: { tab: value === "signin" ? "signin" : "signup" },
+                  replace: true,
+                });
+              }}
               className="w-full"
             >
               <TabsList className="mb-8 grid h-14 w-full grid-cols-2 gap-1 p-1 bg-slate-100 rounded-xl items-stretch">
@@ -1152,6 +1165,8 @@ function ErrorText({
     </p>
   );
 }
+
+
 
 
 

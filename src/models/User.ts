@@ -81,6 +81,7 @@ userSchema.methods["comparePassword"] = async function (this: IUser, password: s
 };
 
 export const User =
-  (mongoose.models && mongoose.models.User)
-    ? (mongoose.models.User as mongoose.Model<IUser>)
+  (mongoose.models && mongoose.models["User"])
+    ? (mongoose.models["User"] as mongoose.Model<IUser>)
     : mongoose.model<IUser>("User", userSchema);
+

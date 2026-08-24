@@ -172,7 +172,7 @@ function ForgotPasswordPage() {
           }}
         >
           <Link
-            to="/apply"
+            to="/apply" search={{ tab: "signup" }}
             style={{
               color: "#1e3a8a",
               textDecoration: "none",

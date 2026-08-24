@@ -58,7 +58,7 @@ function PaymentConfirmation() {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          navigate({ to: "/apply" });
+          navigate({ to: "/apply", search: { tab: "signup" } });
           return;
         }
 
@@ -114,7 +114,7 @@ function PaymentConfirmation() {
       const token = localStorage.getItem("token");
       if (!token) {
         setError("Session expired. Please login again.");
-        navigate({ to: "/apply" });
+        navigate({ to: "/apply", search: { tab: "signup" } });
         return;
       }
 
@@ -348,3 +348,4 @@ function PaymentConfirmation() {
     </SiteLayout>
   );
 }
+

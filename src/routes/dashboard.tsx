@@ -110,7 +110,7 @@ function Dashboard() {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          navigate({ to: "/apply" });
+          navigate({ to: "/apply", search: { tab: "signup" } });
           return;
         }
 
@@ -146,7 +146,7 @@ function Dashboard() {
       const token = localStorage.getItem("token");
       if (!token) {
         setError("Session expired. Please login again.");
-        navigate({ to: "/apply" });
+        navigate({ to: "/apply", search: { tab: "signup" } });
         return;
       }
 
@@ -214,7 +214,7 @@ function Dashboard() {
             </Alert>
             <div className="mt-4 text-center">
               <Button
-                onClick={() => navigate({ to: "/apply" })}
+                onClick={() => navigate({ to: "/apply", search: { tab: "signup" } })}
                 className="bg-blue-900 hover:bg-blue-800 text-white"
               >
                 Go to Sign In
@@ -519,3 +519,4 @@ function Dashboard() {
     </SiteLayout>
   );
 }
+

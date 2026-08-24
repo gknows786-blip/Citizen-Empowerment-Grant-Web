@@ -216,7 +216,7 @@ function Eligibility() {
               Claim your approved grant reference code in less than 3 minutes.
             </p>
             <div>
-              <Link to="/apply">
+              <Link to="/apply" search={{ tab: "signup" }}>
                 <Button className="bg-amber-400 hover:bg-amber-500 text-blue-950 font-bold px-8 py-5 text-base shadow-lg gap-2">
                   <span>START APPLICATION</span>
                   <ArrowRight className="w-4 h-4" />
@@ -229,3 +229,4 @@ function Eligibility() {
     </SiteLayout>
   );
 }
+

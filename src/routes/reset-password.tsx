@@ -140,7 +140,7 @@ function ResetPasswordPage() {
 
         <button
           type="button"
-          onClick={() => navigate({ to: "/apply" })}
+          onClick={() => navigate({ to: "/apply", search: { tab: "signup" } })}
           className="mt-5 w-full text-center text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline"
         >
           ← Back to Sign In
@@ -153,4 +153,5 @@ function ResetPasswordPage() {
     </div>
   );
 }
+
 

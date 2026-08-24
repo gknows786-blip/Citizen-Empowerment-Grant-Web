@@ -177,7 +177,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             ) : (
               <div className="pt-2 border-t border-blue-800/60">
                 <Link
-                  to="/apply"
+                  to="/apply" search={{ tab: "signup" }}
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"
                 >
@@ -221,7 +221,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/apply" className="hover:text-amber-300 transition">
+                  <Link to="/apply" search={{ tab: "signup" }} className="hover:text-amber-300 transition">
                     Apply Now / Sign In
                   </Link>
                 </li>
@@ -293,3 +293,4 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+

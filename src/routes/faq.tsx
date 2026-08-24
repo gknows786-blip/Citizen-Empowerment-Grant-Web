@@ -201,7 +201,7 @@ function FAQ() {
             </div>
 
             <div className="flex gap-3 w-full sm:w-auto">
-              <Link to="/apply" className="w-full sm:w-auto">
+              <Link to="/apply" search={{ tab: "signup" }} className="w-full sm:w-auto">
                 <Button className="w-full sm:w-auto bg-amber-400 hover:bg-amber-500 text-blue-950 font-bold gap-2">
                   <span>Apply Now</span>
                   <ArrowRight className="w-4 h-4" />
@@ -214,3 +214,4 @@ function FAQ() {
     </SiteLayout>
   );
 }
+

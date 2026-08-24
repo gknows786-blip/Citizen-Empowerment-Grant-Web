@@ -148,7 +148,7 @@ function UnifiedHeroSection() {
 
             {/* Action Buttons */}
             <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link to="/apply" className="w-full sm:w-auto">
+              <Link to="/apply" search={{ tab: "signup" }} className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 text-sm sm:text-base font-bold shadow-lg flex items-center justify-center gap-2 border border-emerald-400/40"
@@ -381,7 +381,7 @@ function CallToAction() {
         <p className="text-blue-200 text-sm sm:text-base mb-8">
           Join thousands of citizens receiving approved grants today. Simple, direct, and fully secure.
         </p>
-        <Link to="/apply">
+        <Link to="/apply" search={{ tab: "signup" }}>
           <Button
             size="lg"
             className="bg-amber-400 hover:bg-amber-500 text-blue-950 font-bold px-8 py-6 text-base sm:text-lg shadow-xl"
@@ -406,4 +406,5 @@ function Home() {
     </SiteLayout>
   );
 }
+
 
