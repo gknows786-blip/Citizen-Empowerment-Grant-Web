@@ -172,7 +172,7 @@ function ForgotPasswordPage() {
           }}
         >
           <Link
-            to="/login"
+            to="/apply"
             style={{
               color: "#1e3a8a",
               textDecoration: "none",
