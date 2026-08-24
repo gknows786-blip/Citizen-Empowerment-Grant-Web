@@ -252,8 +252,7 @@ function ImportantNotice() {
           <h3 className="font-bold text-amber-950 text-base sm:text-lg mb-1">
             CONFIDENTIALITY &amp; SECURITY PROTOCOL
           </h3>
-          <p className="text-amber-900 text-xs sm:text-sm leading-relaxed">
-            Please keep your application reference number confidential. Do not share your login credentials or reference codes with third parties to prevent claim interception.
+          <p className="text-amber-900 text-xs sm:text-sm leading-relaxed">Please keep your application reference number confidential. Do not share your login credentials or reference codes with third parties to prevent claim interception.
           </p>
         </div>
       </div>
@@ -407,3 +406,4 @@ function Home() {
     </SiteLayout>
   );
 }
+
