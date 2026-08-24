@@ -32,33 +32,59 @@ export const sendEmail = async (
   html: string,
 ) => {
   try {
-    if (!transporter) {
-      console.log(
-        `[Email Simulation] To: ${to} | Subject: ${subject}`,
-      );
-      return true;
+    const apiKey = (process.env as Record<string, string | undefined>)["BREVO_API_KEY"] || "";
+    const fromEmail =
+      getEnv("EMAIL_FROM") ||
+      "gknows786@gmail.com";
+
+    if (!apiKey) {
+      console.error("BREVO_API_KEY is not configured.");
+      return false;
     }
 
-    const from =
-      getEnv("EMAIL_FROM") ||
-      getEnv("EMAIL_USER") ||
-      "no-reply@example.com";
+    const response = await fetch(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        method: "POST",
+        headers: {
+          "accept": "application/json",
+          "api-key": apiKey,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          sender: {
+            name: "Abubakri's Grant Portal",
+            email: fromEmail,
+          },
+          to: [
+            {
+              email: to,
+            },
+          ],
+          subject,
+          htmlContent: html,
+        }),
+      },
+    );
 
-    await transporter.sendMail({
-      from,
-      to,
-      subject,
-      html,
-    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(
+        "Brevo API email error:",
+        response.status,
+        errorText,
+      );
+      return false;
+    }
 
-    console.log(`Email sent successfully to ${to}`);
+    const result = await response.json();
+    console.log("Email sent successfully through Brevo:", result);
     return true;
   } catch (error) {
-    console.error("Email send error:", error);
+    console.error("Brevo API email error:", error);
     return false;
   }
 };
-
 /* -------------------------------------------------------------------------- */
 /* ADMIN NOTIFICATION                                                         */
 /* -------------------------------------------------------------------------- */
