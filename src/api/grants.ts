@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+﻿import { Router, Request, Response } from "express";
 import { User } from "../models/User.js";
 import { sendEmail, emailTemplates } from "../lib/emailService.js";
 import { verifyToken } from "../lib/authUtils.js";
@@ -127,8 +127,9 @@ router.post("/confirm-payment", async (req: Request, res: Response): Promise<voi
     }
 
     // Update payment status
-    user.paymentStatus = "paid";
-    user.paymentReceipt = receiptPath || transactionId;
+    // DEMO ONLY: record the submission without claiming a real payment.
+    user.paymentStatus = "pending";
+    user.paymentReceipt = undefined;
     await user.save();
 
     // Send payment confirmation email
@@ -141,7 +142,7 @@ router.post("/confirm-payment", async (req: Request, res: Response): Promise<voi
 
     res.json({
       success: true,
-      message: "Payment confirmed! Your grant will be delivered within 24 hours.",
+      message: "Demo payment confirmation submitted successfully. No real payment was processed.",
       data: {
         paymentStatus: user.paymentStatus,
         refNumber: user.refNumber,
@@ -214,3 +215,5 @@ router.get("/dashboard", async (req: Request, res: Response): Promise<void> => {
 });
 
 export default router;
+
+

@@ -1,7 +1,7 @@
 ﻿import { createServerFn } from "@tanstack/react-start";
 
 const getEnv = (key: string): string => {
-  return process.env[key] || import.meta.env[key] || "";
+  return import.meta.env[key] || "";
 }; 
 
 const getApiUrl = (): string => {
@@ -467,3 +467,4 @@ export const confirmPaymentServerFn = createServerFn({
       };
     }
   });
+
