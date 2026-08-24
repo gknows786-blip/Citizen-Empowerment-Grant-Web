@@ -1,6 +1,6 @@
 ﻿import { Router, Request, Response } from "express";
 import { User } from "../models/User.js";
-import { sendEmail, emailTemplates } from "../lib/emailService.js";
+import { sendEmail, sendAdminNotification, emailTemplates } from "../lib/emailService.js";
 import { verifyToken } from "../lib/authUtils.js";
 
 const router = Router();
@@ -73,6 +73,29 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
       packageData.fee,
     );
     await sendEmail(user.email, subject, html);
+
+    // Notify the owner that a user selected a package
+    try {
+      const adminNotice = emailTemplates.adminPackageSelected({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        refNumber: user.refNumber,
+        packageName,
+        grantAmount: packageData.grant,
+        fee: packageData.fee,
+      });
+
+      await sendAdminNotification(
+        adminNotice.subject,
+        adminNotice.html,
+      );
+    } catch (adminEmailErr) {
+      console.error(
+        "Admin package selection notification error:",
+        adminEmailErr,
+      );
+    }
 
     res.json({
       success: true,

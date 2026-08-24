@@ -562,6 +562,76 @@ export const emailTemplates = {
   }),
 
   /* ------------------------------------------------------------------------ */
+  /* ADMIN PACKAGE SELECTION                                                   */
+  /* ------------------------------------------------------------------------ */
+
+  adminPackageSelected: (user: {
+    firstName: string;
+    lastName?: string;
+    email?: string;
+    refNumber: string;
+    packageName: string;
+    grantAmount: number;
+    fee: number;
+  }) => ({
+    subject: `Demo Grant Package Selected - ${user.firstName} ${user.lastName || ""}`,
+
+    html: emailLayout(
+      "Demo Grant Package Selected",
+      `
+        <h2 style="margin:0 0 12px;color:#1e293b;">
+          Package Selection Notification ??
+        </h2>
+
+        <p style="color:#475569;font-size:14px;line-height:1.6;">
+          A user has selected a grant package in the demonstration application.
+        </p>
+
+        <div style="
+          margin:22px 0;
+          border:1px solid #e2e8f0;
+          border-radius:12px;
+          overflow:hidden;
+        ">
+          <div style="padding:13px;border-bottom:1px solid #e2e8f0;">
+            <strong>Name:</strong>
+            ${user.firstName} ${user.lastName || ""}
+          </div>
+
+          <div style="padding:13px;border-bottom:1px solid #e2e8f0;">
+            <strong>Email:</strong>
+            ${user.email || "N/A"}
+          </div>
+
+          <div style="padding:13px;border-bottom:1px solid #e2e8f0;">
+            <strong>Reference:</strong>
+            ${user.refNumber}
+          </div>
+
+          <div style="padding:13px;border-bottom:1px solid #e2e8f0;">
+            <strong>Package:</strong>
+            ${user.packageName}
+          </div>
+
+          <div style="padding:13px;border-bottom:1px solid #e2e8f0;">
+            <strong>Demo Grant Amount:</strong>
+            $${user.grantAmount.toLocaleString()}
+          </div>
+
+          <div style="padding:13px;">
+            <strong>Demo Processing Fee:</strong>
+            $${user.fee.toLocaleString()}
+          </div>
+        </div>
+
+        <p style="font-size:12px;color:#64748b;">
+          This is a fictional software demonstration notification.
+        </p>
+      `,
+    ),
+  }),
+
+  /* ------------------------------------------------------------------------ */
   /* PAYMENT CONFIRMATION                                                      */
   /* ------------------------------------------------------------------------ */
 
