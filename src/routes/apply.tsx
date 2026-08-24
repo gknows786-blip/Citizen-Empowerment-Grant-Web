@@ -509,11 +509,11 @@ function Apply() {
               defaultValue="signup"
               className="w-full"
             >
-              <TabsList className="mb-8 grid w-full grid-cols-2 p-1 bg-slate-100 rounded-lg">
+              <TabsList className="mb-8 grid w-full grid-cols-2 gap-1 p-1 bg-slate-100 rounded-xl">
 
                 <TabsTrigger
                   value="signup"
-                  className="flex items-center justify-center gap-2 py-2.5 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-md transition"
+                  className="h-11 w-full flex items-center justify-center gap-2 px-3 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-lg transition-all duration-200"
                 >
                   <UserPlus className="w-4 h-4" />
 
