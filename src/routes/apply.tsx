@@ -953,6 +953,8 @@ function Apply() {
 
                   <div className="space-y-4">
 
+                  <div className="text-right -mt-2">`r`n                    <Link to="/forgot-password" className="text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline">`r`n                      Forgot your password?`r`n                    </Link>`r`n                  </div>`r`n`r`n
+
                     <FormField
                       id="signin-email"
                       name="email"
@@ -1152,5 +1154,6 @@ function ErrorText({
     </p>
   );
 }
+
 
 
