@@ -611,7 +611,7 @@ function Apply() {
                       id="dateOfBirth"
                       name="dateOfBirth"
                       type="date"
-                      label="Date of Birth (Must be 18+)"
+                      label="Date of Birth (18+)"
                       value={signupData.dateOfBirth || ""}
                       error={errors["dateOfBirth"]}
                       onChange={handleSignupChange}
@@ -703,7 +703,7 @@ function Apply() {
                         <FormField
                           id="state"
                           name="state"
-                          label="State / Province"
+                          label="State"
                           placeholder="e.g. California, Texas"
                           value={signupData.state || ""}
                           error={errors["state"]}
@@ -713,7 +713,7 @@ function Apply() {
                         <FormField
                           id="zipCode"
                           name="zipCode"
-                          label="Postal / ZIP Code"
+                          label="Postal Code"
                           placeholder="ZIP Code"
                           value={signupData.zipCode || ""}
                           error={errors["zipCode"]}
