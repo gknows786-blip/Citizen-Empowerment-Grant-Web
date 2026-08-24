@@ -35,7 +35,7 @@ import {
   signinServerFn,
 } from "@/lib/serverFunctions";
 
-export const Route = createFileRoute("/apply")({
+export const Route = createFileRoute("/apply")({\n  validateSearch: (search: Record<string, unknown>) => ({\n    tab: search.tab === "signin" ? "signin" : "signup",\n  }),
   head: () => ({
     meta: [
       {
@@ -177,8 +177,7 @@ const signinSchema = z.object({
 type SignupData = z.infer<typeof signupSchema>;
 type SigninData = z.infer<typeof signinSchema>;
 
-function Apply() {
-  const navigate = useNavigate();
+function Apply() {\n  const navigate = useNavigate();\n  const { tab } = Route.useSearch();
 
   const [signupData, setSignupData] =
     useState<Partial<SignupData>>({});
@@ -505,8 +504,7 @@ function Apply() {
           {/* Form Card */}
           <div className="rounded-xl bg-white p-6 sm:p-10 shadow-2xl border border-slate-200">
 
-            <Tabs
-              defaultValue="signup"
+            <Tabs\n              value={tab}\n              onValueChange={(value) => {\n                navigate({\n                  to: "/apply",\n                  search: { tab: value === "signin" ? "signin" : "signup" },\n                  replace: true,\n                });\n              }}
               className="w-full"
             >
               <TabsList className="mb-8 grid h-14 w-full grid-cols-2 gap-1 p-1 bg-slate-100 rounded-xl items-stretch">
@@ -1154,6 +1152,7 @@ function ErrorText({
     </p>
   );
 }
+
 
 
 

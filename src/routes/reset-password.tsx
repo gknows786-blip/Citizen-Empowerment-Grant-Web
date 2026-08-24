@@ -53,7 +53,7 @@ function ResetPasswordPage() {
         setConfirmPassword("");
 
         setTimeout(() => {
-          navigate({ to: "/apply" });
+          navigate({ to: "/apply", search: { tab: "signin" } });
         }, 1500);
       } else {
         setError(result.error || "Unable to reset your password.");
@@ -153,3 +153,4 @@ function ResetPasswordPage() {
     </div>
   );
 }
+
