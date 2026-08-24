@@ -509,11 +509,11 @@ function Apply() {
               defaultValue="signup"
               className="w-full"
             >
-              <TabsList className="mb-8 grid w-full grid-cols-2 gap-1 p-1 bg-slate-100 rounded-xl">
+              <TabsList className="mb-8 grid h-14 w-full grid-cols-2 gap-1 p-1 bg-slate-100 rounded-xl items-stretch">
 
                 <TabsTrigger
                   value="signup"
-                  className="h-11 w-full flex items-center justify-center gap-2 px-3 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-lg transition-all duration-200"
+                  className="h-full w-full flex items-center justify-center gap-2 px-3 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-lg transition-all duration-200"
                 >
                   <UserPlus className="w-4 h-4" />
 
@@ -522,7 +522,7 @@ function Apply() {
 
                 <TabsTrigger
                   value="signin"
-                  className="h-11 w-full flex items-center justify-center gap-2 px-3 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-lg transition-all duration-200"
+                  className="h-full w-full flex items-center justify-center gap-2 px-3 font-semibold text-slate-700 data-[state=active]:bg-blue-900 data-[state=active]:text-white rounded-lg transition-all duration-200"
                 >
                   <LogIn className="w-4 h-4" />
 
@@ -953,7 +953,7 @@ function Apply() {
 
                   <div className="space-y-4">
 
-                  <div className="text-right -mt-2">`n                    <Link to="/forgot-password" className="text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline">`n                      Forgot your password?`n                    </Link>`n                  </div>`n`n
+                  <div className="text-right -mt-2">                    <Link to="/forgot-password" className="text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline">                      Forgot your password?                    </Link>                  </div>
 
                     <FormField
                       id="signin-email"
@@ -1154,6 +1154,8 @@ function ErrorText({
     </p>
   );
 }
+
+
 
 
 
