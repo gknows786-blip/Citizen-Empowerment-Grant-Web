@@ -58,16 +58,13 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
-      {/* Top Banner */}
       <div className="bg-blue-950 px-4 py-1.5 text-center text-xs font-medium text-blue-200 border-b border-blue-900/60 flex items-center justify-center gap-1.5">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
         <span>Official U.S. Federal Government Grant Portal &mdash; Secure &amp; Verified</span>
       </div>
 
-      {/* Header */}
       <header className="border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md sticky top-0 z-50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-          {/* Logo */}
           <Link
             to="/"
             onClick={() => setMobileMenuOpen(false)}
@@ -86,7 +83,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1.5">
             {nav.map((item) => {
               const isActive = location.pathname === item.to;
@@ -119,7 +115,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             )}
           </nav>
 
-          {/* Mobile Menu Toggle */}
           <div className="flex items-center md:hidden">
             <button
               type="button"
@@ -137,99 +132,86 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
 
-        {/* Mobile Right Sidebar */}
         {mobileMenuOpen && (
-          <>
-            <button
-              type="button"
-              aria-label="Close main menu"
-              onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 z-40 bg-slate-950/50 md:hidden"
-            />
+          <aside className="absolute right-0 top-full z-50 w-[min(86vw,380px)] max-h-[calc(100vh-80px)] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl animate-in slide-in-from-right duration-200 md:hidden">
+            <div className="mb-4 flex items-center justify-between border-b border-blue-800/70 pb-3">
+              <span className="text-sm font-bold uppercase tracking-wider text-blue-200">
+                Menu
+              </span>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close menu"
+                className="rounded-md p-1.5 text-blue-200 hover:bg-blue-900 hover:text-white"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
 
-            <aside className="absolute right-0 top-full z-50 w-[min(86vw,380px)] max-h-[calc(100vh-80px)] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl animate-in slide-in-from-right duration-200 md:hidden">
-              <div className="mb-4 flex items-center justify-between border-b border-blue-800/70 pb-3">
-                <span className="text-sm font-bold uppercase tracking-wider text-blue-200">
-                  Menu
-                </span>
+            <div className="space-y-1">
+              {nav.map((item) => {
+                const isActive = location.pathname === item.to;
+                const IconComponent = item.icon;
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition-all ${
+                      isActive
+                        ? "bg-amber-400 text-blue-950 font-bold shadow"
+                        : "text-blue-100 hover:bg-blue-900 hover:text-white"
+                    }`}
+                  >
+                    <IconComponent
+                      className={`w-5 h-5 ${
+                        isActive ? "text-blue-950" : "text-amber-400"
+                      }`}
+                    />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {isAuthenticated ? (
+              <div className="pt-4 mt-3 border-t border-blue-800/60 space-y-2">
+                <Link
+                  to="/dashboard"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow"
+                >
+                  <LayoutDashboard className="w-5 h-5" />
+                  <span>Open My Grant Dashboard</span>
+                </Link>
                 <button
                   type="button"
-                  onClick={() => setMobileMenuOpen(false)}
-                  aria-label="Close menu"
-                  className="rounded-md p-1.5 text-blue-200 hover:bg-blue-900 hover:text-white"
+                  onClick={handleLogout}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/40 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/50"
                 >
-                  <X className="h-5 w-5" />
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
                 </button>
               </div>
-
-              <div className="space-y-1">
-                {nav.map((item) => {
-                  const isActive = location.pathname === item.to;
-                  const IconComponent = item.icon;
-                  return (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition-all ${
-                        isActive
-                          ? "bg-amber-400 text-blue-950 font-bold shadow"
-                          : "text-blue-100 hover:bg-blue-900 hover:text-white"
-                      }`}
-                    >
-                      <IconComponent
-                        className={`w-5 h-5 ${
-                          isActive ? "text-blue-950" : "text-amber-400"
-                        }`}
-                      />
-                      <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
+            ) : (
+              <div className="pt-4 mt-3 border-t border-blue-800/60">
+                <Link
+                  to="/apply"
+                  search={{ tab: "signup" }}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"
+                >
+                  <FileSpreadsheet className="w-5 h-5" />
+                  <span>Start Application / Sign In</span>
+                </Link>
               </div>
-
-              {/* Authenticated Controls in Mobile Menu */}
-              {isAuthenticated ? (
-                <div className="pt-4 mt-3 border-t border-blue-800/60 space-y-2">
-                  <Link
-                    to="/dashboard"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow"
-                  >
-                    <LayoutDashboard className="w-5 h-5" />
-                    <span>Open My Grant Dashboard</span>
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/40 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/50"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    <span>Sign Out</span>
-                  </button>
-                </div>
-              ) : (
-                <div className="pt-4 mt-3 border-t border-blue-800/60">
-                  <Link
-                    to="/apply"
-                    search={{ tab: "signup" }}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"
-                  >
-                    <FileSpreadsheet className="w-5 h-5" />
-                    <span>Start Application / Sign In</span>
-                  </Link>
-                </div>
-              )}
-            </aside>
-          </>
+            )}
+          </aside>
         )}
       </header>
 
-      {/* Main Content */}
       <main className="flex-1">{children}</main>
 
-      {/* Footer */}
       <footer className="border-t-4 border-blue-950 bg-slate-900 text-white mt-auto">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
@@ -246,30 +228,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <div>
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Quick Links</h3>
               <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
-                <li>
-                  <Link to="/" className="hover:text-amber-300 transition">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/eligibility" className="hover:text-amber-300 transition">
-                    Check Eligibility &amp; Scoring
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/apply"
-                    search={{ tab: "signup" }}
-                    className="hover:text-amber-300 transition"
-                  >
-                    Apply Now / Sign In
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/faq" className="hover:text-amber-300 transition">
-                    Frequently Asked Questions
-                  </Link>
-                </li>
+                <li><Link to="/" className="hover:text-amber-300 transition">Home</Link></li>
+                <li><Link to="/eligibility" className="hover:text-amber-300 transition">Check Eligibility &amp; Scoring</Link></li>
+                <li><Link to="/apply" search={{ tab: "signup" }} className="hover:text-amber-300 transition">Apply Now / Sign In</Link></li>
+                <li><Link to="/faq" className="hover:text-amber-300 transition">Frequently Asked Questions</Link></li>
               </ul>
             </div>
 
@@ -277,55 +239,27 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Official Inquiries</h3>
               <ul className="text-slate-300 text-xs sm:text-sm space-y-2.5">
                 <li>
-                  <button
-                    type="button"
-                    onClick={() => handleDemoContact("phone")}
-                    className="flex items-center gap-2 text-left hover:text-amber-300 transition"
-                  >
-                    <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span>(202) 555-0199</span>
+                  <button type="button" onClick={() => handleDemoContact("phone")} className="flex items-center gap-2 text-left hover:text-amber-300 transition">
+                    <Phone className="w-4 h-4 text-amber-400 shrink-0" /><span>(202) 555-0199</span>
                   </button>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    onClick={() => handleDemoContact("email")}
-                    className="flex items-center gap-2 text-left hover:text-amber-300 transition"
-                  >
-                    <Mail className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span>support@usfederalgrant.gov</span>
+                  <button type="button" onClick={() => handleDemoContact("email")} className="flex items-center gap-2 text-left hover:text-amber-300 transition">
+                    <Mail className="w-4 h-4 text-amber-400 shrink-0" /><span>support@usfederalgrant.gov</span>
                   </button>
                 </li>
-                <li className="flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span>100 Independence Ave, Washington, D.C. 20500</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>Mon-Fri, 9:00 AM - 5:00 PM EST</span>
-                </li>
+                <li className="flex items-start gap-2"><MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" /><span>100 Independence Ave, Washington, D.C. 20500</span></li>
+                <li className="flex items-center gap-2"><Clock className="w-4 h-4 text-amber-400 shrink-0" /><span>Mon-Fri, 9:00 AM - 5:00 PM EST</span></li>
               </ul>
             </div>
 
             <div>
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Compliance &amp; Security</h3>
               <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
-                <li className="flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>256-bit SSL Data Encryption</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Federal Treasury Verified</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>PCI-DSS Secured Transaction Protocol</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Scale className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Congressional Act Standard Compliance</span>
-                </li>
+                <li className="flex items-center gap-2"><Lock className="w-4 h-4 text-emerald-400 shrink-0" /><span>256-bit SSL Data Encryption</span></li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" /><span>Federal Treasury Verified</span></li>
+                <li className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" /><span>PCI-DSS Secured Transaction Protocol</span></li>
+                <li className="flex items-center gap-2"><Scale className="w-4 h-4 text-emerald-400 shrink-0" /><span>Congressional Act Standard Compliance</span></li>
               </ul>
             </div>
           </div>
@@ -333,12 +267,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <hr className="border-slate-800 mb-6" />
 
           <div className="text-center text-slate-400 text-xs">
-            <p className="mb-2">
-              &copy; {new Date().getFullYear()} U.S. Federal Citizen Grant &amp; Empowerment Portal. All rights reserved.
-            </p>
-            <p className="text-slate-400 text-[11px]">
-              Official Federal Demonstration Portal &bull; Privacy Policy &bull; Terms of Service &bull; Section 508 Accessibility
-            </p>
+            <p className="mb-2">&copy; {new Date().getFullYear()} U.S. Federal Citizen Grant &amp; Empowerment Portal. All rights reserved.</p>
+            <p className="text-slate-400 text-[11px]">Official Federal Demonstration Portal &bull; Privacy Policy &bull; Terms of Service &bull; Section 508 Accessibility</p>
           </div>
         </div>
       </footer>
