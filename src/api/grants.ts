@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { User } from "../models/User.js";
 import { sendEmail, sendAdminNotification, emailTemplates } from "../lib/emailService.js";
+import { demoPackageEmail, demoAdminPackageEmail } from "../lib/demoPackageEmail.js";
 import { verifyToken } from "../lib/authUtils.js";
 
 const router = Router();
@@ -71,7 +72,6 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
 
     const packageData = grantPackages[packageName as keyof typeof grantPackages];
 
-    // Save the package first. Email delivery must never undo the database update.
     user.selectedPackage = packageName as any;
     user.grantAmount = packageData.grant;
     user.feeAmount = packageData.fee;
@@ -82,36 +82,32 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
     let adminEmailSent = false;
 
     try {
-      const userEmail = emailTemplates.packageSelectionEmail(
+      const userEmail = demoPackageEmail(
         user.firstName,
         user.refNumber,
+        packageName,
         packageData.grant,
-        packageData.fee,
       );
 
-      const adminNotice = emailTemplates.adminPackageSelected({
+      const adminNotice = demoAdminPackageEmail({
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         refNumber: user.refNumber,
         packageName,
         grantAmount: packageData.grant,
-        fee: packageData.fee,
       });
 
-      // Await the sends so Vercel/serverless cannot terminate the request before
-      // the Brevo calls finish. Both emails are independent and neither failure
-      // changes the successful package selection.
       [userEmailSent, adminEmailSent] = await Promise.all([
-        sendNotificationSafely("Package selection user", () =>
+        sendNotificationSafely("Demo package selection user", () =>
           sendEmail(user.email, userEmail.subject, userEmail.html),
         ),
-        sendNotificationSafely("Package selection admin", () =>
+        sendNotificationSafely("Demo package selection admin", () =>
           sendAdminNotification(adminNotice.subject, adminNotice.html),
         ),
       ]);
     } catch (error) {
-      console.error("Package selection notification setup failed:", error);
+      console.error("Demo package notification setup failed:", error);
     }
 
     res.json({
