@@ -179,7 +179,7 @@ router.post("/signin", async (req: Request, res: Response): Promise<void> => {
       const signInTime = new Date().toUTCString();
       await sendEmail(
         user.email,
-        `Sign-In Confirmation - Abubakri's Grant Portal Demo`,
+        `Sign-In Confirmation - Citizen-empowerment Grant Portal`,
         `
           <!DOCTYPE html>
           <html lang="en">
@@ -191,8 +191,7 @@ router.post("/signin", async (req: Request, res: Response): Promise<void> => {
           <body style="margin:0;padding:0;background:#f1f5f9;font-family:Arial,Helvetica,sans-serif;color:#0f172a;">
             <div style="max-width:620px;margin:40px auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(15,23,42,0.08);">
               <div style="background:linear-gradient(135deg,#2563eb,#4f46e5);padding:32px 24px;text-align:center;color:white;">
-                <h1 style="margin:0;font-size:26px;">Abubakri's Grant Portal</h1>
-                <p style="margin:8px 0 0;color:#dbeafe;font-size:14px;">Software Development Demonstration</p>
+                <h1 style="margin:0;font-size:26px;">Citizen-empowerment Grant Portal</h1>
               </div>
               <div style="padding:30px 28px;">
                 <h2 style="margin:0 0 12px;color:#1e293b;">Welcome back, ${user.firstName}! 👋</h2>
