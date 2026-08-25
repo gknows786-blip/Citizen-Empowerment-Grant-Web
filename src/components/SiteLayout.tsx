@@ -40,8 +40,31 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    let previousToken = localStorage.getItem("token");
+
+    const checkAuthentication = () => {
+      const currentToken = localStorage.getItem("token");
+
+      if (!previousToken && currentToken && location.pathname === "/apply") {
+        const alreadyWelcomed = sessionStorage.getItem("grantWelcomeSeen") === "true";
+
+        if (!alreadyWelcomed) {
+          navigate({ to: "/welcome", replace: true });
+        }
+      }
+
+      previousToken = currentToken;
+    };
+
+    const interval = window.setInterval(checkAuthentication, 250);
+
+    return () => window.clearInterval(interval);
+  }, [location.pathname, navigate]);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
+    sessionStorage.removeItem("grantWelcomeSeen");
     setIsAuthenticated(false);
     setMobileMenuOpen(false);
     navigate({ to: "/" });
