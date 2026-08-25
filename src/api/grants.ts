@@ -65,38 +65,9 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
     user.paymentStatus = "pending";
     await user.save();
 
-    // Send email with payment instructions
-    const { subject, html } = emailTemplates.packageSelectionEmail(
-      user.firstName,
-      user.refNumber,
-      packageData.grant,
-      packageData.fee,
-    );
-    await sendEmail(user.email, subject, html);
-
-    // Notify the owner that a user selected a package
-    try {
-      const adminNotice = emailTemplates.adminPackageSelected({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        refNumber: user.refNumber,
-        packageName,
-        grantAmount: packageData.grant,
-        fee: packageData.fee,
-      });
-
-      await sendAdminNotification(
-        adminNotice.subject,
-        adminNotice.html,
-      );
-    } catch (adminEmailErr) {
-      console.error(
-        "Admin package selection notification error:",
-        adminEmailErr,
-      );
-    }
-
+    // Respond immediately after the database update. Email notifications are
+    // intentionally sent in the background so a slow email provider cannot
+    // leave the dashboard buttons stuck in a loading/disabled state.
     res.json({
       success: true,
       message: "Package selected successfully",
@@ -107,6 +78,43 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
         refNumber: user.refNumber,
       },
     });
+
+    void (async () => {
+      try {
+        const { subject, html } = emailTemplates.packageSelectionEmail(
+          user.firstName,
+          user.refNumber,
+          packageData.grant,
+          packageData.fee,
+        );
+        await sendEmail(user.email, subject, html);
+      } catch (emailErr) {
+        console.error("Package selection email error:", emailErr);
+      }
+
+      try {
+        const adminNotice = emailTemplates.adminPackageSelected({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          refNumber: user.refNumber,
+          packageName,
+          grantAmount: packageData.grant,
+          fee: packageData.fee,
+        });
+
+        await sendAdminNotification(
+          adminNotice.subject,
+          adminNotice.html,
+        );
+      } catch (adminEmailErr) {
+        console.error(
+          "Admin package selection notification error:",
+          adminEmailErr,
+        );
+      }
+    })();
+
     return;
   } catch (error) {
     console.error("Select package error:", error);
