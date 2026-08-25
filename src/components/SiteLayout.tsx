@@ -133,79 +133,67 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
 
         {mobileMenuOpen && (
-          <aside className="absolute right-0 top-full z-50 w-[min(86vw,380px)] max-h-[calc(100vh-80px)] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl animate-in slide-in-from-right duration-200 md:hidden">
-            <div className="mb-4 flex items-center justify-between border-b border-blue-800/70 pb-3">
-              <span className="text-sm font-bold uppercase tracking-wider text-blue-200">
-                Menu
-              </span>
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                aria-label="Close menu"
-                className="rounded-md p-1.5 text-blue-200 hover:bg-blue-900 hover:text-white"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="space-y-1">
-              {nav.map((item) => {
-                const isActive = location.pathname === item.to;
-                const IconComponent = item.icon;
-                return (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition-all ${
-                      isActive
-                        ? "bg-amber-400 text-blue-950 font-bold shadow"
-                        : "text-blue-100 hover:bg-blue-900 hover:text-white"
-                    }`}
-                  >
-                    <IconComponent
-                      className={`w-5 h-5 ${
-                        isActive ? "text-blue-950" : "text-amber-400"
+          <aside className="fixed inset-y-0 right-0 z-[60] h-screen w-1/2 overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl animate-in slide-in-from-right duration-200 md:hidden">
+            <div className="pt-20">
+              <div className="space-y-1">
+                {nav.map((item) => {
+                  const isActive = location.pathname === item.to;
+                  const IconComponent = item.icon;
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition-all ${
+                        isActive
+                          ? "bg-amber-400 text-blue-950 font-bold shadow"
+                          : "text-blue-100 hover:bg-blue-900 hover:text-white"
                       }`}
-                    />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
+                    >
+                      <IconComponent
+                        className={`w-5 h-5 ${
+                          isActive ? "text-blue-950" : "text-amber-400"
+                        }`}
+                      />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
 
-            {isAuthenticated ? (
-              <div className="pt-4 mt-3 border-t border-blue-800/60 space-y-2">
-                <Link
-                  to="/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow"
-                >
-                  <LayoutDashboard className="w-5 h-5" />
-                  <span>Open My Grant Dashboard</span>
-                </Link>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/40 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/50"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign Out</span>
-                </button>
-              </div>
-            ) : (
-              <div className="pt-4 mt-3 border-t border-blue-800/60">
-                <Link
-                  to="/apply"
-                  search={{ tab: "signup" }}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"
-                >
-                  <FileSpreadsheet className="w-5 h-5" />
-                  <span>Start Application / Sign In</span>
-                </Link>
-              </div>
-            )}
+              {isAuthenticated ? (
+                <div className="pt-4 mt-3 border-t border-blue-800/60 space-y-2">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow"
+                  >
+                    <LayoutDashboard className="w-5 h-5" />
+                    <span>Open My Grant Dashboard</span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/40 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/50"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="pt-4 mt-3 border-t border-blue-800/60">
+                  <Link
+                    to="/apply"
+                    search={{ tab: "signup" }}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"
+                  >
+                    <FileSpreadsheet className="w-5 h-5" />
+                    <span>Start Application / Sign In</span>
+                  </Link>
+                </div>
+              )}
+            </div>
           </aside>
         )}
       </header>
