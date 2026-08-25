@@ -1,11 +1,10 @@
-﻿import { Router, Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { User } from "../models/User.js";
 import { sendEmail, sendAdminNotification, emailTemplates } from "../lib/emailService.js";
 import { verifyToken } from "../lib/authUtils.js";
 
 const router = Router();
 
-// Grant packages
 const grantPackages = {
   Basic: { grant: 10000, fee: 100 },
   Silver: { grant: 20000, fee: 200 },
@@ -14,71 +13,47 @@ const grantPackages = {
   Diamond: { grant: 200000, fee: 2000 },
 };
 
-// Give notification delivery a short window before allowing the request to
-// finish. This keeps the dashboard responsive without letting a slow email
-// provider block the package-selection request indefinitely.
-const withNotificationTimeout = async (
+const sendNotificationSafely = async (
   label: string,
   send: () => Promise<boolean>,
-  timeoutMs = 10000,
-): Promise<boolean> => {
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
-
+): Promise<void> => {
   try {
-    const timeout = new Promise<boolean>((resolve) => {
-      timeoutId = setTimeout(() => {
-        console.warn(`${label} notification timed out after ${timeoutMs}ms`);
-        resolve(false);
-      }, timeoutMs);
-    });
-
-    const delivery = send()
-      .then((sent) => {
-        if (!sent) console.error(`${label} notification was not accepted by the email service`);
-        return sent;
-      })
-      .catch((error) => {
-        console.error(`${label} notification error:`, error);
-        return false;
-      });
-
-    return await Promise.race([delivery, timeout]);
-  } finally {
-    if (timeoutId) clearTimeout(timeoutId);
+    await Promise.race([
+      send(),
+      new Promise<boolean>((resolve) =>
+        setTimeout(() => resolve(false), 5000),
+      ),
+    ]);
+  } catch (error) {
+    console.error(`${label} notification failed:`, error);
   }
 };
 
-// Get available packages
-router.get("/packages", (req: Request, res: Response) => {
+router.get("/packages", (_req: Request, res: Response) => {
   const packages = Object.entries(grantPackages).map(([name, amounts]) => ({
     name,
     grantAmount: amounts.grant,
     feeRequired: amounts.fee,
   }));
 
-  res.json({
-    success: true,
-    packages,
-  });
+  res.json({ success: true, packages });
 });
 
-// Select a grant package
 router.post("/select-package", async (req: Request, res: Response): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!authHeader?.startsWith("Bearer ")) {
       res.status(401).json({ error: "No token provided" });
       return;
     }
 
-    const token = authHeader.substring(7);
-    const decoded = verifyToken(token);
+    const decoded = verifyToken(authHeader.substring(7));
     if (!decoded) {
       res.status(401).json({ error: "Invalid token" });
       return;
     }
 
-    const { packageName } = req.body;
+    const { packageName } = req.body ?? {};
     if (!packageName || !(packageName in grantPackages)) {
       res.status(400).json({ error: "Invalid package name" });
       return;
@@ -91,42 +66,47 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
     }
 
     const packageData = grantPackages[packageName as keyof typeof grantPackages];
+
+    // Save the selection first. Package selection must not depend on email delivery.
     user.selectedPackage = packageName as any;
     user.grantAmount = packageData.grant;
     user.feeAmount = packageData.fee;
     user.paymentStatus = "pending";
     await user.save();
 
-    // Do not send the response before the notification attempt. On some
-    // hosting runtimes, work started after res.json() can be terminated as
-    // soon as the request finishes. The short timeout prevents a slow email
-    // provider from locking the dashboard indefinitely.
-    const userEmail = emailTemplates.packageSelectionEmail(
-      user.firstName,
-      user.refNumber,
-      packageData.grant,
-      packageData.fee,
-    );
+    // Notifications are best-effort and can never turn a successful package
+    // selection into a 500 error. This is important when the email provider is slow,
+    // unavailable, or an email template has a problem.
+    try {
+      const userEmail = emailTemplates.packageSelectionEmail(
+        user.firstName,
+        user.refNumber,
+        packageData.grant,
+        packageData.fee,
+      );
 
-    const adminNotice = emailTemplates.adminPackageSelected({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      refNumber: user.refNumber,
-      packageName,
-      grantAmount: packageData.grant,
-      fee: packageData.fee,
-    });
+      const adminNotice = emailTemplates.adminPackageSelected({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        refNumber: user.refNumber,
+        packageName,
+        grantAmount: packageData.grant,
+        fee: packageData.fee,
+      });
 
-    await Promise.all([
-      withNotificationTimeout("Package selection user", () =>
+      void sendNotificationSafely("Package selection user", () =>
         sendEmail(user.email, userEmail.subject, userEmail.html),
-      ),
-      withNotificationTimeout("Package selection admin", () =>
+      );
+      void sendNotificationSafely("Package selection admin", () =>
         sendAdminNotification(adminNotice.subject, adminNotice.html),
-      ),
-    ]);
+      );
+    } catch (error) {
+      console.error("Package selection notification setup failed:", error);
+    }
 
+    // Return immediately after the database save. The dashboard should not wait
+    // for Brevo/admin email delivery.
     res.json({
       success: true,
       message: "Package selected successfully",
@@ -137,31 +117,29 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
         refNumber: user.refNumber,
       },
     });
-    return;
   } catch (error) {
     console.error("Select package error:", error);
-    res.status(500).json({ error: "Failed to select package" });
-    return;
+    res.status(500).json({
+      error: error instanceof Error ? error.message : "Failed to select package",
+    });
   }
 });
 
-// Confirm payment
 router.post("/confirm-payment", async (req: Request, res: Response): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!authHeader?.startsWith("Bearer ")) {
       res.status(401).json({ error: "No token provided" });
       return;
     }
 
-    const token = authHeader.substring(7);
-    const decoded = verifyToken(token);
+    const decoded = verifyToken(authHeader.substring(7));
     if (!decoded) {
       res.status(401).json({ error: "Invalid token" });
       return;
     }
 
-    const { transactionId, receiptPath } = req.body;
+    const { transactionId } = req.body ?? {};
     if (!transactionId) {
       res.status(400).json({ error: "Transaction ID required" });
       return;
@@ -182,41 +160,43 @@ router.post("/confirm-payment", async (req: Request, res: Response): Promise<voi
     user.paymentReceipt = undefined;
     await user.save();
 
-    const { subject, html } = emailTemplates.paymentConfirmation(
-      user.firstName,
-      user.refNumber,
-      user.grantAmount,
-    );
-    await sendEmail(user.email, subject, html);
+    try {
+      const { subject, html } = emailTemplates.paymentConfirmation(
+        user.firstName,
+        user.refNumber,
+        user.grantAmount,
+      );
+      void sendNotificationSafely("Payment confirmation", () =>
+        sendEmail(user.email, subject, html),
+      );
+    } catch (error) {
+      console.error("Payment confirmation notification setup failed:", error);
+    }
 
     res.json({
       success: true,
-      message: "Demo payment confirmation submitted successfully. No real payment was processed.",
+      message: "Payment confirmation submitted successfully. No real payment was processed.",
       data: {
         paymentStatus: user.paymentStatus,
         refNumber: user.refNumber,
         grantAmount: user.grantAmount,
       },
     });
-    return;
   } catch (error) {
     console.error("Confirm payment error:", error);
     res.status(500).json({ error: "Failed to confirm payment" });
-    return;
   }
 });
 
-// Get user dashboard data
 router.get("/dashboard", async (req: Request, res: Response): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!authHeader?.startsWith("Bearer ")) {
       res.status(401).json({ error: "No token provided" });
       return;
     }
 
-    const token = authHeader.substring(7);
-    const decoded = verifyToken(token);
+    const decoded = verifyToken(authHeader.substring(7));
     if (!decoded) {
       res.status(401).json({ error: "Invalid token" });
       return;
@@ -254,13 +234,10 @@ router.get("/dashboard", async (req: Request, res: Response): Promise<void> => {
         },
       },
     });
-    return;
   } catch (error) {
     console.error("Dashboard error:", error);
     res.status(500).json({ error: "Failed to fetch dashboard" });
-    return;
   }
 });
 
 export default router;
-
