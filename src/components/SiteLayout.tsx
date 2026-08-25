@@ -36,7 +36,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     setIsAuthenticated(Boolean(localStorage.getItem("token")));
   }, [location.pathname]);
 
-  // Automatically close mobile menu when navigating to another route
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
@@ -46,6 +45,15 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     setIsAuthenticated(false);
     setMobileMenuOpen(false);
     navigate({ to: "/" });
+  };
+
+  const handleDemoContact = (type: "phone" | "email") => {
+    const message =
+      type === "phone"
+        ? "This is a demonstration project. The displayed phone number is not a real contact number."
+        : "This is a demonstration project. The displayed email address is not a real contact address.";
+
+    window.alert(message);
   };
 
   return (
@@ -111,7 +119,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             )}
           </nav>
 
-          {/* Mobile Menu Toggle Button (Large, Touch-Friendly, Accessible) */}
+          {/* Mobile Menu Toggle */}
           <div className="flex items-center md:hidden">
             <button
               type="button"
@@ -129,64 +137,92 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
 
-        {/* Mobile Navigation Dropdown Menu with Backdrop & Clear Items */}
+        {/* Mobile Right Sidebar */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-blue-800/80 bg-blue-950 px-4 py-4 space-y-2 shadow-2xl animate-in slide-in-from-top-2 duration-200">
-            <div className="space-y-1">
-              {nav.map((item) => {
-                const isActive = location.pathname === item.to;
-                const IconComponent = item.icon;
-                return (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition-all ${
-                      isActive
-                        ? "bg-amber-400 text-blue-950 font-bold shadow"
-                        : "text-blue-100 hover:bg-blue-900 hover:text-white"
-                    }`}
-                  >
-                    <IconComponent className={`w-5 h-5 ${isActive ? "text-blue-950" : "text-amber-400"}`} />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
+          <>
+            <button
+              type="button"
+              aria-label="Close main menu"
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 z-40 bg-slate-950/50 md:hidden"
+            />
 
-            {/* Authenticated Controls in Mobile Menu */}
-            {isAuthenticated ? (
-              <div className="pt-2 border-t border-blue-800/60 space-y-2">
-                <Link
-                  to="/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow"
-                >
-                  <LayoutDashboard className="w-5 h-5" />
-                  <span>Open My Grant Dashboard</span>
-                </Link>
+            <aside className="absolute right-0 top-full z-50 w-[min(86vw,380px)] max-h-[calc(100vh-80px)] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl animate-in slide-in-from-right duration-200 md:hidden">
+              <div className="mb-4 flex items-center justify-between border-b border-blue-800/70 pb-3">
+                <span className="text-sm font-bold uppercase tracking-wider text-blue-200">
+                  Menu
+                </span>
                 <button
                   type="button"
-                  onClick={handleLogout}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/40 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/50"
+                  onClick={() => setMobileMenuOpen(false)}
+                  aria-label="Close menu"
+                  className="rounded-md p-1.5 text-blue-200 hover:bg-blue-900 hover:text-white"
                 >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign Out</span>
+                  <X className="h-5 w-5" />
                 </button>
               </div>
-            ) : (
-              <div className="pt-2 border-t border-blue-800/60">
-                <Link
-                  to="/apply" search={{ tab: "signup" }}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"
-                >
-                  <FileSpreadsheet className="w-5 h-5" />
-                  <span>Start Application / Sign In</span>
-                </Link>
+
+              <div className="space-y-1">
+                {nav.map((item) => {
+                  const isActive = location.pathname === item.to;
+                  const IconComponent = item.icon;
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition-all ${
+                        isActive
+                          ? "bg-amber-400 text-blue-950 font-bold shadow"
+                          : "text-blue-100 hover:bg-blue-900 hover:text-white"
+                      }`}
+                    >
+                      <IconComponent
+                        className={`w-5 h-5 ${
+                          isActive ? "text-blue-950" : "text-amber-400"
+                        }`}
+                      />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
               </div>
-            )}
-          </div>
+
+              {/* Authenticated Controls in Mobile Menu */}
+              {isAuthenticated ? (
+                <div className="pt-4 mt-3 border-t border-blue-800/60 space-y-2">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow"
+                  >
+                    <LayoutDashboard className="w-5 h-5" />
+                    <span>Open My Grant Dashboard</span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/40 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/50"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="pt-4 mt-3 border-t border-blue-800/60">
+                  <Link
+                    to="/apply"
+                    search={{ tab: "signup" }}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"
+                  >
+                    <FileSpreadsheet className="w-5 h-5" />
+                    <span>Start Application / Sign In</span>
+                  </Link>
+                </div>
+              )}
+            </aside>
+          </>
         )}
       </header>
 
@@ -221,7 +257,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/apply" search={{ tab: "signup" }} className="hover:text-amber-300 transition">
+                  <Link
+                    to="/apply"
+                    search={{ tab: "signup" }}
+                    className="hover:text-amber-300 transition"
+                  >
                     Apply Now / Sign In
                   </Link>
                 </li>
@@ -236,13 +276,25 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <div>
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Official Inquiries</h3>
               <ul className="text-slate-300 text-xs sm:text-sm space-y-2.5">
-                <li className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>(202) 555-0199</span>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoContact("phone")}
+                    className="flex items-center gap-2 text-left hover:text-amber-300 transition"
+                  >
+                    <Phone className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span>(202) 555-0199</span>
+                  </button>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>support@usfederalgrant.gov</span>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoContact("email")}
+                    className="flex items-center gap-2 text-left hover:text-amber-300 transition"
+                  >
+                    <Mail className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span>support@usfederalgrant.gov</span>
+                  </button>
                 </li>
                 <li className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
@@ -293,4 +345,3 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
