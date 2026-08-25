@@ -69,15 +69,16 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             {isAuthenticated && <Link to="/dashboard" className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-colors ${location.pathname === "/dashboard" ? "bg-amber-400 text-blue-950 shadow-sm font-bold" : "bg-emerald-600 text-white hover:bg-emerald-700"}`}><LayoutDashboard className="w-4 h-4" /><span>Dashboard</span></Link>}
           </nav>
 
-          <button type="button" onClick={() => setMobileMenuOpen((prev) => !prev)} aria-label={mobileMenuOpen ? "Close main menu" : "Open main menu"} aria-expanded={mobileMenuOpen} className="relative inline-flex md:hidden items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-lg bg-blue-800/80 border border-blue-600/50 text-white hover:bg-blue-700 active:scale-95 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+          <button type="button" onClick={() => setMobileMenuOpen((prev) => !prev)} aria-label={mobileMenuOpen ? "Close main menu" : "Open main menu"} aria-expanded={mobileMenuOpen} className="relative z-[60] inline-flex md:hidden items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-lg bg-blue-800/80 border border-blue-600/50 text-white hover:bg-blue-700 active:scale-95 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
             {mobileMenuOpen ? <X className="w-6 h-6 text-amber-300" /> : <Menu className="w-6 h-6 text-white" />}
           </button>
         </div>
 
         {mobileMenuOpen && (
           <>
-            <button type="button" aria-label="Close menu overlay" onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 top-[4.25rem] z-30 bg-black/40 md:hidden cursor-default" />
-            <aside className="absolute top-full right-0 z-40 h-[calc(100dvh-4.25rem)] w-[75vw] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl md:hidden">
+            {/* Backdrop begins below the complete navbar, so it never washes over the navbar. */}
+            <button type="button" aria-label="Close menu overlay" onClick={() => setMobileMenuOpen(false)} className="fixed inset-x-0 bottom-0 top-[104px] z-30 bg-black/40 md:hidden cursor-default" />
+            <aside className="absolute top-full right-0 z-40 h-[calc(100dvh-104px)] w-[75vw] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl md:hidden">
               <div className="space-y-1">
                 {nav.map((item) => {
                   const isActive = location.pathname === item.to;
