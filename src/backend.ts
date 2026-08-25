@@ -3,8 +3,19 @@ import "dotenv/config";
 import express, { Express, Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import authRoutes from "./api/auth.js";
+import { emailTemplates } from "./lib/emailService.js";
 import grantRoutes from "./api/grants.js";
+
+// Compatibility fix: the sign-in route currently calls adminUserSignedIn,
+// while the email service exposes adminUserLogin. Create the expected alias
+// before the auth route module is evaluated.
+const templates = emailTemplates as typeof emailTemplates & {
+  adminUserSignedIn: typeof emailTemplates.adminUserLogin;
+};
+templates.adminUserSignedIn = emailTemplates.adminUserLogin;
+
+// Load auth routes after the email-template compatibility alias is ready.
+const { default: authRoutes } = await import("./api/auth.js");
 
 const getEnv = (key: string): string => {
   return (process.env as Record<string, string | undefined>)[key] || "";
