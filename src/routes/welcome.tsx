@@ -21,7 +21,7 @@ function WelcomePage() {
     let active = true;
     getDashboardDataServerFn({ data: { token } }).then((result: any) => {
       if (!active) return;
-      const profile = result?.user || result?.data?.user || {};
+      const profile = result?.data || result?.user || {};
       setUser({ firstName: profile.firstName, lastName: profile.lastName, refNumber: profile.refNumber });
     }).catch(() => {}).finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
