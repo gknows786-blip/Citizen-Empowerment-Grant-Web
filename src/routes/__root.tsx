@@ -11,6 +11,8 @@ import type { ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 
+const SITE_ICON = "/favicon.svg?v=2";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -87,15 +89,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "An independent, non-governmental demonstration grant portal.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "/favicon.svg" },
+      { property: "og:image", content: SITE_ICON },
+      { property: "og:image:alt", content: "Community Grants Portal demo icon" },
       { property: "og:image:type", content: "image/svg+xml" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:image", content: "/favicon.svg" },
+      { name: "twitter:image", content: SITE_ICON },
+      { name: "twitter:image:alt", content: "Community Grants Portal demo icon" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "apple-touch-icon", href: "/favicon.svg" },
+      { rel: "icon", href: SITE_ICON, type: "image/svg+xml" },
+      { rel: "shortcut icon", href: SITE_ICON, type: "image/svg+xml" },
+      { rel: "apple-touch-icon", href: SITE_ICON },
+      { rel: "manifest", href: "/site.webmanifest?v=2" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
