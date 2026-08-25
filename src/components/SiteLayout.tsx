@@ -21,6 +21,14 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   useEffect(() => setIsAuthenticated(Boolean(localStorage.getItem("token"))), [location.pathname]);
   useEffect(() => setMobileMenuOpen(false), [location.pathname]);
 
+  // Authentication always passes through the welcome/introduction page once.
+  // This catches direct navigation to /dashboard as well as normal sign-in/sign-up redirects.
+  useEffect(() => {
+    if (location.pathname === "/dashboard" && localStorage.getItem("token") && sessionStorage.getItem("grantWelcomeSeen") !== "true") {
+      navigate({ to: "/welcome", replace: true });
+    }
+  }, [location.pathname, navigate]);
+
   useEffect(() => {
     if (!mobileMenuOpen) return;
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -52,20 +60,12 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <header className="relative border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md sticky top-0 z-50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 hover:opacity-90 transition select-none">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-800 ring-2 ring-amber-400 shadow text-amber-300 shrink-0">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="block font-serif text-sm sm:text-lg font-bold leading-tight text-white tracking-wide">U.S. Citizen Grant Program</span>
-              <span className="block text-[10px] sm:text-[11px] text-blue-200 uppercase tracking-wider font-semibold">Demonstration Portal</span>
-            </div>
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-800 ring-2 ring-amber-400 shadow text-amber-300 shrink-0"><ShieldCheck className="w-6 h-6" /></div>
+            <div><span className="block font-serif text-sm sm:text-lg font-bold leading-tight text-white tracking-wide">U.S. Citizen Grant Program</span><span className="block text-[10px] sm:text-[11px] text-blue-200 uppercase tracking-wider font-semibold">Demonstration Portal</span></div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1.5">
-            {nav.map((item) => {
-              const isActive = location.pathname === item.to;
-              return <Link key={item.to} to={item.to} className={`rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-colors ${isActive ? "bg-amber-400 text-blue-950 shadow-sm font-bold" : "text-blue-100 hover:bg-blue-800 hover:text-white"}`}>{item.label}</Link>;
-            })}
+            {nav.map((item) => { const isActive = location.pathname === item.to; return <Link key={item.to} to={item.to} className={`rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-colors ${isActive ? "bg-amber-400 text-blue-950 shadow-sm font-bold" : "text-blue-100 hover:bg-blue-800 hover:text-white"}`}>{item.label}</Link>; })}
             {isAuthenticated && <Link to="/dashboard" className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-colors ${location.pathname === "/dashboard" ? "bg-amber-400 text-blue-950 shadow-sm font-bold" : "bg-emerald-600 text-white hover:bg-emerald-700"}`}><LayoutDashboard className="w-4 h-4" /><span>Dashboard</span></Link>}
           </nav>
 
@@ -74,29 +74,15 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </button>
         </div>
 
-        {mobileMenuOpen && (
-          <>
-            {/* Backdrop begins below the complete navbar, so it never washes over the navbar. */}
-            <button type="button" aria-label="Close menu overlay" onClick={() => setMobileMenuOpen(false)} className="fixed inset-x-0 bottom-0 top-[104px] z-30 bg-black/40 md:hidden cursor-default" />
-            <aside className="absolute top-full right-0 z-40 h-[calc(100dvh-104px)] w-[75vw] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl md:hidden">
-              <div className="space-y-1">
-                {nav.map((item) => {
-                  const isActive = location.pathname === item.to;
-                  const IconComponent = item.icon;
-                  return <Link key={item.to} to={item.to} onClick={() => setMobileMenuOpen(false)} className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition-all ${isActive ? "bg-amber-400 text-blue-950 font-bold shadow" : "text-blue-100 hover:bg-blue-900 hover:text-white"}`}><IconComponent className={`w-5 h-5 ${isActive ? "text-blue-950" : "text-amber-400"}`} /><span>{item.label}</span></Link>;
-                })}
-              </div>
-              {isAuthenticated ? (
-                <div className="pt-4 mt-3 border-t border-blue-800/60 space-y-2">
-                  <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow"><LayoutDashboard className="w-5 h-5" /><span>Open Dashboard</span></Link>
-                  <button type="button" onClick={handleLogout} className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/40 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/50"><LogOut className="w-4 h-4" /><span>Sign Out</span></button>
-                </div>
-              ) : (
-                <div className="pt-4 mt-3 border-t border-blue-800/60"><Link to="/apply" search={{ tab: "signup" }} onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"><FileSpreadsheet className="w-5 h-5" /><span>Start Application / Sign In</span></Link></div>
-              )}
-            </aside>
-          </>
-        )}
+        {mobileMenuOpen && <>
+          <button type="button" aria-label="Close menu overlay" onClick={() => setMobileMenuOpen(false)} className="fixed inset-x-0 bottom-0 top-[104px] z-30 bg-black/40 md:hidden cursor-default" />
+          <aside className="absolute top-full right-0 z-40 h-[calc(100dvh-104px)] w-[75vw] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl md:hidden">
+            <div className="space-y-1">
+              {nav.map((item) => { const isActive = location.pathname === item.to; const IconComponent = item.icon; return <Link key={item.to} to={item.to} onClick={() => setMobileMenuOpen(false)} className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition-all ${isActive ? "bg-amber-400 text-blue-950 font-bold shadow" : "text-blue-100 hover:bg-blue-900 hover:text-white"}`}><IconComponent className={`w-5 h-5 ${isActive ? "text-blue-950" : "text-amber-400"}`} /><span>{item.label}</span></Link>; })}
+            </div>
+            {isAuthenticated ? <div className="pt-4 mt-3 border-t border-blue-800/60 space-y-2"><Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow"><LayoutDashboard className="w-5 h-5" /><span>Open Dashboard</span></Link><button type="button" onClick={handleLogout} className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/40 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/50"><LogOut className="w-4 h-4" /><span>Sign Out</span></button></div> : <div className="pt-4 mt-3 border-t border-blue-800/60"><Link to="/apply" search={{ tab: "signup" }} onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-blue-950 hover:bg-amber-500 shadow"><FileSpreadsheet className="w-5 h-5" /><span>Start Application / Sign In</span></Link></div>}
+          </aside>
+        </>}
       </header>
 
       <main className="flex-1">{children}</main>
