@@ -33,7 +33,7 @@ function ForgotPasswordPage() {
 
       if (result.success) {
         setMessage(
-          "If an account exists with this email, a password reset email has been sent.",
+          "A password reset email has been sent.",
         );
         setEmail("");
       } else {

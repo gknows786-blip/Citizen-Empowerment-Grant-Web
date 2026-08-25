@@ -128,12 +128,12 @@ const signupSchema = z
       .min(5, "Address is required (at least 5 characters)"),
 
     city: z
-      .string({ required_error: "City is required" })
+      .string({ required_error: "required" })
       .min(2, "City is required"),
 
     state: z
-      .string({ required_error: "State is required" })
-      .min(2, "State is required"),
+      .string({ required_error: "required" })
+      .min(2, "required"),
 
     zipCode: z
       .string({ required_error: "Postal code is required" })
@@ -714,7 +714,7 @@ function Apply() {
                           id="zipCode"
                           name="zipCode"
                           label="Postal Code"
-                          placeholder="ZIP Code"
+                          placeholder="Code"
                           value={signupData.zipCode || ""}
                           error={errors["zipCode"]}
                           onChange={handleSignupChange}
@@ -761,15 +761,6 @@ function Apply() {
                             <option value="Australia">
                               Australia
                             </option>
-
-                            <option value="Nigeria">
-                              Nigeria
-                            </option>
-
-                            <option value="Other">
-                              Other
-                            </option>
-                          </select>
 
                           {errors["country"] && (
                             <ErrorText>

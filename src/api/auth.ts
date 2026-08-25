@@ -233,7 +233,7 @@ router.post("/signin", async (req: Request, res: Response): Promise<void> => {
       await sendAdminNotification(adminNotice.subject, adminNotice.html);
     } catch (adminEmailErr) {
       console.error("Admin signin notification error:", adminEmailErr);
-    }
+    }  
 
     res.json({
       success: true,
