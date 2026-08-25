@@ -73,7 +73,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       <div className="bg-blue-950 px-4 py-1.5 text-center text-xs font-medium text-blue-200 border-b border-blue-900/60 flex items-center justify-center gap-1.5">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-        <span>U.S. Citizen Grant Portal — Demonstration Project</span>
+        <span>U.S. Citizen Grant Portal</span>
       </div>
       <header className="relative border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md sticky top-0 z-50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
@@ -90,7 +90,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 U.S. Citizen Grant Program
               </span>
               <span className="block text-[10px] sm:text-[11px] text-blue-200 uppercase tracking-wider font-semibold">
-                Demonstration Portal
+                Communtiy Grant Portal
               </span>
             </div>
           </Link>
@@ -205,8 +205,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 <span>About The Program</span>
               </h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                A demonstration portal showing how a citizen grant application experience can be
-                organized for eligible U.S. residents.
+                Organized for eligible U.S. residents.
               </p>
             </div>
             <div>
@@ -286,11 +285,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <hr className="border-slate-800 mb-6" />
           <div className="text-center text-slate-400 text-xs">
             <p className="mb-2">
-              &copy; {new Date().getFullYear()} U.S. Citizen Grant Portal Demonstration. All rights
+              &copy; {new Date().getFullYear()} U.S. Citizen Grant Portal. All rights
               reserved.
             </p>
             <p className="text-slate-400 text-[11px]">
-              Independent demonstration project &bull; Not an official U.S. government website
+              official U.S. government platform
             </p>
           </div>
         </div>

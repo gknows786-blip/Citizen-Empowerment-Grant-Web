@@ -75,26 +75,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Community Grants Portal — Independent Funding Demo" },
+      { title: "Community Grants Portal" },
       {
         name: "description",
         content:
-          "An independent, non-governmental demonstration grant portal. No fees, no guarantees.",
+          "Governmental grant portal.",
       },
       { name: "author", content: "Lovable" },
       { name: "theme-color", content: "#1B2A4A" },
-      { property: "og:title", content: "Community Grants Portal — Demo" },
+      { property: "og:title", content: "Community Grants Portal" },
       {
         property: "og:description",
-        content: "An independent, non-governmental demonstration grant portal.",
+        content: "governmental  grant portal.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: SITE_ICON },
-      { property: "og:image:alt", content: "Community Grants Portal demo icon" },
+      { property: "og:image:alt", content: "Community Grants Portal icon" },
       { property: "og:image:type", content: "image/svg+xml" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:image", content: SITE_ICON },
-      { name: "twitter:image:alt", content: "Community Grants Portal demo icon" },
+      { name: "twitter:image:alt", content: "Community Grants Portal icon" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

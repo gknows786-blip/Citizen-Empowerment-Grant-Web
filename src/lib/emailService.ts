@@ -1007,7 +1007,7 @@ export const emailTemplates = {
               letter-spacing:0.5px;
             "
             >
-            Reset Demo Password
+            Reset Password
           </a>
 
         </div>

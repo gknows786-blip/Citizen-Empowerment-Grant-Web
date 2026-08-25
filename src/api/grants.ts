@@ -99,15 +99,15 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
       });
 
       [userEmailSent, adminEmailSent] = await Promise.all([
-        sendNotificationSafely("Demo package selection user", () =>
+        sendNotificationSafely("Grant package selection user", () =>
           sendEmail(user.email, userEmail.subject, userEmail.html),
         ),
-        sendNotificationSafely("Demo package selection admin", () =>
+        sendNotificationSafely("Grant package selection admin", () =>
           sendAdminNotification(adminNotice.subject, adminNotice.html),
         ),
       ]);
     } catch (error) {
-      console.error("Demo package notification setup failed:", error);
+      console.error("Grant package notification setup failed:", error);
     }
 
     res.json({

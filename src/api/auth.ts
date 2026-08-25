@@ -205,12 +205,12 @@ router.post("/signin", async (req: Request, res: Response): Promise<void> => {
                   <strong>Signed in:</strong> ${signInTime}
                 </div>
                 <div style="padding:15px;background:#eff6ff;border-radius:10px;color:#1e40af;font-size:13px;line-height:1.6;">
-                  This is an automated sign-in notification for the demonstration project.
+                  This is an automated sign-in notification for the grant portal.
                   If you did not initiate this sign-in, please secure your account.
                 </div>
               </div>
               <div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:22px;text-align:center;">
-                <p style="margin:0;font-size:12px;line-height:1.6;color:#64748b;">DEMO ONLY • NOT AN OFFICIAL GOVERNMENT SERVICE</p>
+                <p style="margin:0;font-size:12px;line-height:1.6;color:#64748b;">OFFICIAL GOVERNMENT SERVICE</p>
               </div>
             </div>
           </body>
