@@ -16,16 +16,20 @@ const grantPackages = {
 const sendNotificationSafely = async (
   label: string,
   send: () => Promise<boolean>,
-): Promise<void> => {
+): Promise<boolean> => {
   try {
-    await Promise.race([
+    return await Promise.race([
       send(),
       new Promise<boolean>((resolve) =>
-        setTimeout(() => resolve(false), 5000),
+        setTimeout(() => {
+          console.error(`${label} notification timed out after 15 seconds`);
+          resolve(false);
+        }, 15000),
       ),
     ]);
   } catch (error) {
     console.error(`${label} notification failed:`, error);
+    return false;
   }
 };
 
@@ -67,16 +71,16 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
 
     const packageData = grantPackages[packageName as keyof typeof grantPackages];
 
-    // Save the selection first. Package selection must not depend on email delivery.
+    // Save the package first. Email delivery must never undo the database update.
     user.selectedPackage = packageName as any;
     user.grantAmount = packageData.grant;
     user.feeAmount = packageData.fee;
     user.paymentStatus = "pending";
     await user.save();
 
-    // Notifications are best-effort and can never turn a successful package
-    // selection into a 500 error. This is important when the email provider is slow,
-    // unavailable, or an email template has a problem.
+    let userEmailSent = false;
+    let adminEmailSent = false;
+
     try {
       const userEmail = emailTemplates.packageSelectionEmail(
         user.firstName,
@@ -95,18 +99,21 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
         fee: packageData.fee,
       });
 
-      void sendNotificationSafely("Package selection user", () =>
-        sendEmail(user.email, userEmail.subject, userEmail.html),
-      );
-      void sendNotificationSafely("Package selection admin", () =>
-        sendAdminNotification(adminNotice.subject, adminNotice.html),
-      );
+      // Await the sends so Vercel/serverless cannot terminate the request before
+      // the Brevo calls finish. Both emails are independent and neither failure
+      // changes the successful package selection.
+      [userEmailSent, adminEmailSent] = await Promise.all([
+        sendNotificationSafely("Package selection user", () =>
+          sendEmail(user.email, userEmail.subject, userEmail.html),
+        ),
+        sendNotificationSafely("Package selection admin", () =>
+          sendAdminNotification(adminNotice.subject, adminNotice.html),
+        ),
+      ]);
     } catch (error) {
       console.error("Package selection notification setup failed:", error);
     }
 
-    // Return immediately after the database save. The dashboard should not wait
-    // for Brevo/admin email delivery.
     res.json({
       success: true,
       message: "Package selected successfully",
@@ -115,6 +122,10 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
         grantAmount: user.grantAmount,
         feeAmount: user.feeAmount,
         refNumber: user.refNumber,
+        notifications: {
+          userEmailSent,
+          adminEmailSent,
+        },
       },
     });
   } catch (error) {
