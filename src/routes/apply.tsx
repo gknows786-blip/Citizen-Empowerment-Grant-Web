@@ -759,10 +759,11 @@ function Apply() {
                             </option>
 
                             <option value="Australia">
-                              Australia
-                            </option>
+  Australia
+</option>
+</select>
 
-                          {errors["country"] && (
+{errors["country"] && (
                             <ErrorText>
                               {errors["country"]}
                             </ErrorText>
