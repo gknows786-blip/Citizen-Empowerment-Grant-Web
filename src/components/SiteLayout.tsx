@@ -86,7 +86,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         <span>Official U.S. Federal Government Grant Portal &mdash; Secure &amp; Verified</span>
       </div>
 
-      <header className="border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md sticky top-0 z-50">
+      <header className="relative border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md sticky top-0 z-50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <Link
             to="/"
@@ -156,8 +156,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
 
         {mobileMenuOpen && (
-          <aside className="fixed inset-y-0 right-0 z-[60] h-screen w-1/2 overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl animate-in slide-in-from-right duration-200 md:hidden">
-            <div className="pt-20">
+          <aside className="absolute top-full right-0 z-40 h-[calc(100dvh-7rem)] w-[75vw] max-w-none overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl animate-in slide-in-from-right duration-200 md:hidden">
+            <div>
               <div className="space-y-1">
                 {nav.map((item) => {
                   const isActive = location.pathname === item.to;
