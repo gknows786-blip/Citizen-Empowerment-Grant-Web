@@ -145,13 +145,13 @@ function WelcomePage() {
                   text="Your account and reference information are personal. Never share your password or secure reference."
                 />
               </div>
-              <div className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-5 sm:p-6">
+              {/* <div className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-5 sm:p-6">
                 <div className="flex items-start gap-3">
                   <div className="mt-0.5 rounded-lg bg-blue-900 p-2 text-amber-300">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="mt-8 flex flex-col items-stretch gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
                 <div>
                   <h2 className="font-serif text-lg font-bold text-slate-900">
