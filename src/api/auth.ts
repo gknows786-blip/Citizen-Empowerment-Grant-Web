@@ -174,6 +174,54 @@ router.post("/signin", async (req: Request, res: Response): Promise<void> => {
     // Generate token
     const token = generateToken(user._id.toString(), user.email);
 
+    // Send sign-in confirmation to the user
+    try {
+      const signInTime = new Date().toUTCString();
+      await sendEmail(
+        user.email,
+        `Sign-In Confirmation - Abubakri's Grant Portal Demo`,
+        `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Sign-In Confirmation</title>
+          </head>
+          <body style="margin:0;padding:0;background:#f1f5f9;font-family:Arial,Helvetica,sans-serif;color:#0f172a;">
+            <div style="max-width:620px;margin:40px auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(15,23,42,0.08);">
+              <div style="background:linear-gradient(135deg,#2563eb,#4f46e5);padding:32px 24px;text-align:center;color:white;">
+                <h1 style="margin:0;font-size:26px;">Abubakri's Grant Portal</h1>
+                <p style="margin:8px 0 0;color:#dbeafe;font-size:14px;">Software Development Demonstration</p>
+              </div>
+              <div style="padding:30px 28px;">
+                <h2 style="margin:0 0 12px;color:#1e293b;">Welcome back, ${user.firstName}! 👋</h2>
+                <p style="font-size:15px;line-height:1.7;color:#475569;">
+                  You have successfully signed in to your account.
+                </p>
+                <div style="margin:22px 0;padding:20px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;line-height:2;font-size:14px;">
+                  <strong>Name:</strong> ${user.firstName} ${user.lastName}<br/>
+                  <strong>Email:</strong> ${user.email}<br/>
+                  <strong>Reference:</strong> ${user.refNumber}<br/>
+                  <strong>Signed in:</strong> ${signInTime}
+                </div>
+                <div style="padding:15px;background:#eff6ff;border-radius:10px;color:#1e40af;font-size:13px;line-height:1.6;">
+                  This is an automated sign-in notification for the demonstration project.
+                  If you did not initiate this sign-in, please secure your account.
+                </div>
+              </div>
+              <div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:22px;text-align:center;">
+                <p style="margin:0;font-size:12px;line-height:1.6;color:#64748b;">DEMO ONLY • NOT AN OFFICIAL GOVERNMENT SERVICE</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      );
+    } catch (userEmailErr) {
+      console.error("User signin email error:", userEmailErr);
+    }
+
     // Send Admin Notification on User Sign-in
     try {
       const adminNotice = emailTemplates.adminUserSignedIn({
