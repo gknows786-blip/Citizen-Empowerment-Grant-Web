@@ -253,108 +253,143 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       </header>
       <main className="flex-1">{children}</main>
       <footer className="border-t-4 border-blue-950 bg-slate-900 text-white mt-auto">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-            {/* Column 1: About & Direct Contact Info */}
-            <div>
-              <h3 className="font-serif text-base font-bold text-amber-400 mb-3 flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5" />
-                <span>About The Program</span>
-              </h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
-                The U.S. Federal Citizen Grant Program provides direct economic support and empowerment funds to eligible individuals and families nationwide.
-              </p>
-              <div className="space-y-2 text-slate-300 text-xs sm:text-sm border-t border-slate-800 pt-3">
-                <div className="flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span>100 Independence Ave, Washington, <br />D.C. 20500</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>Mon-Fri, 9:00 AM - 5:00 PM EST</span>
-                </div>
-              </div>
-            </div>
+  <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
 
-            {/* Column 2: Quick Links */}
-            {/* <div>
-              <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Quick Links</h3>
-              <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
-                <li><Link to="/" className="hover:text-amber-300 transition">Home</Link></li>
-                <li><Link to="/eligibility" className="hover:text-amber-300 transition">Check Eligibility</Link></li>
-                <li><Link to="/apply" search={{ tab: "signup" }} className="hover:text-amber-300 transition">Apply / Sign In</Link></li>
-                <li><Link to="/faq" className="hover:text-amber-300 transition">Frequently Asked Questions</Link></li>
-              </ul>
-            </div> */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 mb-10 items-start">
 
-            {/* Column 3: Compliance & Security */}
-            <div>
-              <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Compliance & Security</h3>
-              <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
-                <li className="flex items-center gap-2"><Lock className="w-4 h-4 text-emerald-400 shrink-0" /><span>256-bit SSL Data Encryption</span></li>
-                <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" /><span>Federal Treasury Verified</span></li>
-                <li className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" /><span>PCI-DSS Secured Transaction Protocol</span></li>
-                <li className="flex items-center gap-2"><Scale className="w-4 h-4 text-emerald-400 shrink-0" /><span>Congressional Act Standard Compliance</span></li>
-              </ul>
-            </div>
+      {/* Column 1: About & Direct Contact Info */}
+      <div className="min-w-0">
+        <h3 className="font-serif text-base font-bold text-amber-400 mb-3 flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 shrink-0" />
+          <span>About The Program</span>
+        </h3>
 
-            {/* Column 4: Reach Out Today Form */}
-            <div>
-              <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Reach Out Today</h3>
-              <form onSubmit={handleContactSubmit} className="space-y-2 text-xs">
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="text"
-                    name="firstName"
-                    required
-                    placeholder="First Name"
-                    className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
-                  />
-                  <input
-                    type="text"
-                    name="lastName"
-                    required
-                    placeholder="Last Name"
-                    className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
-                  />
-                </div>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Email Address"
-                  className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
-                />
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Phone Number"
-                  className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
-                />
-                <textarea
-                  name="message"
-                  required
-                  rows={3}
-                  placeholder="Your Message"
-                  className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 resize-none"
-                />
-                <button
-                  type="submit"
-                  disabled={contactSending}
-                  className="w-full py-2 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-semibold rounded transition duration-200"
-                >
-                  {contactSending ? "Sending..." : "Submit"}
-                </button>
-              </form>
-            </div>
+        <p className="text-slate-300 text-xs sm:text-sm leading-6 mb-4 max-w-md">
+          The U.S. Federal Citizen Grant Program provides direct economic support and empowerment funds to eligible individuals and families nationwide.
+        </p>
+
+        <div className="space-y-3 text-slate-300 text-xs sm:text-sm border-t border-slate-800 pt-4">
+          <div className="flex items-start gap-2">
+            <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+            <span>
+              100 Independence Ave, Washington,
+              <br />
+              D.C. 20500
+            </span>
           </div>
-          <hr className="border-slate-800 mb-6" />
-          <div className="text-center text-slate-400 text-xs">
-            <p className="mb-2">&copy; {new Date().getFullYear()} U.S. Citizen Grant Portal. All rights reserved.</p>
-            <p className="text-slate-400 text-[11px]">official U.S. government platform</p>
+
+          <div className="flex items-start gap-2">
+            <Clock className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+            <span>Mon-Fri, 9:00 AM - 5:00 PM EST</span>
           </div>
         </div>
-      </footer>
+      </div>
+
+      {/* Column 2: Compliance & Security */}
+      <div className="min-w-0">
+        <h3 className="font-serif text-base font-bold text-amber-400 mb-3">
+          Compliance & Security
+        </h3>
+
+        <ul className="text-slate-300 text-xs sm:text-sm space-y-3">
+          <li className="flex items-start gap-2">
+            <Lock className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+            <span>256-bit SSL Data Encryption</span>
+          </li>
+
+          <li className="flex items-start gap-2">
+            <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+            <span>Federal Treasury Verified</span>
+          </li>
+
+          <li className="flex items-start gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+            <span>PCI-DSS Secured Transaction Protocol</span>
+          </li>
+
+          <li className="flex items-start gap-2">
+            <Scale className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+            <span>Congressional Act Standard Compliance</span>
+          </li>
+        </ul>
+      </div>
+
+      {/* Column 3: Reach Out Today Form */}
+      <div className="min-w-0 w-full">
+        <h3 className="font-serif text-base font-bold text-amber-400 mb-3">
+          Reach Out Today
+        </h3>
+
+        <form
+          onSubmit={handleContactSubmit}
+          className="space-y-3 text-xs w-full"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <input
+              type="text"
+              name="firstName"
+              required
+              placeholder="First Name"
+              className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+            />
+
+            <input
+              type="text"
+              name="lastName"
+              required
+              placeholder="Last Name"
+              className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+            />
+          </div>
+
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="Email Address"
+            className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+          />
+
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+          />
+
+          <textarea
+            name="message"
+            required
+            rows={4}
+            placeholder="Your Message"
+            className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 resize-none"
+          />
+
+          <button
+            type="submit"
+            disabled={contactSending}
+            className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-semibold rounded-lg transition duration-200"
+          >
+            {contactSending ? "Sending..." : "Submit"}
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <hr className="border-slate-800 mb-6" />
+
+    <div className="text-center text-slate-400 text-xs">
+      <p className="mb-2">
+        &copy; {new Date().getFullYear()} U.S. Citizen Grant Portal. All rights reserved.
+      </p>
+
+      <p className="text-slate-400 text-[11px]">
+        official U.S. government platform
+      </p>
+    </div>
+
+  </div>
+</footer>
     </div>
   );
 }
