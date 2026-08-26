@@ -277,7 +277,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             </div>
 
             {/* Column 2: Quick Links */}
-            <div>
+            {/* <div>
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Quick Links</h3>
               <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
                 <li><Link to="/" className="hover:text-amber-300 transition">Home</Link></li>
@@ -285,7 +285,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 <li><Link to="/apply" search={{ tab: "signup" }} className="hover:text-amber-300 transition">Apply / Sign In</Link></li>
                 <li><Link to="/faq" className="hover:text-amber-300 transition">Frequently Asked Questions</Link></li>
               </ul>
-            </div>
+            </div> */}
 
             {/* Column 3: Compliance & Security */}
             <div>
