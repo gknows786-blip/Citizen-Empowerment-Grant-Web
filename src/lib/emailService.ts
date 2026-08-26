@@ -428,71 +428,71 @@ export const emailTemplates = {
     country?: string;
     refNumber: string;
   }) => ({
-    subject: `New User Registration — user.firstName{user.firstName}user.firstName{user.lastName} (${user.refNumber})`,
+  subject: `New User Registration — ${user.firstName} ${user.lastName} (${user.refNumber})`,
 
-    html: emailLayout(
-      "New User Registration Alert",
-      `
-        <h2 style="
-          margin:0 0 16px;
-          color:#1e3a5f;
-          font-size:18px;
-        ">
-          🔔 New User Registered
-        </h2>
+  html: emailLayout(
+    "New User Registration Alert",
+    `
+      <h2 style="
+        margin:0 0 16px;
+        color:#1e3a5f;
+        font-size:18px;
+      ">
+        🔔 New User Registered
+      </h2>
 
-        <p style="
-          margin:0 0 20px;
-          color:#475569;
-          font-size:14px;
-          line-height:1.6;
-        ">
-          A new user has registered on the Grant Management Portal.
-          Please review the details below.
-        </p>
+      <p style="
+        margin:0 0 20px;
+        color:#475569;
+        font-size:14px;
+        line-height:1.6;
+      ">
+        A new user has registered on the Grant Management Portal.
+        Please review the details below.
+      </p>
 
-        <table style="
-          width:100%;
-          border-collapse:collapse;
-          font-size:14px;
-          color:#475569;
-        ">
-          <tr>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;width:140px;">Full Name</td>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">user.firstName{user.firstName}user.firstName{user.lastName}</td>
-          </tr>
-          <tr>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;">Email</td>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">${user.email}</td>
-          </tr>
-          <tr>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;">Phone</td>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">${user.phone}</td>
-          </tr>
-          <tr>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;">Reference #</td>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">${user.refNumber}</td>
-          </tr>
-          <tr>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;">Occupation</td>
-            <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">${user.occupation || 'Not provided'} </tr>
-          <tr>
-            <td style="padding:10px 12px;font-weight:600;">Location</td>
-            <td style="padding:10px 12px;">user.city∣∣′′,{user.city || ''},user.city∣∣′′,{user.state || ''}, ${user.country || ''}</td>
-          </tr>
-        </table>
+      <table style="
+        width:100%;
+        border-collapse:collapse;
+        font-size:14px;
+        color:#475569;
+      ">
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;width:140px;">Full Name</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">${user.firstName} ${user.lastName}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;">Email</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">${user.email}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;">Phone</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">${user.phone}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;">Reference #</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">${user.refNumber}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;">Occupation</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">${user.occupation || 'Not provided'} </tr>
+        <tr>
+          <td style="padding:10px 12px;font-weight:600;">Location</td>
+          <td style="padding:10px 12px;">user.city∣∣′′,{user.city || ''},user.city∣∣′′,{user.state || ''}, ${user.country || ''}</td>
+        </tr>
+      </table>
 
-        <p style="
-          margin-top:20px;
+      <p style="
+        margin-top:20px;
 -size:12px;
-          color:#94a3b8;
-        ">
-          Registered at: ${new Date().toUTCString()}
-        </p>
-      `,
-      "ADMIN NOTIFICATION"
-    ),
-  }),
+        color:#94a3b8;
+      ">
+        Registered at: ${new Date().toUTCString()}
+      </p>
+    `,
+    "ADMIN NOTIFICATION"
+  ),
+}),
 
   /* ------------------------------------------------------------------------ */
   /* USER SIGN-IN ALERT                                                       */
@@ -504,59 +504,59 @@ export const emailTemplates = {
     email: string;
     refNumber: string;
   }) => ({
-    subject: `User Login — user.firstName{user.firstName}user.firstName{user.lastName} (${user.refNumber})`,
+  subject: `User Login — ${user.firstName} ${user.lastName} (${user.refNumber})`,
 
-    html: emailLayout(
-      "User Login Alert",
-      `
-        <h2 style="margin:0 0 16px;color:#1e3a5f;font-size:18px;">
-          🔐 Account Access Notification
-        </h2>
+  html: emailLayout(
+    "User Login Alert",
+    `
+      <h2 style="margin:0 0 16px;color:#1e3a5f;font-size:18px;">
+        🔐 Account Access Notification
+      </h2>
 
-        <p style="color:#475569;font-size:14px;line-height:1.6;">
-          The following user has accessed their account on the Grant Management Portal.
-        </p>
-        <table style="
-          width:100%;
-          border-collapse:collapse;
-          font-size:14px;
-          color:#475569;
-          margin:20px 0;
-        ">
-          <tr>
-            <td style="padding:12px 14px;border:1px solid #e2e8f0;background:#f8fafc;font-weight:600;width:140px;">Name</td>
-            <td style="padding:12px 14px;border:1px solid #e2e8f0;">user.firstName{user.firstName}user.firstName{user.lastName}</td>
-          </tr>
-          <tr>
-            <td style="padding:12px 14px;border:1px solid #e2e8f0;background:#f8fafc;font-weight:600;">Email</td>
-            <td style="padding:12px 14px;border:1px solid #e2e8f0;">${user.email}</td>
-          </tr>
-          <tr>
-            <td style="padding:12px 14px;border:1px solid #e2e8f0;background:#f8fafc;font-weight:600;">Reference #</td>
-            <td style="padding:12px 14px;border:1px solid #e2e8f0;font-family:monospace;font-weight:bold;">${user.refNumber}</td>
-          </tr>
-          <tr>
-            <td style="padding:12px 14px;border:1px solid #e2e8f0;background:#f8fafc;font-weight:600;">Time</td>
-            <td style="padding:12px 14px;border:1px solid #e2e8f0;">${new Date().toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: 'full', timeStyle: 'short' })} EST</td>
-          </tr>
-        </table>
+      <p style="color:#475569;font-size:14px;line-height:1.6;">
+        The following user has accessed their account on the Grant Management Portal.
+      </p>
+      <table style="
+        width:100%;
+        border-collapse:collapse;
+        font-size:14px;
+        color:#475569;
+        margin:20px 0;
+      ">
+        <tr>
+          <td style="padding:12px 14px;border:1px solid #e2e8f0;background:#f8fafc;font-weight:600;width:140px;">Name</td>
+          <td style="padding:12px 14px;border:1px solid #e2e8f0;">${user.firstName} ${user.lastName}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 14px;border:1px solid #e2e8f0;background:#f8fafc;font-weight:600;">Email</td>
+          <td style="padding:12px 14px;border:1px solid #e2e8f0;">${user.email}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 14px;border:1px solid #e2e8f0;background:#f8fafc;font-weight:600;">Reference #</td>
+          <td style="padding:12px 14px;border:1px solid #e2e8f0;font-family:monospace;font-weight:bold;">${user.refNumber}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 14px;border:1px solid #e2e8f0;background:#f8fafc;font-weight:600;">Time</td>
+          <td style="padding:12px 14px;border:1px solid #e2e8f0;">${new Date().toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: 'full', timeStyle: 'short' })} EST</td>
+        </tr>
+      </table>
 
-        <div style="
-          padding:14px;
-          background:#fef3c7;
-          border:1px solid #fcd34d;
-          border-radius:8px;
-          font-size:13px;
-          color:#92400e;
-          line-height:1.6;
-        ">
-          ⚠️ If you did not authorize this access, please review your
-          account security settings immediately.
-        </div>
-      `,
-      "SECURT"
-    ),
-  }),
+      <div style="
+        padding:14px;
+        background:#fef3c7;
+        border:1px solid #fcd34d;
+        border-radius:8px;
+        font-size:13px;
+        color:#92400e;
+        line-height:1.6;
+      ">
+        ⚠️ If you did not authorize this access, please review your
+        account security settings immediately.
+      </div>
+    `,
+    "SECURT"
+  ),
+}),
 
   /* ------------------------------------------------------------------------ */
   /* GRANT APPLICATION SUBMITTED                                              */
