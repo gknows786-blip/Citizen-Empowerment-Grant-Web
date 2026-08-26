@@ -70,7 +70,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       <div className="bg-blue-950 px-4 py-1.5 text-center text-xs font-medium text-blue-200 border-b border-blue-900/60 flex items-center justify-center gap-1.5">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-        <span>U.S. Citizen Grant Portal</span>
+        <span>Official U.S. Federal Government Grant Portal — Secure & Verified</span>
       </div>
       <header className="relative border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md sticky top-0 z-50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
