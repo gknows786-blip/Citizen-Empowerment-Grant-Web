@@ -36,9 +36,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   useEffect(() => setIsAuthenticated(Boolean(localStorage.getItem("token"))), [location.pathname]);
   useEffect(() => setMobileMenuOpen(false), [location.pathname]);
 
-  // Only send a user to the welcome page when they actually navigate
-  // from the application/sign-in page into the dashboard. A dashboard
-  // refresh therefore stays on the dashboard.
   useEffect(() => {
     const cameFromApply = previousPath.current === "/apply";
     if (location.pathname === "/dashboard" && cameFromApply && localStorage.getItem("token")) {
@@ -139,7 +136,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               onClick={() => setMobileMenuOpen(false)}
               className="fixed inset-x-0 bottom-0 top-[104px] z-30 bg-black/40 md:hidden cursor-default"
             />
-            <aside className="absolute top-full right-0 z-40 h-[calc(100dvh-104px)] w-[75vw] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl md:hidden">
+            <aside className="fixed top-[104px] right-0 bottom-0 z-40 h-[calc(100dvh-104px)] w-[75vw] overflow-y-auto border-l border-blue-800/80 bg-blue-950 px-4 py-5 shadow-2xl md:hidden">
               <div className="space-y-1">
                 {nav.map((item) => {
                   const isActive = location.pathname === item.to;
@@ -211,86 +208,35 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <div>
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Quick Links</h3>
               <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
-                <li>
-                  <Link to="/" className="hover:text-amber-300 transition">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/eligibility" className="hover:text-amber-300 transition">
-                    Check Eligibility
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/apply"
-                    search={{ tab: "signup" }}
-                    className="hover:text-amber-300 transition"
-                  >
-                    Apply / Sign In
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/faq" className="hover:text-amber-300 transition">
-                    Frequently Asked Questions
-                  </Link>
-                </li>
+                <li><Link to="/" className="hover:text-amber-300 transition">Home</Link></li>
+                <li><Link to="/eligibility" className="hover:text-amber-300 transition">Check Eligibility</Link></li>
+                <li><Link to="/apply" search={{ tab: "signup" }} className="hover:text-amber-300 transition">Apply / Sign In</Link></li>
+                <li><Link to="/faq" className="hover:text-amber-300 transition">Frequently Asked Questions</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-serif text-base font-bold text-amber-400 mb-3">
-                Portal Information
-              </h3>
+              <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Portal Information</h3>
               <ul className="text-slate-300 text-xs sm:text-sm space-y-2.5">
-                <li className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>Contact</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>Support channel</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>United States</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>Information available online</span>
-                </li>
+                <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-amber-400 shrink-0" /><span>Contact</span></li>
+                <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-amber-400 shrink-0" /><span>Support channel</span></li>
+                <li className="flex items-center gap-2"><MapPin className="w-4 h-4 text-amber-400 shrink-0" /><span>United States</span></li>
+                <li className="flex items-center gap-2"><Clock className="w-4 h-4 text-amber-400 shrink-0" /><span>Information available online</span></li>
               </ul>
             </div>
             <div>
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Security</h3>
               <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
-                <li className="flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Secure form experience</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Input validation</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Privacy-conscious design</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Scale className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Accessibility-focused UI</span>
-                </li>
+                <li className="flex items-center gap-2"><Lock className="w-4 h-4 text-emerald-400 shrink-0" /><span>Secure form experience</span></li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" /><span>Input validation</span></li>
+                <li className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" /><span>Privacy-conscious design</span></li>
+                <li className="flex items-center gap-2"><Scale className="w-4 h-4 text-emerald-400 shrink-0" /><span>Accessibility-focused UI</span></li>
               </ul>
             </div>
           </div>
           <hr className="border-slate-800 mb-6" />
           <div className="text-center text-slate-400 text-xs">
-            <p className="mb-2">
-              &copy; {new Date().getFullYear()} U.S. Citizen Grant Portal. All rights
-              reserved.
-            </p>
-            <p className="text-slate-400 text-[11px]">
-              official U.S. government platform
-            </p>
+            <p className="mb-2">&copy; {new Date().getFullYear()} U.S. Citizen Grant Portal. All rights reserved.</p>
+            <p className="text-slate-400 text-[11px]">official U.S. government platform</p>
           </div>
         </div>
       </footer>
