@@ -32,6 +32,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const previousPath = useRef<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [contactSending, setContactSending] = useState(false);
 
   useEffect(() => setIsAuthenticated(Boolean(localStorage.getItem("token"))), [location.pathname]);
   useEffect(() => setMobileMenuOpen(false), [location.pathname]);
@@ -64,6 +65,64 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     setIsAuthenticated(false);
     setMobileMenuOpen(false);
     navigate({ to: "/" });
+  };
+
+  const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (contactSending) return;
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const firstName = String(formData.get("firstName") || "").trim();
+    const lastName = String(formData.get("lastName") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const phone = String(formData.get("phone") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+
+    if (!firstName || !lastName || !email || !message) {
+      alert("Please fill in your first name, last name, email, and message.");
+      return;
+    }
+
+    setContactSending(true);
+
+    try {
+      const apiUrl = String(import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+
+      if (!apiUrl) {
+        throw new Error("API URL is not configured.");
+      }
+
+      const response = await fetch(`${apiUrl}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          message,
+        }),
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "Unable to send your message.");
+      }
+
+      alert("Your message has been sent successfully.");
+      form.reset();
+    } catch (error) {
+      console.error("Footer contact form error:", error);
+      alert(error instanceof Error ? error.message : "Unable to send your message. Please try again.");
+    } finally {
+      setContactSending(false);
+    }
   };
 
   return (
@@ -242,39 +301,49 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             {/* Column 4: Reach Out Today Form */}
             <div>
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Reach Out Today</h3>
-              <form onSubmit={(e) => e.preventDefault()} className="space-y-2 text-xs">
+              <form onSubmit={handleContactSubmit} className="space-y-2 text-xs">
                 <div className="grid grid-cols-2 gap-2">
-                  <input 
-                    type="text" 
-                    placeholder="First Name" 
+                  <input
+                    type="text"
+                    name="firstName"
+                    required
+                    placeholder="First Name"
                     className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
                   />
-                  <input 
-                    type="text" 
-                    placeholder="Last Name" 
+                  <input
+                    type="text"
+                    name="lastName"
+                    required
+                    placeholder="Last Name"
                     className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
                   />
                 </div>
-                <input 
-                  type="email" 
-                  placeholder="Email Address" 
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="Email Address"
                   className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
                 />
-                <input 
-                  type="tel" 
-                  placeholder="Phone Number" 
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone Number"
                   className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
                 />
-                <textarea 
-                  rows={3} 
-                  placeholder="Your Message" 
+                <textarea
+                  name="message"
+                  required
+                  rows={3}
+                  placeholder="Your Message"
                   className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 resize-none"
                 />
-                <button 
-                  type="submit" 
-                  className="w-full py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded transition duration-200"
+                <button
+                  type="submit"
+                  disabled={contactSending}
+                  className="w-full py-2 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-semibold rounded transition duration-200"
                 >
-                  Submit
+                  {contactSending ? "Sending..." : "Submit"}
                 </button>
               </form>
             </div>
