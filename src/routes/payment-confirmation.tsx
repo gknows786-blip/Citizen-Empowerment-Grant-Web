@@ -11,6 +11,9 @@ import {
   ShieldCheck,
   ArrowLeft,
   Clock,
+  User,
+  Phone,
+  ShieldAlert,
   Mail,
   FileCheck,
 } from "lucide-react";
@@ -170,7 +173,10 @@ function PaymentConfirmation() {
 
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600">
               <p>
-                Beneficiary: <strong className="text-slate-900">{userData.firstName} {userData.lastName}</strong>
+                Beneficiary:{" "}
+                <strong className="text-slate-900">
+                  {userData.firstName} {userData.lastName}
+                </strong>
               </p>
               <p className="sm:text-right">
                 Reference: <strong className="font-mono text-blue-900">{userData.refNumber}</strong>
@@ -184,30 +190,93 @@ function PaymentConfirmation() {
                 <Mail className="w-5 h-5" />
               </div>
               <div className="flex-1">
-                <h2 className="text-lg font-bold font-serif text-blue-950">
-                  What To Do Next
-                </h2>
+                <h2 className="text-lg font-bold font-serif text-blue-950">What To Do Next</h2>
                 <p className="text-sm text-slate-600 mt-2 leading-6">
-                  To continue your claim and discuss delivery arrangements, contact the program administrator by email.
-                  Include your reference number in the message so your claim can be identified.
+                  Your selection has been saved. To finalize your claim and coordinate the delivery
+                  of your grant package, please contact your assigned program agent directly using
+                  the details below.
                 </p>
 
-                <div className="mt-5 rounded-xl bg-blue-50 border border-blue-200 p-4">
-                  <p className="text-xs font-bold uppercase tracking-wide text-blue-700">Claim Contact</p>
-                  <a
-                    href="mailto:gknows786@gmail.com"
-                    className="mt-1 inline-block text-base sm:text-lg font-bold text-blue-950 hover:text-blue-700 break-all"
-                  >
-                    gknows786@gmail.com
-                  </a>
-                  <p className="text-xs text-slate-600 mt-2">
-                    Reference number to include: <strong className="font-mono text-blue-900">{userData.refNumber}</strong>
-                  </p>
+                {/* Assigned Agent Card */}
+                <div className="mt-5 rounded-xl bg-slate-50 border border-slate-200 p-5 shadow-sm">
+                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
+                    <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
+                      Assigned Claim Agent
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                      ● Active Officer
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {/* Agent Name */}
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-blue-100 text-blue-950 shrink-0">
+                        <User className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-500 font-medium">Agent Name</p>
+                        <p className="text-sm sm:text-base font-bold text-slate-900">
+                          Martin Brad Bales
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Agent Email */}
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-blue-100 text-blue-950 shrink-0">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-500 font-medium">Official Email</p>
+                        <a
+                          href="mailto:agentmartbb@consultant.com"
+                          className="text-sm sm:text-base font-bold text-blue-900 hover:text-blue-700 hover:underline break-all"
+                        >
+                          agentmartbb@consultant.com
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Agent Phone */}
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-blue-100 text-blue-950 shrink-0">
+                        <Phone className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-500 font-medium">
+                          Telephone / Direct Line
+                        </p>
+                        <a
+                          href="tel:4062011622"
+                          className="text-sm sm:text-base font-bold text-blue-900 hover:text-blue-700 hover:underline"
+                        >
+                          (406) 201-1622
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Reference Code Footer */}
+                  <div className="mt-4 pt-3 border-t border-slate-200 bg-blue-50/70 -mx-5 -mb-5 p-4 rounded-b-xl flex items-center justify-between">
+                    <span className="text-xs text-slate-600 font-medium">
+                      Required Reference Number:
+                    </span>
+                    <strong className="font-mono text-xs sm:text-sm bg-blue-900 text-white px-2.5 py-1 rounded shadow-sm">
+                      {userData.refNumber}
+                    </strong>
+                  </div>
                 </div>
 
+                {/* Security Note */}
                 <div className="mt-4 flex items-start gap-2 text-xs text-slate-500">
-                  <Clock className="w-4 h-4 shrink-0 mt-0.5" />
-                  <p>Keep your reference number private and only share it with the person or team handling your claim.</p>
+                  <Clock className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
+                  <p>
+                    Please quote reference code{" "}
+                    <strong className="font-mono text-slate-700">{userData.refNumber}</strong> when
+                    contacting Agent Martin Brad Bales to ensure swift processing and package
+                    dispatch.
+                  </p>
                 </div>
               </div>
             </div>
