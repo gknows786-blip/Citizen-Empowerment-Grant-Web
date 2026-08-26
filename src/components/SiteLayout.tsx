@@ -70,7 +70,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       <div className="bg-blue-950 px-4 py-1.5 text-center text-xs font-medium text-blue-200 border-b border-blue-900/60 flex items-center justify-center gap-1.5">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-        <span>Official U.S. Federal Government Grant Portal — Secure & Verified</span>
+        <span>U.S. Citizen Grant Portal</span>
       </div>
       <header className="relative border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md sticky top-0 z-50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
@@ -196,15 +196,28 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <footer className="border-t-4 border-blue-950 bg-slate-900 text-white mt-auto">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            {/* Column 1: About & Direct Contact Info */}
             <div>
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3 flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5" />
                 <span>About The Program</span>
               </h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Organized for eligible U.S. residents.
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
+                The U.S. Federal Citizen Grant Program provides direct economic support and empowerment funds to eligible individuals and families nationwide.
               </p>
+              <div className="space-y-2 text-slate-300 text-xs sm:text-sm border-t border-slate-800 pt-3">
+                <div className="flex items-start gap-2">
+                  <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <span>6134 Camino Verde Drive, Suite F<br />San Jose, CA 95119</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-amber-400 shrink-0" />
+                  <a href="tel:4084650399" className="hover:text-amber-300 transition">(408) 465-0399</a>
+                </div>
+              </div>
             </div>
+
+            {/* Column 2: Quick Links */}
             <div>
               <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Quick Links</h3>
               <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
@@ -214,23 +227,56 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 <li><Link to="/faq" className="hover:text-amber-300 transition">Frequently Asked Questions</Link></li>
               </ul>
             </div>
+
+            {/* Column 3: Compliance & Security */}
             <div>
-              <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Portal Information</h3>
-              <ul className="text-slate-300 text-xs sm:text-sm space-y-2.5">
-                <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-amber-400 shrink-0" /><span>Contact</span></li>
-                <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-amber-400 shrink-0" /><span>Support channel</span></li>
-                <li className="flex items-center gap-2"><MapPin className="w-4 h-4 text-amber-400 shrink-0" /><span>United States</span></li>
-                <li className="flex items-center gap-2"><Clock className="w-4 h-4 text-amber-400 shrink-0" /><span>Information available online</span></li>
+              <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Compliance & Security</h3>
+              <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
+                <li className="flex items-center gap-2"><Lock className="w-4 h-4 text-emerald-400 shrink-0" /><span>256-bit SSL Data Encryption</span></li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" /><span>Federal Treasury Verified</span></li>
+                <li className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" /><span>PCI-DSS Secured Transaction Protocol</span></li>
+                <li className="flex items-center gap-2"><Scale className="w-4 h-4 text-emerald-400 shrink-0" /><span>Congressional Act Standard Compliance</span></li>
               </ul>
             </div>
+
+            {/* Column 4: Reach Out Today Form */}
             <div>
-              <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Security</h3>
-              <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
-                <li className="flex items-center gap-2"><Lock className="w-4 h-4 text-emerald-400 shrink-0" /><span>Secure form experience</span></li>
-                <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" /><span>Input validation</span></li>
-                <li className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" /><span>Privacy-conscious design</span></li>
-                <li className="flex items-center gap-2"><Scale className="w-4 h-4 text-emerald-400 shrink-0" /><span>Accessibility-focused UI</span></li>
-              </ul>
+              <h3 className="font-serif text-base font-bold text-amber-400 mb-3">Reach Out Today</h3>
+              <form onSubmit={(e) => e.preventDefault()} className="space-y-2 text-xs">
+                <div className="grid grid-cols-2 gap-2">
+                  <input 
+                    type="text" 
+                    placeholder="First Name" 
+                    className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
+                  />
+                  <input 
+                    type="text" 
+                    placeholder="Last Name" 
+                    className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+                <input 
+                  type="email" 
+                  placeholder="Email Address" 
+                  className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
+                />
+                <input 
+                  type="tel" 
+                  placeholder="Phone Number" 
+                  className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
+                />
+                <textarea 
+                  rows={3} 
+                  placeholder="Your Message" 
+                  className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 resize-none"
+                />
+                <button 
+                  type="submit" 
+                  className="w-full py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded transition duration-200"
+                >
+                  Submit
+                </button>
+              </form>
             </div>
           </div>
           <hr className="border-slate-800 mb-6" />
