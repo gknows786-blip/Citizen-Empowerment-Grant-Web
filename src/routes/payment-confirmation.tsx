@@ -178,21 +178,6 @@ function PaymentConfirmation() {
             </div>
           </Card>
 
-          <Card className="p-6 sm:p-8 bg-white shadow-md border border-emerald-200">
-            <div className="flex items-start gap-3">
-              <div className="shrink-0 rounded-full bg-emerald-100 p-2 text-emerald-700">
-                <CheckCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="text-lg font-bold text-slate-900">No Payment Is Required Here</h2>
-                <p className="text-sm text-slate-600 mt-2 leading-6">
-                  Do not send money, bank-transfer fees, card payments, or payment receipts through this page.
-                  Your reference number is provided for claim and delivery communication only.
-                </p>
-              </div>
-            </div>
-          </Card>
-
           <Card className="p-6 sm:p-8 bg-white shadow-md border border-slate-200">
             <div className="flex items-start gap-3">
               <div className="shrink-0 rounded-full bg-blue-100 p-2 text-blue-900">

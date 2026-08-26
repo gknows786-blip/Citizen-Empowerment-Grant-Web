@@ -267,11 +267,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               <div className="space-y-2 text-slate-300 text-xs sm:text-sm border-t border-slate-800 pt-3">
                 <div className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span>6134 Camino Verde Drive, Suite F<br />San Jose, CA 95119</span>
+                  <span>100 Independence Ave, Washington, <br />D.C. 20500</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-                  <a href="tel:4084650399" className="hover:text-amber-300 transition">(408) 465-0399</a>
+                  <Clock className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>Mon-Fri, 9:00 AM - 5:00 PM EST</span>
                 </div>
               </div>
             </div>
