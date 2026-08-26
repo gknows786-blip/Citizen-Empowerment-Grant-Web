@@ -253,22 +253,22 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       </header>
       <main className="flex-1">{children}</main>
       <footer className="border-t-4 border-blue-950 bg-slate-900 text-white mt-auto">
-  <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 mb-10 items-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-6 items-start">
 
       {/* Column 1: About & Direct Contact Info */}
       <div className="min-w-0">
-        <h3 className="font-serif text-base font-bold text-amber-400 mb-3 flex items-center gap-2">
+        <h3 className="font-serif text-base font-bold text-amber-400 mb-2 flex items-center gap-2">
           <ShieldCheck className="w-5 h-5 shrink-0" />
           <span>About The Program</span>
         </h3>
 
-        <p className="text-slate-300 text-xs sm:text-sm leading-6 mb-4 max-w-md">
+        <p className="text-slate-300 text-xs sm:text-sm leading-5 mb-3">
           The U.S. Federal Citizen Grant Program provides direct economic support and empowerment funds to eligible individuals and families nationwide.
         </p>
 
-        <div className="space-y-3 text-slate-300 text-xs sm:text-sm border-t border-slate-800 pt-4">
+        <div className="space-y-1.5 text-slate-300 text-xs sm:text-sm border-t border-slate-800 pt-2.5">
           <div className="flex items-start gap-2">
             <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
             <span>
@@ -278,8 +278,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             </span>
           </div>
 
-          <div className="flex items-start gap-2">
-            <Clock className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-amber-400 shrink-0" />
             <span>Mon-Fri, 9:00 AM - 5:00 PM EST</span>
           </div>
         </div>
@@ -287,28 +287,28 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
       {/* Column 2: Compliance & Security */}
       <div className="min-w-0">
-        <h3 className="font-serif text-base font-bold text-amber-400 mb-3">
+        <h3 className="font-serif text-base font-bold text-amber-400 mb-2">
           Compliance & Security
         </h3>
 
-        <ul className="text-slate-300 text-xs sm:text-sm space-y-3">
-          <li className="flex items-start gap-2">
-            <Lock className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+        <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
+          <li className="flex items-center gap-2">
+            <Lock className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>256-bit SSL Data Encryption</span>
           </li>
 
-          <li className="flex items-start gap-2">
-            <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+          <li className="flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>Federal Treasury Verified</span>
           </li>
 
-          <li className="flex items-start gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+          <li className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>PCI-DSS Secured Transaction Protocol</span>
           </li>
 
-          <li className="flex items-start gap-2">
-            <Scale className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+          <li className="flex items-center gap-2">
+            <Scale className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>Congressional Act Standard Compliance</span>
           </li>
         </ul>
@@ -316,21 +316,22 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
       {/* Column 3: Reach Out Today Form */}
       <div className="min-w-0 w-full">
-        <h3 className="font-serif text-base font-bold text-amber-400 mb-3">
+        <h3 className="font-serif text-base font-bold text-amber-400 mb-2">
           Reach Out Today
         </h3>
 
         <form
           onSubmit={handleContactSubmit}
-          className="space-y-3 text-xs w-full"
+          className="space-y-1.5 text-xs"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {/* Keep inputs side-by-side */}
+          <div className="grid grid-cols-2 gap-2">
             <input
               type="text"
               name="firstName"
               required
               placeholder="First Name"
-              className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+              className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
             />
 
             <input
@@ -338,7 +339,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               name="lastName"
               required
               placeholder="Last Name"
-              className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+              className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
             />
           </div>
 
@@ -347,28 +348,28 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             name="email"
             required
             placeholder="Email Address"
-            className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+            className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
           />
 
           <input
             type="tel"
             name="phone"
             placeholder="Phone Number"
-            className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+            className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
           />
 
           <textarea
             name="message"
             required
-            rows={4}
+            rows={2}
             placeholder="Your Message"
-            className="w-full min-w-0 px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 resize-none"
+            className="w-full px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 resize-none"
           />
 
           <button
             type="submit"
             disabled={contactSending}
-            className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-semibold rounded-lg transition duration-200"
+            className="w-full py-1.5 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-semibold rounded transition duration-200"
           >
             {contactSending ? "Sending..." : "Submit"}
           </button>
@@ -376,10 +377,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       </div>
     </div>
 
-    <hr className="border-slate-800 mb-6" />
+    <hr className="border-slate-800 mb-4" />
 
     <div className="text-center text-slate-400 text-xs">
-      <p className="mb-2">
+      <p className="mb-1">
         &copy; {new Date().getFullYear()} U.S. Citizen Grant Portal. All rights reserved.
       </p>
 
