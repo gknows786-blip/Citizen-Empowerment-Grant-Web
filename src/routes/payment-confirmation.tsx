@@ -185,102 +185,98 @@ function PaymentConfirmation() {
           </Card>
 
           <Card className="p-6 sm:p-8 bg-white shadow-md border border-slate-200">
-            <div className="flex items-start gap-3">
-              <div className="shrink-0 rounded-full bg-blue-100 p-2 text-blue-900">
-                <Mail className="w-5 h-5" />
-              </div>
-              <div className="flex-1">
-                <h2 className="text-lg font-bold font-serif text-blue-950">What To Do Next</h2>
-                <p className="text-sm text-slate-600 mt-2 leading-6">
-                  Your selection has been saved. To finalize your claim and coordinate the delivery
-                  of your grant package, please contact your assigned program agent directly using
-                  the details below.
-                </p>
+  <div className="flex items-start gap-3">
+    <div className="shrink-0 rounded-full bg-blue-100 p-2 text-blue-900">
+      <Mail className="w-5 h-5" />
+    </div>
+    <div className="flex-1">
+      <h2 className="text-lg font-bold font-serif text-blue-950">
+        What To Do Next
+      </h2>
+      <p className="text-sm text-slate-600 mt-2 leading-6">
+        Your selection has been registered. Click on either contact button below to connect directly with your assigned program agent and arrange the delivery of your grant package.
+      </p>
 
-                {/* Assigned Agent Card */}
-                <div className="mt-5 rounded-xl bg-slate-50 border border-slate-200 p-5 shadow-sm">
-                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
-                    <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
-                      Assigned Claim Agent
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
-                      ● Active Officer
-                    </span>
-                  </div>
+      {/* Assigned Agent Card */}
+      <div className="mt-5 rounded-xl bg-slate-50 border border-slate-200 p-5 shadow-sm">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-200">
+          <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
+            Assigned Claim Agent
+          </span>
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+            ● Active Officer
+          </span>
+        </div>
 
-                  <div className="space-y-3">
-                    {/* Agent Name */}
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-blue-100 text-blue-950 shrink-0">
-                        <User className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 font-medium">Agent Name</p>
-                        <p className="text-sm sm:text-base font-bold text-slate-900">
-                          Martin Brad Bales
-                        </p>
-                      </div>
-                    </div>
+        {/* Agent Info */}
+        <div className="mb-5 flex items-center gap-3 bg-white p-3 rounded-lg border border-slate-200">
+          <div className="p-2.5 rounded-full bg-blue-100 text-blue-950 shrink-0">
+            <User className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-xs text-slate-500 font-medium">Delivery Administrator</p>
+            <p className="text-base font-bold text-slate-900">
+              Agent Martin Brad Bales
+            </p>
+          </div>
+        </div>
 
-                    {/* Agent Email */}
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-blue-100 text-blue-950 shrink-0">
-                        <Mail className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 font-medium">Official Email</p>
-                        <a
-                          href="mailto:agentmartbb@consultant.com"
-                          className="text-sm sm:text-base font-bold text-blue-900 hover:text-blue-700 hover:underline break-all"
-                        >
-                          agentmartbb@consultant.com
-                        </a>
-                      </div>
-                    </div>
-
-                    {/* Agent Phone */}
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-blue-100 text-blue-950 shrink-0">
-                        <Phone className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 font-medium">
-                          Telephone / Direct Line
-                        </p>
-                        <a
-                          href="tel:4062011622"
-                          className="text-sm sm:text-base font-bold text-blue-900 hover:text-blue-700 hover:underline"
-                        >
-                          (406) 201-1622
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Reference Code Footer */}
-                  <div className="mt-4 pt-3 border-t border-slate-200 bg-blue-50/70 -mx-5 -mb-5 p-4 rounded-b-xl flex items-center justify-between">
-                    <span className="text-xs text-slate-600 font-medium">
-                      Required Reference Number:
-                    </span>
-                    <strong className="font-mono text-xs sm:text-sm bg-blue-900 text-white px-2.5 py-1 rounded shadow-sm">
-                      {userData.refNumber}
-                    </strong>
-                  </div>
-                </div>
-
-                {/* Security Note */}
-                <div className="mt-4 flex items-start gap-2 text-xs text-slate-500">
-                  <Clock className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
-                  <p>
-                    Please quote reference code{" "}
-                    <strong className="font-mono text-slate-700">{userData.refNumber}</strong> when
-                    contacting Agent Martin Brad Bales to ensure swift processing and package
-                    dispatch.
-                  </p>
-                </div>
+        {/* Action Clickable Buttons */}
+        <div className="space-y-3">
+          {/* Email Button */}
+          <a
+            href="mailto:agentmartbb@consultant.com"
+            className="flex items-center justify-between gap-3 p-3.5 bg-blue-900 hover:bg-blue-800 text-white rounded-xl transition shadow-sm group"
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <Mail className="w-5 h-5 text-amber-400 shrink-0" />
+              <div className="text-left min-w-0">
+                <p className="text-[10px] uppercase font-bold text-blue-200 tracking-wider">Click To Send Email</p>
+                <p className="text-xs sm:text-sm font-semibold truncate">agentmartbb@consultant.com</p>
               </div>
             </div>
-          </Card>
+            <span className="text-xs font-bold bg-amber-400 text-blue-950 px-2.5 py-1 rounded shrink-0 group-hover:bg-amber-300">
+              Send Email
+            </span>
+          </a>
+
+          {/* Phone Button */}
+          <a
+            href="tel:4062011622"
+            className="flex items-center justify-between gap-3 p-3.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl transition shadow-sm group"
+          >
+            <div className="flex items-center gap-3">
+              <Phone className="w-5 h-5 text-emerald-200 shrink-0" />
+              <div className="text-left">
+                <p className="text-[10px] uppercase font-bold text-emerald-200 tracking-wider">Click To Call Direct Line</p>
+                <p className="text-xs sm:text-sm font-semibold">(406) 201-1622</p>
+              </div>
+            </div>
+            <span className="text-xs font-bold bg-white text-emerald-900 px-2.5 py-1 rounded shrink-0 group-hover:bg-slate-100">
+              Call Agent
+            </span>
+          </a>
+        </div>
+
+        {/* Reference Code Banner */}
+        <div className="mt-5 pt-3 border-t border-slate-200 bg-blue-50/80 -mx-5 -mb-5 p-4 rounded-b-xl flex items-center justify-between">
+          <span className="text-xs text-slate-600 font-medium">Your Reference Code:</span>
+          <strong className="font-mono text-xs sm:text-sm bg-blue-950 text-amber-300 px-3 py-1 rounded shadow-sm border border-blue-900">
+            {userData.refNumber}
+          </strong>
+        </div>
+      </div>
+
+      {/* Helper Note */}
+      <div className="mt-4 flex items-start gap-2 text-xs text-slate-500">
+        <Clock className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
+        <p>
+          Simply tap or click either button above to contact Agent Martin Brad Bales. Make sure to provide your reference number <strong className="font-mono text-slate-700">{userData.refNumber}</strong> when prompted.
+        </p>
+      </div>
+    </div>
+  </div>
+</Card>
 
           <div className="text-center pb-4">
             <Link to="/dashboard">
