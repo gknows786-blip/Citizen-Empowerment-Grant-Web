@@ -8,10 +8,16 @@
   "background_color": "#ffffff",
   "icons": [
     {
-      "src": "/favicon.svg?v=2",
+      "src": "/favicon.svg?v=3",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32 48x48",
+      "type": "image/x-icon",
+      "purpose": "any"
     }
   ]
 }
