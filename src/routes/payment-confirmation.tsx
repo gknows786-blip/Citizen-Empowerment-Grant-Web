@@ -3,6 +3,8 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useEffect, useState } from "react";
+import grant-proof-1 from "./grant1.jpeg";
+import grant-proof-2 from "./grant2.jpeg";
 import { getDashboardDataServerFn } from "@/lib/serverFunctions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -183,7 +185,70 @@ function PaymentConfirmation() {
               </p>
             </div>
           </Card>
+          {/* Recent Grant Recipients Section */}
+<div className="mt-6 rounded-2xl bg-white border border-slate-200 p-4 sm:p-6 lg:p-8 shadow-md w-full overflow-hidden">
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b border-slate-200 gap-2">
+    <div>
+      <h3 className="text-lg sm:text-xl font-bold font-serif text-blue-950 flex items-center gap-2">
+        <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+        <span>Recent Beneficiaries & Proof of Delivery</span>
+      </h3>
+      <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        See examples of verified applicants who recently received their grant packages.
+      </p>
+    </div>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide bg-blue-50 text-blue-900 border border-blue-200 px-3 py-1 rounded-full w-fit">
+      Verified Claims
+    </span>
+  </div>
 
+  {/* Image Grid Container */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+    {/* Recipient Proof 1 */}
+    <div className="group rounded-xl border border-slate-200 bg-slate-50 overflow-hidden shadow-sm hover:shadow-md transition">
+      <div className="relative aspect-[4/3] w-full bg-slate-200 overflow-hidden">
+        <img
+          src={grant-proof-1}
+          alt="Grant recipient proof of delivery 1"
+          className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+        />
+        <div className="absolute top-3 left-3 bg-blue-950/80 backdrop-blur-md text-amber-300 text-[10px] font-bold font-mono px-2.5 py-1 rounded-md">
+          Delivered
+        </div>
+      </div>
+      <div className="p-3.5 sm:p-4">
+        <p className="text-sm font-bold text-slate-900">
+          Package Delivery Confirmation
+        </p>
+        <p className="text-xs text-slate-500 mt-0.5">
+          Grant funds & documentation successfully received by beneficiary.
+        </p>
+      </div>
+    </div>
+
+    {/* Recipient Proof 2 */}
+    <div className="group rounded-xl border border-slate-200 bg-slate-50 overflow-hidden shadow-sm hover:shadow-md transition">
+      <div className="relative aspect-[4/3] w-full bg-slate-200 overflow-hidden">
+        <img
+          src={grant-proof-2}
+          alt="Grant recipient proof of delivery 2"
+          className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+        />
+        <div className="absolute top-3 left-3 bg-emerald-900/80 backdrop-blur-md text-emerald-200 text-[10px] font-bold font-mono px-2.5 py-1 rounded-md">
+          Verified Grant
+        </div>
+      </div>
+      <div className="p-3.5 sm:p-4">
+        <p className="text-sm font-bold text-slate-900">
+          Official Grant Disbursement
+        </p>
+        <p className="text-xs text-slate-500 mt-0.5">
+          Processed and delivered through our assigned program officers.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 <Card className="p-4 sm:p-6 lg:p-8 bg-white shadow-md border border-slate-200 w-full max-w-full overflow-hidden">
   <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
     <div className="shrink-0 rounded-full bg-blue-100 p-2 text-blue-900">
@@ -258,7 +323,7 @@ function PaymentConfirmation() {
               Send Email
             </span>
           </a>
-
+            
           {/* Phone Button */}
           <a
             href="tel:4062011622"

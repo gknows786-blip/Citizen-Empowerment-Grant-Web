@@ -578,7 +578,7 @@ function Apply() {
                           id="state"
                           name="state"
                           label="State"
-                          placeholder="e.g. California, Texas"
+                          placeholder="Texas"
                           value={signupData.state || ""}
                           error={errors["state"]}
                           onChange={handleSignupChange}
