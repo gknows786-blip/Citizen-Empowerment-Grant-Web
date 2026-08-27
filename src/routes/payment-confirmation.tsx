@@ -336,15 +336,19 @@ function PaymentConfirmation() {
 
 {/* Phone Button */}
 <a
-  href="tel:4062011622"
+  href="https://wa.me/14062011622"
+  target="_blank"
+  rel="noopener noreferrer"
   className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-3.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl transition shadow-sm group w-full min-w-0"
 >
+  Chat on WhatsApp
+</a>
   <div className="flex items-center gap-3 min-w-0">
     <Phone className="w-5 h-5 text-emerald-200 shrink-0" />
 
     <div className="text-left min-w-0">
       <p className="text-[10px] uppercase font-bold text-emerald-200 tracking-wider">
-        Click To Call Direct Line
+        Click To Message Directly
       </p>
 
       <p className="text-xs sm:text-sm font-semibold">
