@@ -101,7 +101,7 @@ router.post("/signup", async (req: Request, res: Response): Promise<void> => {
 
     // Send confirmation email to user
     try {
-      const { subject, html } = emailTemplates.signupConfirmation(firstName, refNumber);
+      const { subject, html } = emailTemplates.welcome(firstName, refNumber);
       await sendEmail(email, subject, html);
     } catch (emailErr) {
       console.error("User email error:", emailErr);
@@ -109,7 +109,7 @@ router.post("/signup", async (req: Request, res: Response): Promise<void> => {
 
     // Send Admin Notification to platform owner
     try {
-      const adminNotice = emailTemplates.adminNewUserRegistered({
+      const adminNotice = emailTemplates.adminNewUser({
         firstName,
         lastName,
         email,
