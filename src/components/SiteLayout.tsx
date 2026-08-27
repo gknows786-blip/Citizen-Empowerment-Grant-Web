@@ -108,10 +108,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       <style>{`@keyframes slideInFromRight { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }`}</style>
       <div ref={headerRef} className="sticky top-0 z-50">
-        <div className="bg-blue-950 px-4 py-1.5 text-center text-xs font-medium text-blue-200 border-b border-blue-900/60 flex items-center justify-center gap-1.5">
+        {/* <div className="bg-blue-950 px-4 py-1.5 text-center text-xs font-medium text-blue-200 border-b border-blue-900/60 flex items-center justify-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
           <span>Demo</span>
-        </div>
+        </div> */}
         <header className="relative border-b-4 border-amber-500 bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900 text-white shadow-md">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
             <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 hover:opacity-90 transition select-none">
