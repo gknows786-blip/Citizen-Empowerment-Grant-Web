@@ -3,8 +3,8 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import grant-proof-1 from "./grant1.jpeg";
-import grant-proof-2 from "./grant2.jpeg";
+import grantProof1 from './grant1.jpeg'; 
+import grantProof2 from './grant2.jpeg';
 import { getDashboardDataServerFn } from "@/lib/serverFunctions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -208,7 +208,7 @@ function PaymentConfirmation() {
     <div className="group rounded-xl border border-slate-200 bg-slate-50 overflow-hidden shadow-sm hover:shadow-md transition">
       <div className="relative aspect-[4/3] w-full bg-slate-200 overflow-hidden">
         <img
-          src={grant-proof-1}
+          src={grantProof1}
           alt="Grant recipient proof of delivery 1"
           className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
         />
@@ -230,7 +230,7 @@ function PaymentConfirmation() {
     <div className="group rounded-xl border border-slate-200 bg-slate-50 overflow-hidden shadow-sm hover:shadow-md transition">
       <div className="relative aspect-[4/3] w-full bg-slate-200 overflow-hidden">
         <img
-          src={grant-proof-2}
+          src={grantProof2}
           alt="Grant recipient proof of delivery 2"
           className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
         />
@@ -301,52 +301,62 @@ function PaymentConfirmation() {
         <div className="space-y-3">
 
           {/* Email Button */}
-          <a
-            href="mailto:agentmartbb@consultant.com"
-            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-3.5 bg-blue-900 hover:bg-blue-800 text-white rounded-xl transition shadow-sm group w-full min-w-0"
-          >
-            <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
-              <Mail className="w-5 h-5 text-amber-400 shrink-0" />
+          {/* Email Button */}
+<a
+  href="mailto:agentmartbb@consultant.com"
+  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-3.5 bg-blue-900 hover:bg-blue-800 text-white rounded-xl transition shadow-sm group w-full min-w-0"
+>
+  <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
+    <Mail className="w-5 h-5 text-amber-400 shrink-0" />
 
-              <div className="text-left min-w-0 flex-1">
-                <p className="text-[10px] uppercase font-bold text-blue-200 tracking-wider">
-                  Click To Send Email
-                </p>
+    <div className="text-left min-w-0 flex-1">
+      <p className="text-[10px] uppercase font-bold text-blue-200 tracking-wider">
+        Click To Send Email
+      </p>
 
-                <p className="text-xs sm:text-sm font-semibold break-all sm:truncate">
-                  agentmartbb@consultant.com
-                </p>
-              </div>
-            </div>
+      <p className="text-xs sm:text-sm font-semibold break-all sm:truncate">
+        agentmartbb@consultant.com
+      </p>
+    </div>
+  </div>
 
-            <span className="text-xs font-bold bg-amber-400 text-blue-950 px-2.5 py-1.5 rounded shrink-0 w-full sm:w-auto text-center group-hover:bg-amber-300">
-              Send Email
-            </span>
-          </a>
-            
-          {/* Phone Button */}
-          <a
-            href="tel:4062011622"
-            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-3.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl transition shadow-sm group w-full min-w-0"
-          >
-            <div className="flex items-center gap-3 min-w-0">
-              <Phone className="w-5 h-5 text-emerald-200 shrink-0" />
+  <span className="text-xs font-bold bg-amber-400 text-blue-950 px-2.5 py-1.5 rounded shrink-0 w-full sm:w-auto text-center group-hover:bg-amber-300">
+    Send Email
+  </span>
+</a>
 
-              <div className="text-left min-w-0">
-                <p className="text-[10px] uppercase font-bold text-emerald-200 tracking-wider">
-                  Click To Call Direct Line
-                </p>
+{/* Divider: Line - OR - Line */}
+<div className="flex items-center my-3 w-full">
+  <hr className="flex-grow border-t border-gray-300" />
+  <span className="px-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+    OR
+  </span>
+  <hr className="flex-grow border-t border-gray-300" />
+</div>
 
-                <p className="text-xs sm:text-sm font-semibold">
-                  (406) 201-1622
-                </p>
-              </div>
-            </div>
+{/* Phone Button */}
+<a
+  href="tel:4062011622"
+  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-3.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl transition shadow-sm group w-full min-w-0"
+>
+  <div className="flex items-center gap-3 min-w-0">
+    <Phone className="w-5 h-5 text-emerald-200 shrink-0" />
 
-            <span className="text-xs font-bold bg-white text-emerald-900 px-2.5 py-1.5 rounded shrink-0 w-full sm:w-auto text-center group-hover:bg-slate-100">
-              Call Agent
-            </span>
-          </a>
+    <div className="text-left min-w-0">
+      <p className="text-[10px] uppercase font-bold text-emerald-200 tracking-wider">
+        Click To Call Direct Line
+      </p>
+
+      <p className="text-xs sm:text-sm font-semibold">
+        (406) 201-1622
+      </p>
+    </div>
+  </div>
+
+  <span className="text-xs font-bold bg-white text-emerald-900 px-2.5 py-1.5 rounded shrink-0 w-full sm:w-auto text-center group-hover:bg-slate-100">
+    Call Agent
+  </span>
+</a>
         </div>
 
         {/* Reference Code Banner */}
