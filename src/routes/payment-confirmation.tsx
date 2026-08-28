@@ -276,7 +276,7 @@ export function PaymentConfirmation() {
               <div>
                 <h3 className="text-xs sm:text-sm font-bold font-serif text-blue-950 flex items-center gap-1.5">
                   <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Recent Proof of Delivery</span>
+                  <span>Recent Delivery</span>
                 </h3>
               </div>
               <span className="text-[9px] font-bold uppercase bg-blue-50 text-blue-900 border border-blue-200 px-2 py-0.5 rounded-full">
@@ -326,7 +326,7 @@ export function PaymentConfirmation() {
           <Card className="p-3.5 sm:p-4 bg-white shadow-sm border border-slate-200 w-full">
             <h2 className="text-sm font-bold font-serif text-blue-950 flex items-center gap-1.5">
               <Mail className="w-4 h-4 text-blue-900" />
-              <span>Next Steps</span>
+              <span>Do Next</span>
             </h2>
 
             <p className="text-xs text-slate-600 mt-1 leading-normal">
