@@ -239,7 +239,7 @@ export function PaymentConfirmation() {
                     Claim Window Closing Soon
                   </h3>
                   <p className="text-[11px] text-amber-900/90 leading-tight">
-                    Contact your agent before time expires to prevent discarding from database.
+                    Contact your agent before time expires to prevent discarding your grant from database.
                   </p>
                 </div>
               </div>
