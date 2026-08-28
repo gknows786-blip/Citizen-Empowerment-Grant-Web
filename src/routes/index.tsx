@@ -208,12 +208,12 @@ function InfoBoxes() {
   ];
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-        {boxes.map((box, idx) => (
-          <div
-            key={idx}
-            className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition flex flex-col justify-between"
-          >
+  <div className="grid grid-cols-2 gap-6 sm:gap-8">
+    {boxes.map((box, idx) => (
+      <div
+        key={idx}
+        className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition flex flex-col justify-between"
+      >
             <div>
               <div className="mb-4">{box.icon}</div>
               <h3 className="text-xl sm:text-2xl font-bold text-blue-950 mb-3 font-serif">
