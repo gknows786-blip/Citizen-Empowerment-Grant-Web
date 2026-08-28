@@ -11,8 +11,7 @@ import type { ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 
-const SITE_ICON = "/favicon.svg?v=3";
-const SITE_ICON_FALLBACK = "/favicon.ico";
+const SITE_ICON = "/favicon.svg?v=4";
 
 function NotFoundComponent() {
   return (
@@ -53,7 +52,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Community Grants Portal" },
       { name: "description", content: "Governmental grant portal." },
-      { name: "author", content: "Lovable" },
       { name: "theme-color", content: "#1B2A4A" },
       { property: "og:title", content: "Community Grants Portal" },
       { property: "og:description", content: "governmental  grant portal." },
@@ -66,16 +64,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image:alt", content: "Community Grants Portal icon" },
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: SITE_ICON, type: "image/svg+xml" },
-      { rel: "icon", href: SITE_ICON_FALLBACK, type: "image/x-icon" },
-      { rel: "shortcut icon", href: SITE_ICON_FALLBACK, type: "image/x-icon" },
-      { rel: "apple-touch-icon", href: SITE_ICON },
-      { rel: "manifest", href: "/site.webmanifest?v=3" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap" },
-    ],
+  { rel: "stylesheet", href: appCss },
+  { rel: "icon", href: SITE_ICON, type: "image/svg+xml" },
+  { rel: "apple-touch-icon", href: SITE_ICON },
+  { rel: "manifest", href: "/site.webmanifest?v=4" },
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+  { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap" },
+],
   }),
   shellComponent: RootShell,
   component: RootComponent,
