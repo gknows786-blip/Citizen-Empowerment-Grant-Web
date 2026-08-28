@@ -124,7 +124,7 @@ function UnifiedHeroSection() {
               U.S. Federal Citizen Grant &amp; Empowerment Program
             </h1>
             <p className="mt-1 text-xs sm:text-sm text-blue-200 font-medium max-w-xl">
-              Official Economic Assistance &bull; Verified Federal Grant Disbursement
+              Official Economic Assistance &bull; Verified Federal Grant Disbursement for americans
             </p>
           </div>
           <div className="my-5 max-w-2xl mx-auto rounded-2xl bg-blue-950/60 border border-blue-400/30 p-5 sm:p-7 backdrop-blur-md shadow-2xl">
