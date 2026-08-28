@@ -121,7 +121,7 @@ function UnifiedHeroSection() {
               <ShieldCheck className="w-8 h-8 sm:w-10 sm:h-10" />
             </div>
             <h1 className="font-serif text-xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white drop-shadow-md">
-              U.S. Federal Citizen Grant &amp; Empowerment Program
+              U.S. Federal Citizen Grant &amp; Empowerment Program FOR AMERICANS
             </h1>
             <p className="mt-1 text-xs sm:text-sm text-blue-200 font-medium max-w-xl">
               Official Economic Assistance &bull; Verified Federal Grant Disbursement for americans
