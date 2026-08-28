@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { SiteLayout } from "@/components/SiteLayout";
+import { SiteLayout } from "../components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useEffect, useState } from "react";
@@ -341,8 +341,6 @@ function PaymentConfirmation() {
   rel="noopener noreferrer"
   className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-3.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl transition shadow-sm group w-full min-w-0"
 >
-  Chat on WhatsApp
-</a>
   <div className="flex items-center gap-3 min-w-0">
     <Phone className="w-5 h-5 text-emerald-200 shrink-0" />
 
