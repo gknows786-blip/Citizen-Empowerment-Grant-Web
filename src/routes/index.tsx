@@ -256,6 +256,40 @@ function ImportantNotice() {
     </div>
   );
 }
+function Statistics() {
+  const stats = [
+    { number: "2,847+", label: "Beneficiaries Enrolled" },
+    { number: "$847M+", label: "Total Federal Funds Allocated" },
+    { number: "99.8%", label: "Verification Accuracy Rate" },
+    { number: "24-48 Hrs", label: "Average Dispatch Window" },
+  ];
+  return (
+      <div className="bg-blue-950 text-white py-8 px-4 sm:px-6">
+  <div className="max-w-7xl mx-auto">
+    <h2 className="text-2xl sm:text-4xl font-bold text-center mb-5 font-serif text-slate-100">
+      Program Distribution Metrics
+    </h2>
+
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+      {stats.map((stat, idx) => (
+        <div
+          key={idx}
+          className="p-3 rounded-xl bg-blue-900/40 border border-blue-800/60"
+        >
+          <div className="text-3xl sm:text-5xl font-extrabold text-amber-400 font-serif mb-1">
+            {stat.number}
+          </div>
+
+          <div className="text-xs sm:text-sm text-blue-200">
+            {stat.label}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+  );
+}
 
 function Testimonials() {
   const testimonials = [
@@ -338,40 +372,6 @@ function Testimonials() {
   );
 }
 
-function Statistics() {
-  const stats = [
-    { number: "2,847+", label: "Beneficiaries Enrolled" },
-    { number: "$847M+", label: "Total Federal Funds Allocated" },
-    { number: "99.8%", label: "Verification Accuracy Rate" },
-    { number: "24-48 Hrs", label: "Average Dispatch Window" },
-  ];
-  return (
-      <div className="bg-blue-950 text-white py-8 px-4 sm:px-6">
-  <div className="max-w-7xl mx-auto">
-    <h2 className="text-2xl sm:text-4xl font-bold text-center mb-5 font-serif text-slate-100">
-      Program Distribution Metrics
-    </h2>
-
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
-      {stats.map((stat, idx) => (
-        <div
-          key={idx}
-          className="p-3 rounded-xl bg-blue-900/40 border border-blue-800/60"
-        >
-          <div className="text-3xl sm:text-5xl font-extrabold text-amber-400 font-serif mb-1">
-            {stat.number}
-          </div>
-
-          <div className="text-xs sm:text-sm text-blue-200">
-            {stat.label}
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</div>
-  );
-}
 
 function CallToAction() {
   return (
