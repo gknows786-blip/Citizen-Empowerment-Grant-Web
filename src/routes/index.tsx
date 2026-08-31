@@ -206,33 +206,34 @@ function InfoBoxes() {
         "Up to $200,000 in federal grant funding • Insured home delivery • Full federal protection & verification • Expedited dispatch.",
     },
   ];
+
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 py-8 sm:py-16">
-  <div className="grid grid-cols-2 gap-3 sm:gap-8">
-    {boxes.map((box, idx) => (
-  <div
-    key={idx}
-    className={`bg-white border border-slate-200 rounded-xl p-3 sm:p-8 shadow-sm hover:shadow-md transition flex flex-col justify-between ${
-      idx > 1 ? "hidden sm:flex" : ""
-    }`}
-  >
-    <div>
-      <div className="mb-2 sm:mb-4 [&>svg]:w-7 [&>svg]:h-7 sm:[&>svg]:w-10 sm:[&>svg]:h-10">
-        {box.icon}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-8">
+        {boxes.map((box, idx) => (
+          <div
+            key={idx}
+            className={`bg-white border border-slate-200 rounded-xl p-3 sm:p-8 shadow-sm hover:shadow-md transition flex flex-col justify-between ${
+              idx > 1 ? "hidden sm:flex" : ""
+            }`}
+          >
+            <div>
+              <div className="mb-2 sm:mb-4 [&>svg]:w-7 [&>svg]:h-7 sm:[&>svg]:w-10 sm:[&>svg]:h-10">
+                {box.icon}
+              </div>
+
+              <h3 className="text-sm sm:text-2xl font-bold text-blue-950 mb-2 sm:mb-3 font-serif leading-tight">
+                {box.title}
+              </h3>
+
+              <p className="text-slate-600 text-[11px] sm:text-base leading-5 sm:leading-relaxed whitespace-pre-line">
+                {box.content}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
-
-      <h3 className="text-sm sm:text-2xl font-bold text-blue-950 mb-2 sm:mb-3 font-serif leading-tight">
-        {box.title}
-      </h3>
-
-      <p className="text-slate-600 text-[11px] sm:text-base leading-5 sm:leading-relaxed whitespace-pre-line">
-        {box.content}
-      </p>
     </div>
-  </div>
-))}
-  </div>
-</div>
   );
 }
 
