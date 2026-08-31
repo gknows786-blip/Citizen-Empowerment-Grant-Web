@@ -237,6 +237,7 @@ function InfoBoxes() {
   );
 }
 
+
 function ImportantNotice() {
   return (
     <div className="bg-amber-50 border-l-4 border-amber-600 p-6 max-w-7xl mx-auto my-4 rounded-r-xl shadow-sm px-4 sm:px-6">
