@@ -319,7 +319,7 @@ function Testimonials() {
     },
   ];
   return (
-    <div className="bg-slate-100 py-16 px-4 sm:px-6 border-y border-slate-200">
+    <div className="bg-slate-100 py-9 px-4 sm:px-6 border-y border-slate-200">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold font-serif text-blue-950">
