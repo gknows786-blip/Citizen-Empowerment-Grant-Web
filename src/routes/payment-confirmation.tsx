@@ -3,8 +3,8 @@ import { SiteLayout } from "../components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import grantProof1 from './grant1.jpeg'; 
-import grantProof2 from './grant2.jpeg';
+import grantProof1 from "./grant1.jpeg";
+import grantProof2 from "./grant2.jpeg";
 import { getDashboardDataServerFn } from "@/lib/serverFunctions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -51,7 +51,7 @@ export function PaymentConfirmation() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   // State for the 48-hour countdown timer
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ hours: 48, minutes: 0, seconds: 0 });
 
@@ -134,9 +134,7 @@ export function PaymentConfirmation() {
         <div className="min-h-[60vh] bg-slate-100 flex items-center justify-center p-4">
           <div className="text-center bg-white p-6 rounded-xl shadow-sm border border-slate-200">
             <ShieldCheck className="w-8 h-8 text-blue-900 mx-auto mb-2" />
-            <p className="text-sm font-semibold text-slate-800">
-              Loading claim details...
-            </p>
+            <p className="text-sm font-semibold text-slate-800">Loading claim details...</p>
           </div>
         </div>
       </SiteLayout>
@@ -154,7 +152,9 @@ export function PaymentConfirmation() {
             </Alert>
             <div className="mt-3 text-center">
               <Link to="/dashboard">
-                <Button size="sm" className="bg-blue-900 text-white">Return to Dashboard</Button>
+                <Button size="sm" className="bg-blue-900 text-white">
+                  Return to Dashboard
+                </Button>
               </Link>
             </div>
           </div>
@@ -167,7 +167,6 @@ export function PaymentConfirmation() {
     <SiteLayout>
       <div className="min-h-screen bg-slate-100 py-4 px-3 sm:px-6 lg:px-8">
         <div className="max-w-xl mx-auto space-y-3">
-          
           {/* Back Link */}
           <div>
             <Link
@@ -209,7 +208,9 @@ export function PaymentConfirmation() {
             <div className="grid grid-cols-2 gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
               <div>
                 <p className="text-[10px] font-bold text-slate-500 uppercase">Package</p>
-                <p className="text-xs sm:text-sm font-bold text-blue-950 mt-0.5">{userData.selectedPackage}</p>
+                <p className="text-xs sm:text-sm font-bold text-blue-950 mt-0.5">
+                  {userData.selectedPackage}
+                </p>
               </div>
               <div className="border-l border-slate-200 pl-2">
                 <p className="text-[10px] font-bold text-slate-500 uppercase">Grant Amount</p>
@@ -221,7 +222,10 @@ export function PaymentConfirmation() {
 
             <div className="mt-2.5 flex flex-wrap justify-between gap-1 text-[11px] text-slate-600">
               <p>
-                Beneficiary: <strong className="text-slate-900">{userData.firstName} {userData.lastName}</strong>
+                Beneficiary:{" "}
+                <strong className="text-slate-900">
+                  {userData.firstName} {userData.lastName}
+                </strong>
               </p>
               <p>
                 Ref: <strong className="font-mono text-blue-900">{userData.refNumber}</strong>
@@ -239,7 +243,8 @@ export function PaymentConfirmation() {
                     Claim Window Closing Soon
                   </h3>
                   <p className="text-[11px] text-amber-900/90 leading-tight">
-                    Contact your agent before time expires to prevent discarding your grant from database.
+                    Contact your agent before time expires to prevent discarding your grant from
+                    database.
                   </p>
                 </div>
               </div>
@@ -248,21 +253,21 @@ export function PaymentConfirmation() {
               <div className="flex items-center gap-1.5 bg-amber-100/80 border border-amber-300 px-2.5 py-1 rounded-md shrink-0">
                 <div className="text-center min-w-[28px]">
                   <span className="block text-sm font-bold font-mono text-amber-950">
-                    {String(timeLeft.hours).padStart(2, '0')}
+                    {String(timeLeft.hours).padStart(2, "0")}
                   </span>
                   <span className="text-[8px] uppercase font-bold text-amber-800">hrs</span>
                 </div>
                 <span className="text-xs font-bold text-amber-700">:</span>
                 <div className="text-center min-w-[28px]">
                   <span className="block text-sm font-bold font-mono text-amber-950">
-                    {String(timeLeft.minutes).padStart(2, '0')}
+                    {String(timeLeft.minutes).padStart(2, "0")}
                   </span>
                   <span className="text-[8px] uppercase font-bold text-amber-800">min</span>
                 </div>
                 <span className="text-xs font-bold text-amber-700">:</span>
                 <div className="text-center min-w-[28px]">
                   <span className="block text-sm font-bold font-mono text-amber-950">
-                    {String(timeLeft.seconds).padStart(2, '0')}
+                    {String(timeLeft.seconds).padStart(2, "0")}
                   </span>
                   <span className="text-[8px] uppercase font-bold text-amber-800">sec</span>
                 </div>
@@ -299,7 +304,9 @@ export function PaymentConfirmation() {
                   </div>
                 </div>
                 <div className="p-2">
-                  <p className="text-[11px] font-bold text-slate-900 leading-tight">Delivery Confirmed</p>
+                  <p className="text-[11px] font-bold text-slate-900 leading-tight">
+                    Delivery Confirmed
+                  </p>
                 </div>
               </div>
 
@@ -316,7 +323,9 @@ export function PaymentConfirmation() {
                   </div>
                 </div>
                 <div className="p-2">
-                  <p className="text-[11px] font-bold text-slate-900 leading-tight">Disbursement Complete</p>
+                  <p className="text-[11px] font-bold text-slate-900 leading-tight">
+                    Disbursement Complete
+                  </p>
                 </div>
               </div>
             </div>
@@ -349,7 +358,9 @@ export function PaymentConfirmation() {
                   <User className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-[10px] text-slate-500 font-medium leading-none">Delivery Administrator</p>
+                  <p className="text-[10px] text-slate-500 font-medium leading-none">
+                    Delivery Administrator
+                  </p>
                   <p className="text-xs font-bold text-slate-900 mt-0.5">Agent Martin Brad Bales</p>
                 </div>
               </div>
@@ -379,7 +390,7 @@ export function PaymentConfirmation() {
 
                 {/* Phone Button */}
                 <a
-                  href="https://wa.me/14062011622"
+                  href="https://signal.me/#p/+12703878443"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-2.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg transition shadow-xs group w-full text-xs"
@@ -407,7 +418,9 @@ export function PaymentConfirmation() {
             <div className="mt-2.5 flex items-start gap-1.5 text-[11px] text-slate-500">
               <Clock className="w-3.5 h-3.5 shrink-0 mt-0.5 text-amber-600" />
               <p className="leading-tight">
-                Provide reference number <strong className="font-mono text-slate-700">{userData.refNumber}</strong> when contacting the agent.
+                Provide reference number{" "}
+                <strong className="font-mono text-slate-700">{userData.refNumber}</strong> when
+                contacting the agent.
               </p>
             </div>
           </Card>
@@ -420,7 +433,6 @@ export function PaymentConfirmation() {
               </Button>
             </Link>
           </div>
-
         </div>
       </div>
     </SiteLayout>
