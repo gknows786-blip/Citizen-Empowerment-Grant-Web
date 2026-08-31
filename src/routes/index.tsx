@@ -325,9 +325,6 @@ function Testimonials() {
           <h2 className="text-1.5xl sm:text-4xl font-bold font-serif text-blue-950">
             Beneficiary Testimonials
           </h2>
-          <p className="text-slate-600 mt-2 text-sm sm:text-base">
-            Verified feedback from grant recipients across participating states
-          </p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {testimonials.map((testimonial, idx) => (
