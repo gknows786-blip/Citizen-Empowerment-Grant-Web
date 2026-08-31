@@ -320,52 +320,66 @@ function Testimonials() {
   ];
   return (
     <div className="bg-slate-100 py-9 px-4 sm:px-6 border-y border-slate-200">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-4xl font-bold font-serif text-blue-950">
-            Beneficiary Testimonials
-          </h2>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {testimonials.map((testimonial, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-slate-200 flex min-w-0 flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-bold shrink-0">
-                    <User className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-bold text-blue-950 text-xs sm:text-sm truncate">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-[11px] sm:text-xs text-slate-500">{testimonial.state}</p>
-                  </div>
-                </div>
-                <div className="flex text-amber-400 gap-0.5 mb-2.5 sm:mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-400" />
-                  ))}
-                </div>
-                <p className="text-slate-600 text-[11px] sm:text-sm italic leading-[1.55] sm:leading-relaxed mb-3 sm:mb-4 break-words">
-                  &quot;{testimonial.text}&quot;
+  <div className="max-w-7xl mx-auto">
+    <div className="text-center mb-12">
+      <h2 className="text-2xl sm:text-4xl font-bold font-serif text-blue-950">
+        Beneficiary Testimonials
+      </h2>
+    </div>
+
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {testimonials.map((testimonial, idx) => (
+        <div
+          key={idx}
+          className={`bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-slate-200 flex min-w-0 flex-col justify-between ${
+            idx > 1 ? "hidden sm:flex" : ""
+          }`}
+        >
+          <div>
+            <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-bold shrink-0">
+                <User className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
+              </div>
+
+              <div className="min-w-0">
+                <p className="font-bold text-blue-950 text-xs sm:text-sm truncate">
+                  {testimonial.name}
+                </p>
+
+                <p className="text-[11px] sm:text-xs text-slate-500">
+                  {testimonial.state}
                 </p>
               </div>
-              <div className="pt-2.5 sm:pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                <span className="text-[10px] sm:text-[11px] font-bold uppercase text-slate-400">
-                  Awarded
-                </span>
-                <span className="text-xs sm:text-sm font-extrabold text-emerald-700 whitespace-nowrap">
-                  {testimonial.amount}
-                </span>
-              </div>
             </div>
-          ))}
+
+            <div className="flex text-amber-400 gap-0.5 mb-2.5 sm:mb-3">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-400"
+                />
+              ))}
+            </div>
+
+            <p className="text-slate-600 text-[11px] sm:text-sm italic leading-[1.55] sm:leading-relaxed mb-3 sm:mb-4 break-words">
+              &quot;{testimonial.text}&quot;
+            </p>
+          </div>
+
+          <div className="pt-2.5 sm:pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <span className="text-[10px] sm:text-[11px] font-bold uppercase text-slate-400">
+              Awarded
+            </span>
+
+            <span className="text-xs sm:text-sm font-extrabold text-emerald-700 whitespace-nowrap">
+              {testimonial.amount}
+            </span>
+          </div>
         </div>
-      </div>
+      ))}
     </div>
+  </div>
+</div>
   );
 }
 
