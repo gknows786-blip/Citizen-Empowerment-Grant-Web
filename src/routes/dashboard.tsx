@@ -388,7 +388,7 @@ function Dashboard() {
                         </p>
                       </div>
                       <div className="border-t border-slate-100 pt-2 mb-4 text-xs text-slate-600">
-                        Markdown:{" "}
+                        Imbursement:{" "}
                         <span className="font-bold text-slate-900">${pkg.feeRequired}</span>
                       </div>
                     </div>
