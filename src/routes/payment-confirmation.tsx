@@ -374,7 +374,7 @@ export function PaymentConfirmation() {
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <Mail className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span className="font-semibold truncate">agentmartbb@consultant.com</span>
+                    <span className="font-semibold truncate">matinbradbales@gmail.com</span>
                   </div>
                   <span className="text-[10px] font-bold bg-amber-400 text-blue-950 px-2 py-1 rounded shrink-0 group-hover:bg-amber-300">
                     Email
