@@ -381,14 +381,11 @@ export function PaymentConfirmation() {
                   </span>
                 </a>
 
-                {/* Divider */}
-                <div className="flex items-center my-1.5 w-full">
+                {/* <div className="flex items-center my-1.5 w-full">
                   <hr className="flex-grow border-t border-gray-300" />
                   <span className="px-2 text-[10px] font-bold text-gray-400 uppercase">OR</span>
                   <hr className="flex-grow border-t border-gray-300" />
                 </div>
-
-                {/* Phone Button */}
                 <a
                   href="https://signal.me/#p/+12703878443"
                   target="_blank"
@@ -402,7 +399,7 @@ export function PaymentConfirmation() {
                   <span className="text-[10px] font-bold bg-white text-emerald-900 px-2 py-1 rounded shrink-0 group-hover:bg-slate-100">
                     Message
                   </span>
-                </a>
+                </a> */}
               </div>
 
               {/* Reference Banner */}
