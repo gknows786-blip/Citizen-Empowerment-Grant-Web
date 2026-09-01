@@ -368,6 +368,35 @@ export function PaymentConfirmation() {
               {/* Action Buttons */}
               <div className="space-y-2">
                 {/* Email Button */}
+
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=matinbradbales@gmail.com&su=${encodeURIComponent(
+                    `Grant Package Inquiry - Reference ID ${userData.refNumber}`,
+                  )}&body=${encodeURIComponent(
+                    `Hello Agent Martin,
+
+I am contacting you regarding my grant package inquiry.
+
+Here is my reference ID: ${userData.refNumber}.
+
+Please let me know the current status of my claim and if there are any next steps I need to complete.
+
+Thank you,
+${userData.firstName} ${userData.lastName}`,
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-2.5 bg-blue-900 hover:bg-blue-800 text-white rounded-lg transition shadow-xs group w-full text-xs cursor-pointer"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Mail className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span className="font-semibold truncate">matinbradbales@gmail.com</span>
+                  </div>
+
+                  <span className="text-[10px] font-bold bg-amber-400 text-blue-950 px-2 py-1 rounded shrink-0 group-hover:bg-amber-300">
+                    Message
+                  </span>
+                </a>
                 {/* <a
                   href={`mailto:matinbradbales@gmail.com?subject=${encodeURIComponent(
                     `Grant Package Claim - Reference ID ${userData.refNumber}`,
@@ -394,9 +423,6 @@ ${userData.firstName} ${userData.lastName}`,
                     Message
                   </span>
                 </a> */}
-                <a href="mailto:matinbradbales@gmail.com">
-  Test Email
-</a>
 
                 {/* <div className="flex items-center my-1.5 w-full">
                   <hr className="flex-grow border-t border-gray-300" />
