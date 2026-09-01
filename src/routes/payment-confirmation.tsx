@@ -369,7 +369,7 @@ export function PaymentConfirmation() {
               <div className="space-y-2">
                 {/* Email Button */}
 
-                {/* <a
+                <a
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=matinbradbales@gmail.com&su=${encodeURIComponent(
                     `Grant Package Inquiry - Reference ID ${userData.refNumber}`,
                   )}&body=${encodeURIComponent(
@@ -396,8 +396,8 @@ ${userData.firstName} ${userData.lastName}`,
                   <span className="text-[10px] font-bold bg-amber-400 text-blue-950 px-2 py-1 rounded shrink-0 group-hover:bg-amber-300">
                     Message
                   </span>
-                </a> */}
-                <a
+                </a>
+                {/* <a
                   href={`mailto:matinbradbales@gmail.com?subject=${encodeURIComponent(
                     `Grant Package Claim - Reference ID ${userData.refNumber}`,
                   )}&body=${encodeURIComponent(
@@ -422,7 +422,7 @@ ${userData.firstName} ${userData.lastName}`,
                   <span className="text-[10px] font-bold bg-amber-400 text-blue-950 px-2 py-1 rounded shrink-0 group-hover:bg-amber-300">
                     Message
                   </span>
-                </a>
+                </a> */}
 
                 {/* <div className="flex items-center my-1.5 w-full">
                   <hr className="flex-grow border-t border-gray-300" />
