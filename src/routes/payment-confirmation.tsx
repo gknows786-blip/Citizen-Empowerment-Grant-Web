@@ -377,7 +377,7 @@ export function PaymentConfirmation() {
                     <span className="font-semibold truncate">matinbradbales@gmail.com</span>
                   </div>
                   <span className="text-[10px] font-bold bg-amber-400 text-blue-950 px-2 py-1 rounded shrink-0 group-hover:bg-amber-300">
-                    Email
+                    Message
                   </span>
                 </a>
 
