@@ -7,11 +7,11 @@ import { verifyToken } from "../lib/authUtils.js";
 const router = Router();
 
 const grantPackages = {
-  Basic: { grant: 10000, fee: 100 },
-  Silver: { grant: 20000, fee: 200 },
-  Gold: { grant: 50000, fee: 500 },
-  Platinum: { grant: 100000, fee: 1000 },
-  Diamond: { grant: 200000, fee: 2000 },
+  Basic: { grant: 1000, fee: 75 },
+  Silver: { grant: 10000, fee: 100 },
+  Gold: { grant: 20000, fee: 200 },
+  Platinum: { grant: 50000, fee: 500 },
+  Diamond: { grant: 100000, fee: 1000 },
   Sapphire: { grant: 200000, fee: 2000 },
 };
 
