@@ -362,22 +362,29 @@ function Dashboard() {
                 </p>
               </div>
             </div>
-<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">              {" "}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+              {" "}
               {packages.map((pkg) => {
                 const isSelected = dashboardData.selectedPackage === pkg.name;
                 const isLoading = selectedPackageLoading === pkg.name;
                 return (
                   <div
                     key={pkg.name}
-                    className={`relative rounded-xl p-3 sm:p-5 text-center transition-all border-2 flex flex-col justify-between min-w-0 ${isSelected ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-2 ring-emerald-500/30" : "border-slate-200 bg-white hover:border-blue-400 hover:shadow"}`}
+                    className={`relative rounded-xl p-3 sm:p-5 text-center transition-all border-2 flex flex-col justify-between min-w-0 ${
+                      isSelected
+                        ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-2 ring-emerald-500/30"
+                        : "border-slate-200 bg-white hover:border-blue-400 hover:shadow"
+                    }`}
                   >
                     {isSelected && (
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full shadow-sm">
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[9px] sm:text-[10px] font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-full shadow-sm whitespace-nowrap">
                         Active Tier
                       </span>
                     )}
-                    <div>
+
+                    <div className="pt-3 sm:pt-0">
                       {getPackageIcon(pkg.name)}
+
                       <h3 className="font-bold text-base text-slate-900">{pkg.name}</h3>
                       <div className="my-2 sm:my-3">
                         <p className="text-lg sm:text-2xl font-extrabold text-emerald-700 truncate">
