@@ -12,6 +12,7 @@ const grantPackages = {
   Gold: { grant: 50000, fee: 500 },
   Platinum: { grant: 100000, fee: 1000 },
   Diamond: { grant: 200000, fee: 2000 },
+  Sapphire: { grant: 200000, fee: 2000 },
 };
 
 const sendNotificationSafely = async (
