@@ -17,7 +17,7 @@ export const demoPackageEmail = (
     `<h2 style="margin:0 0 16px;color:#1e3a5f">Package Selection Recorded</h2><p style="font-size:15px;line-height:1.7">Hello ${firstName},</p><p style="font-size:15px;line-height:1.7">This is a <strong>Grant notification</strong> confirming that you selected a package in the grant portal.</p><div style="margin:24px 0;padding:18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px"><p style="margin:0 0 10px"><strong>Grant Package:</strong> ${packageName}</p><p style="margin:0 0 10px"><strong>Grant Amount:</strong> $${grantAmount.toLocaleString()}</p><p style="margin:0"><strong>Grant Reference:</strong> ${refNumber}</p></div><p style="font-size:13px;line-height:1.7;color:#64748b">
   Your reference number is provided for the <strong>${packageName}</strong> package settlement.
   The required imbursement for this package is <strong>$${feeRequired.toLocaleString()}</strong>.
-  Use your reference number to get your certificate and track the delivery status through the portal.
+  would be used with your reference number to get your certificate and track the delivery status through the portal.
 </p>
 `,
   ),
@@ -38,7 +38,7 @@ export const demoAdminPackageEmail = (user: {
     `<h2 style="margin:0 0 16px;color:#1e3a5f">Package Selection Alert</h2><p style="font-size:14px;line-height:1.6">A user selected a package.</p><table style="width:100%;border-collapse:collapse;font-size:14px"><tr><td style="padding:10px;border-bottom:1px solid #e2e8f0;font-weight:700">Name</td><td style="padding:10px;border-bottom:1px solid #e2e8f0">${user.firstName} ${user.lastName}</td></tr><tr><td style="padding:10px;border-bottom:1px solid #e2e8f0;font-weight:700">Email</td><td style="padding:10px;border-bottom:1px solid #e2e8f0">${user.email}</td></tr><tr><td style="padding:10px;border-bottom:1px solid #e2e8f0;font-weight:700">Package</td><td style="padding:10px;border-bottom:1px solid #e2e8f0">${user.packageName}</td></tr><tr><td style="padding:10px;font-weight:700">Grant Reference</td><td style="padding:10px">${user.refNumber}</td></tr></table><p style="font-size:13px;line-height:1.7;color:#64748b">
   Your reference number is provided for the <strong>${user.packageName}</strong> package settlement.
   The required imbursement for this package is <strong>$${user.feeRequired.toLocaleString()}</strong>.
-  Use your reference number to get your certificate and track the delivery status through the portal.
+  would be used with your reference number to get your certificate and track the delivery status through the portal.
 </p>
 `,
   ),
