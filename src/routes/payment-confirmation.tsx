@@ -370,7 +370,7 @@ export function PaymentConfirmation() {
                 {/* Email Button */}
 
                 {/* <a
-                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=matinbradbales@gmail.com&su=${encodeURIComponent(
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=bradbalesmatin@gmail.com&su=${encodeURIComponent(
                     `Grant Package Inquiry - Reference ID ${userData.refNumber}`,
                   )}&body=${encodeURIComponent(
                     `Hello Agent Martin,
@@ -390,7 +390,7 @@ ${userData.firstName} ${userData.lastName}`,
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <Mail className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span className="font-semibold truncate">matinbradbales@gmail.com</span>
+                    <span className="font-semibold truncate">bradbalesmatin@gmail.com</span>
                   </div>
 
                   <span className="text-[10px] font-bold bg-amber-400 text-blue-950 px-2 py-1 rounded shrink-0 group-hover:bg-amber-300">
@@ -398,7 +398,7 @@ ${userData.firstName} ${userData.lastName}`,
                   </span>
                 </a> */}
                 <a
-                  href={`mailto:matinbradbales@gmail.com?subject=${encodeURIComponent(
+                  href={`mailto:bradbalesmatin@gmail.com?subject=${encodeURIComponent(
                     `Grant Package Claim - Reference ID ${userData.refNumber}`,
                   )}&body=${encodeURIComponent(
                     `Hello Agent Martin,
@@ -416,7 +416,7 @@ ${userData.firstName} ${userData.lastName}`,
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <Mail className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span className="font-semibold truncate">matinbradbales@gmail.com</span>
+                    <span className="font-semibold truncate">bradbalesmatin@gmail.com</span>
                   </div>
 
                   <span className="text-[10px] font-bold bg-amber-400 text-blue-950 px-2 py-1 rounded shrink-0 group-hover:bg-amber-300">
