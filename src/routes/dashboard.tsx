@@ -81,17 +81,17 @@ interface GrantPackage {
 function getPackageIcon(name: string) {
   switch (name) {
     case "Basic":
-      return <Award className="w-8 h-8 text-amber-700 mx-auto mb-2" />;
+      return <Award className="w-6 h-6 sm:w-8 sm:h-8 text-amber-700 mx-auto mb-2" />;
     case "Silver":
-      return <Medal className="w-8 h-8 text-slate-400 mx-auto mb-2" />;
+      return <Medal className="w-6 h-6 sm:w-8 sm:h-8 text-slate-400 mx-auto mb-2" />;
     case "Gold":
-      return <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />;
+      return <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-500 mx-auto mb-2" />;
     case "Platinum":
-      return <Gem className="w-8 h-8 text-cyan-500 mx-auto mb-2" />;
+      return <Gem className="w-6 h-6 sm:w-8 sm:h-8 text-cyan-500 mx-auto mb-2" />;
     case "Diamond":
-      return <Crown className="w-8 h-8 text-amber-500 mx-auto mb-2" />;
+      return <Crown className="w-6 h-6 sm:w-8 sm:h-8 text-amber-500 mx-auto mb-2" />;
     default:
-      return <Award className="w-8 h-8 text-blue-600 mx-auto mb-2" />;
+      return <Award className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 mx-auto mb-2" />;
   }
 }
 
@@ -362,14 +362,14 @@ function Dashboard() {
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">              {" "}
               {packages.map((pkg) => {
                 const isSelected = dashboardData.selectedPackage === pkg.name;
                 const isLoading = selectedPackageLoading === pkg.name;
                 return (
                   <div
                     key={pkg.name}
-                    className={`relative rounded-xl p-5 text-center transition-all border-2 flex flex-col justify-between ${isSelected ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-2 ring-emerald-500/30" : "border-slate-200 bg-white hover:border-blue-400 hover:shadow"}`}
+                    className={`relative rounded-xl p-3 sm:p-5 text-center transition-all border-2 flex flex-col justify-between min-w-0 ${isSelected ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-2 ring-emerald-500/30" : "border-slate-200 bg-white hover:border-blue-400 hover:shadow"}`}
                   >
                     {isSelected && (
                       <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full shadow-sm">
@@ -379,15 +379,17 @@ function Dashboard() {
                     <div>
                       {getPackageIcon(pkg.name)}
                       <h3 className="font-bold text-base text-slate-900">{pkg.name}</h3>
-                      <div className="my-3">
-                        <p className="text-2xl font-extrabold text-emerald-700">
+                      <div className="my-2 sm:my-3">
+                        <p className="text-lg sm:text-2xl font-extrabold text-emerald-700 truncate">
+                          {" "}
                           ${pkg.grantAmount.toLocaleString()}
                         </p>
                         <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
                           Federal Allocation
                         </p>
                       </div>
-                      <div className="border-t border-slate-100 pt-2 mb-4 text-xs text-slate-600">
+                      <div className="border-t border-slate-100 pt-2 mb-3 sm:mb-4 text-[10px] sm:text-xs text-slate-600">
+                        {" "}
                         Imbursement:{" "}
                         <span className="font-bold text-slate-900">${pkg.feeRequired}</span>
                       </div>
