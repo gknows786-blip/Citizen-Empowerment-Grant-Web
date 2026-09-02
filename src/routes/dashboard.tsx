@@ -150,7 +150,7 @@ function Dashboard() {
       if (dashResult.success && dashResult.data) {
         setDashboardData(dashResult.data as DashboardData);
         setSuccess(
-          `Success: ${packageName} package selected! Proceed below to complete your payment clearance.`,
+          `Success: ${packageName} package selected! Proceed below to complete your payment.`,
         );
         requestAnimationFrame(() =>
           requestAnimationFrame(() =>

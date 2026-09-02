@@ -84,20 +84,22 @@ router.post("/select-package", async (req: Request, res: Response): Promise<void
 
     try {
       const userEmail = demoPackageEmail(
-        user.firstName,
-        user.refNumber,
-        packageName,
-        packageData.grant,
-      );
+  user.firstName,
+  user.refNumber,
+  packageName,
+  packageData.grant,
+  packageData.fee,
+);
 
       const adminNotice = demoAdminPackageEmail({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        refNumber: user.refNumber,
-        packageName,
-        grantAmount: packageData.grant,
-      });
+  firstName: user.firstName,
+  lastName: user.lastName,
+  email: user.email,
+  refNumber: user.refNumber,
+  packageName,
+  grantAmount: packageData.grant,
+  feeRequired: packageData.fee,
+});
 
       [userEmailSent, adminEmailSent] = await Promise.all([
         sendNotificationSafely("Grant package selection user", () =>
