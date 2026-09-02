@@ -18,7 +18,7 @@ export interface IUser extends Document {
   maritalStatus: "Single" | "Married" | "Divorced" | "Widowed";
   personalIdNumber?: string;
   refNumber: string;
-  selectedPackage?: "Basic" | "Silver" | "Gold" | "Platinum" | "Diamond";
+  selectedPackage?: "Basic" | "Silver" | "Gold" | "Platinum" | "Diamond" | "Sapphire";
   grantAmount?: number;
   feeAmount?: number;
   paymentStatus: "pending" | "paid" | "delivered";
@@ -49,7 +49,7 @@ const userSchema = new Schema<IUser>(
     maritalStatus: { type: String, enum: ["Single", "Married", "Divorced", "Widowed"] },
     personalIdNumber: { type: String },
     refNumber: { type: String, required: true, unique: true },
-    selectedPackage: { type: String, enum: ["Basic", "Silver", "Gold", "Platinum", "Diamond"] },
+    selectedPackage: { type: String, enum: ["Basic", "Silver", "Gold", "Platinum", "Diamond", "Sapphire"] },
     grantAmount: { type: Number },
     feeAmount: { type: Number },
     paymentStatus: { type: String, enum: ["pending", "paid", "delivered"], default: "pending" },
