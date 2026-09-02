@@ -398,7 +398,7 @@ function Dashboard() {
                       <div className="border-t border-slate-100 pt-2 mb-3 sm:mb-4 text-[10px] sm:text-xs text-slate-600">
                         {" "}
                         Imbursement:{" "}
-                        <span className="font-bold text-slate-900">${pkg.feeRequired}</span>
+                        <span className="text-slate-900">${pkg.feeRequired}</span>
                       </div>
                     </div>
                     <Button
