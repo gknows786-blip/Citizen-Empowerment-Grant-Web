@@ -395,7 +395,7 @@ function Dashboard() {
                           Federal Allocation
                         </p>
                       </div>
-                      <div className="border-t border-slate-100 pt-2 mb-3 sm:mb-4 text-[10px] sm:text-xs text-slate-600">
+                      <div className="border-t border-slate-100 pt-2 mb-3 sm:mb-4 text-[5px] sm:text-xs text-slate-600">
                         {" "}
                         Imbursement:{" "}
                         <span className="text-slate-900">${pkg.feeRequired}</span>

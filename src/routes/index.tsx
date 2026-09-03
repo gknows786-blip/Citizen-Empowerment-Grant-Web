@@ -185,7 +185,7 @@ function InfoBoxes() {
       title: "What is This Program?",
       icon: <ShieldCheck className="w-10 h-10 text-blue-900" />,
       content:
-        "Federal citizen economic empowerment initiative designed to provide direct stimulus and grants to qualified residents. Not a loan — 100% grant funding.",
+        "Federal citizen economic empowerment initiative designed to provide direct stimulus and grants to qualified residents. Not loan — 100% grant funding.",
     },
     {
       title: "How It Works",
@@ -226,7 +226,7 @@ function InfoBoxes() {
                 {box.title}
               </h3>
 
-              <p className="text-slate-600 text-[11px] sm:text-base leading-5 sm:leading-relaxed whitespace-pre-line">
+              <p className="text-slate-600 text-[14.5px] sm:text-base leading-5 sm:leading-relaxed whitespace-pre-line">
                 {box.content}
               </p>
             </div>
